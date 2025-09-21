@@ -1,0 +1,48 @@
+.benefits-alt {
+    padding: 1rem 10rem;
+}
+
+.benefits-list {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+.benefit-block {
+    display: flex;
+    align-items: flex-start;
+}
+.benefit-title-box {
+    height: 50px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #0a2a66;
+    color: #fff;
+    font-weight: 600;
+    padding: 0.6rem 1.2rem;
+    border: 2px solid #0a2a66;
+    position: relative;
+    z-index: 2;
+}
+
+.benefit-title-box::after {
+    content: "";
+    position: absolute;
+    bottom: -6px;
+    right: -6px;
+    width: 100%;
+    height: 100%;
+    border: 2px solid #0a2a66;
+    z-index: -1;
+}
+
+.benefit-desc-box {
+    margin-left: auto;
+    height: 50px;
+    background-color: #e6f2ff;
+    margin-top: 0.8rem;
+    padding: 1.2rem 1.6rem;
+    max-width: 600px;
+    border-radius: 4px;
+}

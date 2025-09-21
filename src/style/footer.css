@@ -1,0 +1,71 @@
+.logo-footer{
+    display: flex;
+    margin-bottom: 10%;
+}
+.footer {
+    background-color: #00274d;
+    color: #fff;
+    padding: 2rem;
+    font-size: 0.95rem;
+}
+
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.footer-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    min-width: 220px;
+}
+
+.footer-logo {
+    width: 60px;
+    margin-bottom: 1rem;
+}
+
+.footer h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0.3rem 0;
+}
+
+.footer h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.8rem;
+}
+
+.footer p {
+    margin: 0.2rem 0;
+}
+
+.social-icons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.social-icons a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 1.5rem;
+    transition: 0.3s;
+}
+
+.social-icons a:hover {
+    color: #00aced; 
+}
+
+.tiktok-icon {
+    width: 22px;
+    height: 22px;
+    filter: brightness(0) invert(1);
+}

@@ -1,0 +1,146 @@
+body, h1, h2, h3, p, ul {
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #222;
+  line-height: 1.6;
+  background: #f9f9f9;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background: #00274d;
+  color: #fff;
+}
+.logo {
+  font-weight: bold;
+}
+.logo p{
+  font-size: 8px;
+}
+.logo h2{
+  font-size: 12px;
+}
+.logoImg{
+  margin-left: 4%;
+  margin-right: 1%;
+  width: 50px;
+}
+.nav{
+  margin-left: auto;
+  margin-right: 2%;
+}
+.nav a {
+  margin-left: 1.5rem;
+  color: #fff;
+  font-weight: 500;
+}
+.nav a:hover {
+  text-decoration: underline;
+}
+
+.hero {
+  background: url('../assets/hero.png') center;
+  background-size: cover;
+  color: #fff;
+  text-align: center;
+  height: 150px;
+  padding: 4rem 2rem;
+  position: relative;
+}
+.overlay-hero{
+  box-sizing: border-box;
+  padding-top: 2rem ;
+  position: absolute;
+  background: rgba(0, 0, 0, 0.5); 
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 0;
+}
+.hero h1 {
+  font-size: 2.2rem;
+  margin-bottom: 1rem;
+}
+.hero p {
+  max-width: 600px;
+  margin: 0 auto 2rem;
+}
+.cta-btn {
+  background: #ffcc00;
+  color: #003366;
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.cta-btn:hover {
+  background: #ffdb4d;
+}
+
+/* Sections */
+.about, .features, .integration {
+  padding: 3rem 2rem;
+  max-width: 1100px;
+  margin: auto;
+}
+.about h2, .features h2, .integration h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: #003366;
+}
+.about p, .integration ul {
+  font-size: 1rem;
+  color: #333;
+}
+
+/* Features */
+.feature-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+.feature-card {
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+  transition: transform 0.2s;
+}
+.feature-card:hover {
+  transform: translateY(-5px);
+}
+.feature-card h3 {
+  color: #0055a5;
+  margin-bottom: 0.5rem;
+}
+
+/* Integration */
+.integration ul {
+  list-style-type: disc;
+  margin-left: 1.5rem;
+}
+.integration li {
+  margin-bottom: 0.5rem;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 1rem;
+  background: #00274d;
+  color: #fff;
+  margin-top: 2rem;
+}
