@@ -1,24 +1,13 @@
-import React from "react";
 import "../../style/homepage.css"
-import logo from '../../assets/logo.png'
 import Benefits from "./Benefits";
-import Footer from "./Footer";
-export default function Homepage() {
+import { useNavigate } from "react-router-dom";
+function Homepage() {
+  const navigate = useNavigate();
+  async function handleLogin() {
+    navigate('/login');
+  }
   return (
     <div className="homepage">
-      <header className="header">
-        <img src={logo} className="logoImg" alt="logo" />
-        <div className="logo">
-            <p>ĐẠI HỌC QUỐC GIA THÀNH PHỐ HỒ CHÍ MINH</p>
-            <h2>TRƯỜNG ĐẠI HỌC BÁCH KHOA</h2>
-        </div>
-        <nav className="nav">
-            <a href="#">Trang chủ</a>
-            <a href="#about">Giới thiệu</a>
-            <a href="#features">Thư viện</a>
-            <a href="#contact">Liên hệ</a>
-        </nav>
-      </header>
       <section className="hero">
         <div className="overlay-hero">
             <div className="hero-content">
@@ -27,7 +16,7 @@ export default function Homepage() {
                 Hỗ trợ sinh viên trong học tập và phát triển kỹ năng, kết nối với
                 giảng viên, nghiên cứu sinh và sinh viên năm trên giàu kinh nghiệm.
             </p>
-            <button className="cta-btn">Đăng nhập</button>
+            <button onClick={()=>handleLogin()}className="cta-btn">Đăng nhập</button>
         </div>
         </div>
       </section>
@@ -73,7 +62,7 @@ export default function Homepage() {
           </div>
         </div>
       </section>
-      <Footer/>
     </div>
   );
 }
+export default Homepage;

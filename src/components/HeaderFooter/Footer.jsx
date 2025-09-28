@@ -2,7 +2,6 @@ import {
   Facebook,
   Instagram,
   Youtube,
-  Linkedin,
 } from "lucide-react";
 import logo from '../../assets/logo.png'
 import "../../style/footer.css";
@@ -40,17 +39,9 @@ export default function Footer() {
         <div className="footer-col">
             <h4>LIÊN KẾT MẠNG XÃ HỘI</h4>
             <div className="social-icons">
-                <a href="#"><Facebook /></a>
-                <a href="#"><Instagram /></a>
-                <a href="#"><Youtube /></a>
-                <a href="#"><Linkedin /></a>
-                <a href="#">
-                <img
-                    src="/assets/tiktok-icon.png"
-                    alt="TikTok"
-                    className="tiktok-icon"
-                />
-                </a>
+                <a href="#" className="fb"><Facebook /></a>
+                <a href="#" className="ig"><Instagram /></a>
+                <a href="#" className="yt"><Youtube /></a>
             </div>
         </div>
         </div>
