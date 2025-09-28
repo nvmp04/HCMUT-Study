@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import "../../style/UserHomepage/userHomepage.css"
-import UserHeader from "./UserHeader";
+import "../../../style/UserHomepage/userHomepage.css"
+import UserHeader from "../UserHeader";
 
 export default function UserHomepage() {
   const user = {
