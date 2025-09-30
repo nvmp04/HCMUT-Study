@@ -15,40 +15,6 @@ a {
 button{
   cursor: pointer;
 }
-.header {
-  display: flex;
-  align-items: center;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  background: #00274d;
-  color: #fff;
-}
-.logo {
-  font-weight: bold;
-}
-.logo p{
-  font-size: 8px;
-}
-.logo h2{
-  font-size: 12px;
-}
-.logoImg{
-  margin-left: 4%;
-  margin-right: 1%;
-  width: 50px;
-}
-.nav{
-  margin-left: auto;
-  margin-right: 2%;
-}
-.nav a {
-  margin-left: 1.5rem;
-  color: #fff;
-  font-weight: 500;
-}
-.nav a:hover {
-  text-decoration: underline;
-}
 
 .hero {
   background: url('../assets/hero.png') center;

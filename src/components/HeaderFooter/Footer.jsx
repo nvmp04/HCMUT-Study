@@ -4,7 +4,7 @@ import {
   Youtube,
 } from "lucide-react";
 import logo from '../../assets/logo.png'
-import "../../style/footer.css";
+import "../../style/HeaderFooter/footer.css";
 
 export default function Footer() {
   return (
@@ -20,28 +20,24 @@ export default function Footer() {
             </div>
             <p>
                 ▶ Cơ sở 1: 268 Lý Thường Kiệt, Phường Diên Hồng, TP.HCM{" "}
-                <em>(Bản đồ)</em>
             </p>
             <p>
                 ▶ Cơ sở 2: Khu phố Tân Lập, Phường Đông Hòa, TP.HCM{" "}
-                <em>(Bản đồ)</em>
             </p>
         </div>
 
         <div className="footer-col">
             <h4>Thông tin liên hệ và hỗ trợ</h4>
             <p>Sinh viên</p>
-            <p>▶ MyBK</p>
-            <p>Quý khách</p>
-            <p>▶ Email</p>
+            <a href="https://mybk.hcmut.edu.vn/my/index.action">▶ MyBK</a>
         </div>
 
         <div className="footer-col">
             <h4>LIÊN KẾT MẠNG XÃ HỘI</h4>
             <div className="social-icons">
-                <a href="#" className="fb"><Facebook /></a>
-                <a href="#" className="ig"><Instagram /></a>
-                <a href="#" className="yt"><Youtube /></a>
+                <a href="https://www.facebook.com/truongdhbachkhoa?locale=vi_VN" className="fb"><Facebook /></a>
+                <a href="https://www.instagram.com/truongdaihocbachkhoa.1957/" className="ig"><Instagram /></a>
+                <a href="https://www.youtube.com/@bkoisp" className="yt"><Youtube /></a>
             </div>
         </div>
         </div>

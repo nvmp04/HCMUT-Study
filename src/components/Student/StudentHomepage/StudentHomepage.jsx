@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import "../../../style/UserHomepage/userHomepage.css"
-import UserHeader from "../UserHeader";
+import "../../../style/StudentHomepage/studentHomepage.css"
 
-export default function UserHomepage() {
-  const user = {
+export default function StudentHomepage() {
+  const student = {
     fullName: "Nguyễn Văn An",
     studentId: "2231594",
     faculty: "Kỹ thuật Máy tính",
@@ -24,7 +23,6 @@ export default function UserHomepage() {
 
   return (
     <>
-    <UserHeader/>
     <div className="homepage-container">
         {/* THÔNG TIN SINH VIÊN */}
         <div className="card">
@@ -33,14 +31,14 @@ export default function UserHomepage() {
             </div>
             <div className="card-content profile-grid">
             <div>
-                <p><strong>Họ tên:</strong> {user.fullName}</p>
-                <p><strong>MSSV:</strong> {user.studentId}</p>
-                <p><strong>Khoa:</strong> {user.faculty}</p>
-                <p><strong>Email:</strong> {user.email}</p>
+                <p><strong>Họ tên:</strong> {student.fullName}</p>
+                <p><strong>MSSV:</strong> {student.studentId}</p>
+                <p><strong>Khoa:</strong> {student.faculty}</p>
+                <p><strong>Email:</strong> {student.email}</p>
             </div>
             <div>
-                <p><strong>Vai trò:</strong> {user.role}</p>
-                <p><strong>Trạng thái:</strong> {user.status}</p>
+                <p><strong>Vai trò:</strong> {student.role}</p>
+                <p><strong>Trạng thái:</strong> {student.status}</p>
             </div>
             </div>
         </div>

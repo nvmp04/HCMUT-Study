@@ -1,14 +1,14 @@
-import "../../style/UserHomepage/userHeader.css";
+import "../../style/StudentHomepage/studentHeader.css";
 import { Home } from "lucide-react";
 import { Link } from "react-router-dom";
-function UserHeader() {
+function StudentHeader() {
   return (
     <div className="main-header">
         <div className="menu">
-          <Link to='/user/home' className="menu-item home-icon">
+          <Link to='/student' className="menu-item home-icon">
             <Home />
           </Link>
-          <Link to='/user/schedule' className="menu-item">
+          <Link to='/student/schedule' className="menu-item">
             ĐẶT LỊCH
           </Link>
           <Link to='' className="menu-item">
@@ -21,4 +21,4 @@ function UserHeader() {
     </div>
   );
 }
-export default UserHeader;
+export default StudentHeader;

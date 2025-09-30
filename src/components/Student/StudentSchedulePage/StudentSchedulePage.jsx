@@ -1,9 +1,8 @@
-import '../../../style/UserSchedulePage/userSchedulePage.css'
+import '../../../style/StudentSchedulePage/studentSchedulePage.css'
 import { Search, Star, Calendar, User } from 'lucide-react';
 import { useState } from 'react';
-import UserHeader from '../UserHeader'
 import avt from '../../../assets/avt.jpg'
-const UserSchedulePage = () => {
+function StudentSchedulePage() {
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -26,56 +25,6 @@ const UserSchedulePage = () => {
       reviews: 127,
       avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
       category: 'math'
-    },
-    {
-      id: 2,
-      name: 'Trần Thị Lan',
-      role: 'Sinh viên',
-      major: 'Ngôn ngữ Anh',
-      rating: 4.9,
-      reviews: 89,
-      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
-      category: 'english'
-    },
-    {
-      id: 3,
-      name: 'Lê Minh Tuấn',
-      role: 'Giảng viên',
-      major: 'Khoa học máy tính',
-      rating: 4.7,
-      reviews: 203,
-      avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
-      category: 'programming'
-    },
-    {
-      id: 4,
-      name: 'Phạm Thị Hoa',
-      role: 'Sinh viên',
-      major: 'Vật lý lý thuyết',
-      rating: 4.6,
-      reviews: 64,
-      avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face',
-      category: 'physics'
-    },
-    {
-      id: 5,
-      name: 'Hoàng Đức Minh',
-      role: 'Giảng viên',
-      major: 'Hóa học hữu cơ',
-      rating: 4.8,
-      reviews: 156,
-      avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face',
-      category: 'chemistry'
-    },
-    {
-      id: 6,
-      name: 'Vũ Thị Mai',
-      role: 'Sinh viên',
-      major: 'Kinh tế quốc tế',
-      rating: 4.5,
-      reviews: 78,
-      avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face',
-      category: 'economics'
     }
   ];
 
@@ -89,8 +38,7 @@ const UserSchedulePage = () => {
 
   return (
     <>
-    <UserHeader/>
-    <div className="user-schedule-page">
+    <div className="student-schedule-page">
       <div className="page-header">
         <h1 className="page-title">Đặt lịch học với Tutor</h1>
         <p className="page-subtitle">Tìm kiếm và đặt lịch học với các giảng viên và sinh viên xuất sắc</p>
@@ -169,4 +117,4 @@ const UserSchedulePage = () => {
     </>
   );
 };
-export default UserSchedulePage;
+export default StudentSchedulePage;
