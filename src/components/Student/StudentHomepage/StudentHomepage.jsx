@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "../../../style/StudentHomepage/studentHomepage.css"
+import { Link } from "react-router-dom";
 
 export default function StudentHomepage() {
   const student = {
@@ -12,8 +13,6 @@ export default function StudentHomepage() {
   };
 
   const sessions = [
-    { id: 1, topic: "Ôn thi Giải tích", date: "12/10/2025", location: "Phòng A3-201", tutor: "Thầy Nam" },
-    { id: 2, topic: "Luyện đồ án Web", date: "20/10/2025", location: "Online", tutor: "Cô Mai" },
   ];
 
   const resources = [
@@ -46,7 +45,7 @@ export default function StudentHomepage() {
         <div className="card">
             <div className="card-header row-space-between">
                 <h2>LỊCH HẸN TUTOR</h2>
-                <button className="secondary-btn">+ Đặt lịch mới</button>
+                <Link to='/student/schedule' className="secondary-btn">+ Đặt lịch mới</Link>
             </div>
             <div className="card-content">
             {sessions.length === 0 ? (
