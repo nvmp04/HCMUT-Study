@@ -1,6 +1,7 @@
 import '../../../style/StudentSchedulePage/studentSchedulePage.css'
 import { Search, Star, Calendar, User } from 'lucide-react';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import avt from '../../../assets/avt.jpg'
 function StudentSchedulePage() {
   const [activeCategory, setActiveCategory] = useState('all');
@@ -97,12 +98,12 @@ function StudentSchedulePage() {
             </div>
             
             <div className="tutor-actions">
-              <button 
+              <Link to = '/student/schedule/:id'
                 className="book-btn"
               >
                 <Calendar size={16} />
                 Đặt lịch
-              </button>
+              </Link>
             </div>
           </div>
         ))}
