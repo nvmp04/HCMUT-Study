@@ -1,12 +1,18 @@
 import "../../style/homepage.css"
 import Benefits from "./Benefits";
 import { useNavigate } from "react-router-dom";
+import {useAuth} from '../../hooks/useAuth'
+import StudentHeader from '../Student/StudentHeader'
 function Homepage() {
   const navigate = useNavigate();
   async function handleLogin() {
     navigate('/login');
   }
+  const {auth} = useAuth();
+  const role = auth.role;
   return (
+    <>
+    {role === 'student' && <StudentHeader/>}
     <div className="homepage">
       <section className="hero">
         <div className="overlay-hero">
@@ -16,7 +22,7 @@ function Homepage() {
                 Hỗ trợ sinh viên trong học tập và phát triển kỹ năng, kết nối với
                 giảng viên, nghiên cứu sinh và sinh viên năm trên giàu kinh nghiệm.
             </p>
-            <button onClick={()=>handleLogin()}className="cta-btn">Đăng nhập</button>
+            {!auth.token && <button onClick={()=>handleLogin()}className="cta-btn">Đăng nhập</button>}
         </div>
         </div>
       </section>
@@ -63,6 +69,7 @@ function Homepage() {
         </div>
       </section>
     </div>
+    </>
   );
 }
 export default Homepage;
