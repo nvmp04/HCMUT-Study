@@ -1,0 +1,17 @@
+@import "tailwindcss";
+button{
+    cursor: pointer;
+}
+body, h1, h2, h3, p, ul {
+    margin: 0;
+    padding: 0;
+}
+.hero {
+  background: url('./assets/hero.png') center;
+  background-size: cover;
+  color: #fff;
+  text-align: center;
+  height: 200px;
+  padding: 2rem 2rem;
+  position: relative;
+}

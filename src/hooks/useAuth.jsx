@@ -1,8 +1,28 @@
-import { createContext, useContext, useState } from "react";
-
+import { createContext, useContext, useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 const AuthContext = createContext();
 export function AuthProvider({children}){
+    const navigate = useNavigate();
     const [auth, setAuth] = useState({token: sessionStorage.getItem("token"), role: sessionStorage.getItem("role")});
+    const logout = () => {
+        sessionStorage.removeItem("token");
+        sessionStorage.removeItem("role");
+        setAuth({ token: null, role: null });
+        navigate('/login');
+    };
+    useEffect(()=>{
+        if(auth.token){
+            const decoded = jwtDecode(auth.token);
+            const timeLeft = decoded.exp * 1000 - Date.now();
+            if (timeLeft <= 0) {
+                logout();
+            } else {
+                const timer = setTimeout(logout, timeLeft);
+                return () => clearTimeout(timer); 
+            }
+        }
+    },[auth.token]);
     return (
         <AuthContext.Provider value={{auth, setAuth}}>
             {children}
