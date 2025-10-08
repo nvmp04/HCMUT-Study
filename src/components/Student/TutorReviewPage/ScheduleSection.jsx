@@ -37,37 +37,17 @@ export default function ScheduleSection({ selectedTimeSlot, setSelectedTimeSlot 
       return {
         day: dayformat,
         date: dateformat,
-        timeSlots: slotsFromAPI.map((time) => ({
+        timeSlots: slotsFromAPI.map((time) => {
+          const matched = data.status?.find(appt => appt.slotId === (time + ' ' + dateformat));
+          console.log(matched);
+          return {
           id: time + ' ' + dateformat,
           time, 
-          status: 'available'
-        })),
+          status: matched ? matched.status : 'available'
+        }}),
       };
     });
   }, [data]);
-  // const weeklySchedule = [
-  //   {
-  //     day: "Thứ 2",
-  //     date: "28/10/2024",
-  //     timeSlots: [
-  //       { time: "08:00 - 10:00", available: true, id: "mon-1" },
-  //       { time: "10:00 - 12:00", available: false, id: "mon-2" },
-  //       { time: "14:00 - 16:00", available: true, id: "mon-3" },
-  //       { time: "16:00 - 18:00", available: true, id: "mon-4" },
-  //     ],
-  //   },
-  //   {
-  //     day: "Thứ 3",
-  //     date: "29/10/2024",
-  //     timeSlots: [
-  //       { time: "08:00 - 10:00", available: true, id: "tue-1" },
-  //       { time: "10:00 - 12:00", available: true, id: "tue-2" },
-  //       { time: "14:00 - 16:00", available: false, id: "tue-3" },
-  //       { time: "16:00 - 18:00", available: true, id: "tue-4" },
-  //     ],
-  //   },
-  //   // ... các ngày khác
-  // ];
   const [expiredTimeModal, setExpiredTimeModal] = useState(false); 
   const handleTimeSlotClick = (day, timeSlot) => {
     const time = timeSlot.time;
@@ -122,8 +102,11 @@ export default function ScheduleSection({ selectedTimeSlot, setSelectedTimeSlot 
                 >
                   <Clock size={14} />
                   {slot.time}
-                  {slot.status !== 'available' && (
+                  {slot.status !== 'available' && slot.status !== 'cancelled' && (
                     <span className="text-[10px] font-normal">Đã đặt</span>
+                  )}
+                  {slot.status === 'cancelled' && (
+                    <span className="text-[10px] font-normal">Đã bị hủy</span>
                   )}
                 </button>
               ))}

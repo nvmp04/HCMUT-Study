@@ -2,8 +2,10 @@ import { jwtDecode } from 'jwt-decode';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchAPI } from '../../../utils/fetchAPI';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function BookingModal({ tutor, selectedTimeSlot, onConfirm, onCancel }) {
+  const queryClient = useQueryClient();
   const [sessionTitle, setSessionTitle] = useState('');
   const {id} = useParams();
   async function handleConfirm(){
@@ -19,6 +21,7 @@ export default function BookingModal({ tutor, selectedTimeSlot, onConfirm, onCan
         tutorName: tutor.name,
         tutorPhone: tutor.phone,
         date: selectedTimeSlot.day + ', ' + selectedTimeSlot.date,
+        time: selectedTimeSlot.time,
         slotId: selectedTimeSlot.time + ' ' + selectedTimeSlot.date,
         title: sessionTitle,
         type: '',
@@ -27,7 +30,8 @@ export default function BookingModal({ tutor, selectedTimeSlot, onConfirm, onCan
         reason: ''
       }
       const url = 'http://localhost:5000/student/booksession'
-      const res = await fetchAPI(url, 'POST', content, true);
+      await fetchAPI(url, 'POST', content, true);
+      queryClient.invalidateQueries( {queryKey:['tutorschedule']});
       onConfirm(sessionTitle);
       setSessionTitle('');
     }

@@ -1,4 +1,4 @@
-import { useState, useRef, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { Calendar, Clock, Plus } from "lucide-react";
 import RequestModal from "./RequestModal";
 import ConfirmedModal from "./ConfirmedModal";
@@ -7,7 +7,6 @@ import {AddTimeModal, weekdayMap2} from "./AddTimeModal";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchAPI } from "../../../utils/fetchAPI";
 import { EndModal } from "./EndModal";
-
 
 export default function TutorSchedule() {
   const queryClient = useQueryClient();
@@ -28,7 +27,6 @@ export default function TutorSchedule() {
       5: "fri",
       6: "sat",
     };
-
     return Array.from({ length: 7 }, (_, i) => {
       const date = new Date(today);
       date.setDate(today.getDate() + i);
@@ -59,18 +57,6 @@ export default function TutorSchedule() {
   }, [data]);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
   const [modalType, setModalType] = useState(null);
-
-  const updateSlot = (dayIndex, slotIndex, patch) => {
-    // setWeeklySchedule((prev) => {
-    //   const clone = JSON.parse(JSON.stringify(prev));
-    //   clone[dayIndex].timeSlots[slotIndex] = {
-    //     ...clone[dayIndex].timeSlots[slotIndex],
-    //     ...patch,
-    //   };
-    //   return clone;
-    // });
-  };
-
   const handleTimeSlotClick = (day, slotIndex) => {
     const Day = weeklySchedule.find((d)=>d.day === day);
     const slot = Day.timeSlots[slotIndex];
@@ -91,12 +77,6 @@ export default function TutorSchedule() {
       }
     }
     else setModalType("availableActions");
-  };
-
-  const handleCancelAccepted = () => {
-    const { dayIndex, slotIndex } = selectedTimeSlot;
-    updateSlot(dayIndex, slotIndex, { status: "available", request: undefined });
-    closeModal();
   };
 
   async function handleConfirmDeleteAvailable(){
@@ -198,7 +178,6 @@ export default function TutorSchedule() {
           day={selectedTimeSlot.day}
           date={selectedTimeSlot.date}
           onClose={closeModal}
-          onCancel={handleCancelAccepted}
         />
       )}
       {modalType === "availableActions" && selectedTimeSlot && (
