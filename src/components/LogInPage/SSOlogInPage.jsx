@@ -22,9 +22,6 @@ export default function SSOLogin() {
         sessionStorage.setItem("token", token);
         sessionStorage.setItem("role", role);
         setAuth({token: token, role: role});
-        if(role === 'student') {
-          navigate('/student');
-        }
       }
       else{
         handleClear();

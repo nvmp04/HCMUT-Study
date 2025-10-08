@@ -15,7 +15,8 @@ export default function StudentHomepage() {
     { id: 1, title: "Giáo trình Giải tích 1", course: "MA101", link: "#" },
     { id: 2, title: "Slide Cấu trúc dữ liệu", course: "CS200", link: "#" },
   ];
-
+  sessionStorage.setItem('name', data.student.name);
+  sessionStorage.setItem('phone', data.student.phone);
   return (
     <div className="max-w-[1000px] mx-auto py-20 px-8">
       {/* THÔNG TIN SINH VIÊN */}

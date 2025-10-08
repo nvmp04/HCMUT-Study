@@ -4,6 +4,7 @@ import AppRoutes from './routes/AppRoutes';
 import { useAuth } from './hooks/useAuth';
 // LoadingModal.jsx
 import React from "react";
+import { useLocation } from 'react-router-dom';
 
 export function LoadingModal() {
   return (
@@ -18,14 +19,14 @@ export function LoadingModal() {
 
 function App() {
   const {auth, setAuth} = useAuth();
-  
+  const location = useLocation();
+  const path = location.pathname;
   const token = auth.token;
-
   return (
     <>
       <Header/>
       <AppRoutes/>
-      {!token && <Footer/>}
+      {(!token || path === '/') && <Footer/>}
     </>
   )
 }

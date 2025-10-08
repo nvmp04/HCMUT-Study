@@ -131,7 +131,8 @@ function NavigationBar() {
   else if (role === 'tutor')
     headerLinks = [
     { to: '/tutor/myschedule', name: 'LỊCH CỦA TÔI' },
-    { to: '/tutor/', name: 'HỌC VIÊN CỦA TÔI' },
+    { to: '/tutor/appointments', name: 'CÁC BUỔI HẸN'},
+    { to: '/tutor/mystudent', name: 'HỌC VIÊN CỦA TÔI' },
     { to: '/tutor/library', name: 'THƯ VIỆN' }
   ];
   else return;

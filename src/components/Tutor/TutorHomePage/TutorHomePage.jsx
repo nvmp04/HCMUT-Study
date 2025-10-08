@@ -9,7 +9,7 @@ function TutorHomePage() {
   const sessions = [{id: 123, topic: 'Cơ sở dữ liệu', date: '04/10/2025', location: 'Phòng 101', tutor: 'Nguyễn Văn A'}];
   const url = 'http://localhost:5000/tutor/gettutordata'
   const {data, isLoading} = useQuery({
-    queryKey: [], 
+    queryKey: ['tutor'], 
     queryFn: async () => await fetchAPI(url, 'GET', null, true)
   })
   if(isLoading) return <LoadingModal/>

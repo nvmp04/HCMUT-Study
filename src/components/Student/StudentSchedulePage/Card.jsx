@@ -33,7 +33,7 @@ export default function Card({ tutor }) {
       <div className="flex justify-center">
         <Link
           to={`/student/schedule/${tutor.id}`}
-          className="bg-gradient-to-r from-[#014181] to-blue-600 text-white font-semibold px-6 py-2.5 rounded-md text-sm shadow-md flex items-center gap-2 transition hover:from-blue-600 hover:to-[#2c5aa0]"
+          className="bg-[#014181] text-white font-semibold px-6 py-2.5 rounded-md text-sm shadow-md flex items-center gap-2 transition"
         >
           <Calendar size={16} />
           Đặt lịch

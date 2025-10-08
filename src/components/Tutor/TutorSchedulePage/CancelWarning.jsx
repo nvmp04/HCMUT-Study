@@ -44,7 +44,7 @@ export default function CancelWarning({ info, onClose, setWarning }) {
             <strong>Tên học viên:</strong> {info.studentName}
           </p>
           <p>
-            <strong>Số điện thoại:</strong> {info.phone}
+            <strong>Số điện thoại:</strong> {info.studentPhone}
           </p>
         </div>
 

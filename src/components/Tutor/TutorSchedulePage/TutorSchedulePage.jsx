@@ -1,89 +1,96 @@
-import React, { useState, useRef } from "react";
+import { useState, useRef, useMemo } from "react";
 import { Calendar, Clock, Plus } from "lucide-react";
 import RequestModal from "./RequestModal";
 import ConfirmedModal from "./ConfirmedModal";
 import AvailableModal from "./AvailableModal";
-import AddTimeModal from "./AddTimeModal";
+import {AddTimeModal, weekdayMap2} from "./AddTimeModal";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { fetchAPI } from "../../../utils/fetchAPI";
+import { EndModal } from "./EndModal";
 
 
 export default function TutorSchedule() {
-  const generateRandomStatus = () => {
-    const statuses = ["available", "pending", "accepted"];
-    const pick = statuses[Math.floor(Math.random() * statuses.length)];
-
-    if (pick === "pending" || pick === "accepted") {
-      return {
-        status: pick,
-        request: {
-          studentName: ["Nguyễn Văn A", "Trần Thị B", "Lê Văn C"][
-            Math.floor(Math.random() * 3)
-          ],
-          subjectName: ["Toán - Đại số", "Vật lý - Cơ học", "Lập trình C cơ bản"][
-            Math.floor(Math.random() * 3)
-          ],
-          note: "Buổi học ôn luyện chuyên sâu",
-        },
-      };
-    }
-    return { status: "available" };
-  };
-
-  const generateWeeklySchedule = () => {
+  const queryClient = useQueryClient();
+  const url = 'http://localhost:5000/tutor/getschedule';
+  const {data, isLoading} = useQuery({
+    queryKey: ['schedule'], 
+    queryFn: async ()=> await fetchAPI(url, 'GET', null, true)
+  })
+  const weeklySchedule = useMemo(() => {
+    if (!data) return [];
     const today = new Date();
+    const weekdayMap = {
+      0: "sun",
+      1: "mon",
+      2: "tues",
+      3: "wed",
+      4: "thur",
+      5: "fri",
+      6: "sat",
+    };
+
     return Array.from({ length: 7 }, (_, i) => {
       const date = new Date(today);
       date.setDate(today.getDate() + i);
-      return {
-        day: date.toLocaleDateString("vi-VN", { weekday: "long" }),
-        date: date.toLocaleDateString("vi-VN", {
+      const weekday = date.getDay();
+      const scheduleKey = weekdayMap[weekday];
+      const slotsFromAPI = data?.schedule?.[scheduleKey] || [];
+      const dayformat = date.toLocaleDateString("vi-VN", { weekday: "long" });
+      const dateformat = date.toLocaleDateString("vi-VN", {
           day: "2-digit",
           month: "2-digit",
           year: "numeric",
-        }),
-        timeSlots: [
-          { id: `${i}-1`, time: "08:00 - 10:00", ...generateRandomStatus() },
-          { id: `${i}-2`, time: "10:00 - 12:00", ...generateRandomStatus() },
-          { id: `${i}-3`, time: "16:00 - 17:00", ...generateRandomStatus() },
-          { id: `${i}-4`, time: "17:00 - 18:00", ...generateRandomStatus() },
-        ],
+        })
+      return {
+        day: dayformat,
+        date: dateformat,
+        timeSlots: slotsFromAPI.map((time) => {
+          const matched = data.appointment?.find(appt => appt.slotId === (time + ' ' + dateformat));
+          return{
+            id: time + ' ' + dateformat,
+            time,
+            status: matched ? matched.status : 'available',
+            studentName: matched ? matched.studentName : '',
+            studentPhone: matched ? matched.studentPhone : '',
+            title: matched ? matched.title : ''
+        }}),
       };
     });
-  };
-
-  const [weeklySchedule, setWeeklySchedule] = useState(generateWeeklySchedule());
+  }, [data]);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
   const [modalType, setModalType] = useState(null);
 
   const updateSlot = (dayIndex, slotIndex, patch) => {
-    setWeeklySchedule((prev) => {
-      const clone = JSON.parse(JSON.stringify(prev));
-      clone[dayIndex].timeSlots[slotIndex] = {
-        ...clone[dayIndex].timeSlots[slotIndex],
-        ...patch,
-      };
-      return clone;
-    });
+    // setWeeklySchedule((prev) => {
+    //   const clone = JSON.parse(JSON.stringify(prev));
+    //   clone[dayIndex].timeSlots[slotIndex] = {
+    //     ...clone[dayIndex].timeSlots[slotIndex],
+    //     ...patch,
+    //   };
+    //   return clone;
+    // });
   };
 
-  const handleTimeSlotClick = (dayIndex, slotIndex) => {
-    const slot = weeklySchedule[dayIndex].timeSlots[slotIndex];
-    setSelectedTimeSlot({ dayIndex, slotIndex, slot });
-
+  const handleTimeSlotClick = (day, slotIndex) => {
+    const Day = weeklySchedule.find((d)=>d.day === day);
+    const slot = Day.timeSlots[slotIndex];
+    const date = Day.date;
+    setSelectedTimeSlot({ day, date, slotIndex, slot });
     if (slot.status === "pending") setModalType("request");
-    else if (slot.status === "accepted") setModalType("confirmed");
+    else if (slot.status === "accepted") {
+      const endTime = slot.time.split(' - ')[1];
+      const [hours, minutes] = endTime.split(":").map(Number);
+      const [day, month, year] = date.split("/").map(Number);
+      const endDateTime = new Date(year, month - 1, day, hours, minutes);
+      const now = new Date();
+      if ((endDateTime - now) / 1000 / 60 <= 0) {
+        setModalType("end");
+      }
+      else {
+        setModalType("confirmed");
+      }
+    }
     else setModalType("availableActions");
-  };
-
-  const handleAcceptRequest = () => {
-    const { dayIndex, slotIndex } = selectedTimeSlot;
-    updateSlot(dayIndex, slotIndex, { status: "accepted" });
-    closeModal();
-  };
-
-  const handleDeclineRequest = () => {
-    const { dayIndex, slotIndex } = selectedTimeSlot;
-    updateSlot(dayIndex, slotIndex, { status: "available", request: undefined });
-    closeModal();
   };
 
   const handleCancelAccepted = () => {
@@ -92,21 +99,20 @@ export default function TutorSchedule() {
     closeModal();
   };
 
-  const handleConfirmDeleteAvailable = () => {
-    const { dayIndex, slotIndex } = selectedTimeSlot;
-    setWeeklySchedule((prev) => {
-      const clone = JSON.parse(JSON.stringify(prev));
-      clone[dayIndex].timeSlots.splice(slotIndex, 1);
-      return clone;
-    });
+  async function handleConfirmDeleteAvailable(){
+    const url = 'http://localhost:5000/tutor/adddeleteslot';
+    const {day, slot} = selectedTimeSlot;
+    const {time} = slot;
+    const content = {day: weekdayMap2[day], time, type: 'delete'};
+    await fetchAPI(url, 'PUT', content, true);
+    queryClient.invalidateQueries(['schedule']);
     closeModal();
   };
-  const [addTime, setAddTime] = useState(false);
-  const dayIndexRef = useRef();
-  const addSlot = (dayIndex) => {
-    dayIndexRef.current = dayIndex;
-    setAddTime(true);
-    
+  //selectedDay là state quản lí ngày được thêm khung giờ
+  const [selectedDay, setSelectedDay] = useState();
+  const addSlot = (day) => {
+    setSelectedDay(day);
+    setModalType('addTime');
   };
 
   const closeModal = () => {
@@ -142,18 +148,18 @@ export default function TutorSchedule() {
                 </div>
                 <button
                   title="Thêm khung rảnh"
-                  onClick={() => addSlot(dayIndex)}
+                  onClick={() => addSlot(day)}
                   className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md text-sm bg-blue-50 border border-blue-200 text-blue-600 hover:bg-blue-100"
                 >
                   <Plus size={14} /> Thêm
                 </button>
               </div>
 
-              <div className="grid grid-cols-[repeat(auto-fit,minmax(120px,1fr))] gap-2">
+              <div className="grid grid-cols-[repeat(auto-fit,minmax(120px,120px))] gap-2">
                 {day.timeSlots.map((slot, slotIndex) => (
                   <div key={slot.id}>
                     <button
-                      onClick={() => handleTimeSlotClick(dayIndex, slotIndex)}
+                      onClick={() => handleTimeSlotClick(day.day, slotIndex)}
                       className={`flex flex-col items-center justify-center gap-1 min-h-[60px] p-2 border-2 rounded-lg text-sm font-medium transition-all ${slotClassByStatus(
                         slot.status
                       )}`}
@@ -180,38 +186,34 @@ export default function TutorSchedule() {
       {modalType === "request" && selectedTimeSlot && (
         <RequestModal
           slot={selectedTimeSlot.slot}
-          day={weeklySchedule[selectedTimeSlot.dayIndex].day}
-          date={weeklySchedule[selectedTimeSlot.dayIndex].date}
+          day={selectedTimeSlot.day}
+          date={selectedTimeSlot.date}
           onClose={closeModal}
-          onAccept={handleAcceptRequest}
-          onDecline={handleDeclineRequest}
         />
       )}
 
       {modalType === "confirmed" && selectedTimeSlot && (
         <ConfirmedModal
           slot={selectedTimeSlot.slot}
-          day={weeklySchedule[selectedTimeSlot.dayIndex].day}
-          date={weeklySchedule[selectedTimeSlot.dayIndex].date}
+          day={selectedTimeSlot.day}
+          date={selectedTimeSlot.date}
           onClose={closeModal}
           onCancel={handleCancelAccepted}
         />
       )}
-
       {modalType === "availableActions" && selectedTimeSlot && (
         <AvailableModal
           slot={selectedTimeSlot.slot}
-          day={weeklySchedule[selectedTimeSlot.dayIndex].day}
-          date={weeklySchedule[selectedTimeSlot.dayIndex].date}
+          day={selectedTimeSlot.day}
+          date={selectedTimeSlot.date}
           onClose={closeModal}
           onDelete={handleConfirmDeleteAvailable}
         />
       )}
-      {addTime && <AddTimeModal 
-        setAddTime={setAddTime}
-        setWeeklySchedule={setWeeklySchedule}
-        weeklySchedule={weeklySchedule}
-        dayIndexRef={dayIndexRef}/>}
+      {modalType === "addTime" && <AddTimeModal 
+        onClose={()=>setModalType(null)}
+        day={selectedDay}/>}
+      {modalType === "end" && <EndModal onClose={()=>setModalType(null)}/>}
     </div>
   );
 }
