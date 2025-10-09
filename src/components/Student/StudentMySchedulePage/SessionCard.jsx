@@ -35,15 +35,20 @@ export default function SessionCard({
 
           <div className="flex items-center gap-2">
             {session.type === "online" ? (
+              <>
               <Video size={16} className="text-blue-500" />
+              <span>{session.link}</span>
+              </>
             ) : (
+              <>
               <MapPin size={16} className="text-blue-500" />
+              <span>{session.location}</span>
+              </>
             )}
-            <span>{session.location}</span>
           </div>
         </div>
       </div>
-      {isFailed && session.reason && (
+      {isFailed && (
         <div className="flex items-start gap-3 bg-red-50 p-3 rounded-md mb-4 text-sm text-red-700">
           <AlertCircle size={16} />
           <div>
@@ -52,7 +57,7 @@ export default function SessionCard({
           </div>
         </div>
       )}
-      {isPast && session.hasMinutes && (
+      {isPast && (
         <div className="mb-4">
           <button className="inline-flex items-center gap-2 text-blue-600 text-sm hover:text-blue-800">
             <FileText size={16} />

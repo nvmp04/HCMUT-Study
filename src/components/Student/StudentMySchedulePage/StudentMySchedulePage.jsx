@@ -26,7 +26,7 @@ export default function StudentMySchedulePage() {
     const [startTime] = s.time.split(" - "); 
     const [hours, minutes] = startTime.split(":").map(Number);
     const sessionDateTime = new Date(year, month - 1, day, hours, minutes);
-    if (tab === "upcoming") return sessionDateTime >= now;
+    if (tab === "upcoming") return (sessionDateTime >= now && s.status !== 'cancelled');
     if (tab === "past") return sessionDateTime < now || s.status === "completed";
     if (tab === "cancelled") return s.status === "cancelled";
     return true;
@@ -95,7 +95,7 @@ export default function StudentMySchedulePage() {
           filteredSessions.map((session) => {
             const isPast = new Date(session.date) < new Date();
             const isFailed =
-              session.status === "rejected" ||
+              session.status === "cancelled" ||
               session.status === "expired_pending";
 
             return (
