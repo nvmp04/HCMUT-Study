@@ -1,13 +1,19 @@
 import React, { useState } from "react";
+import { fetchAPI } from "../../../utils/fetchAPI";
+import { useQueryClient } from "@tanstack/react-query";
 
-export default function CancelModal({ open, session, onClose, onSubmit }) {
+export default function CancelModal({ slot, open, session, onClose}) {
   const [reason, setReason] = useState("");
-
+  const queryClient = useQueryClient();
   if (!open) return null;
 
-  const handleSubmit = () => {
+  async function handleSubmit (){
     if (reason.trim()) {
-      onSubmit({ ...session, reason });
+      console.log(slot)
+      const content = {status:'cancelled', slotId: slot.slotId, reason};
+      const url = 'http://localhost:5000/student/cancelled';
+      await fetchAPI(url, 'PUT', content, true);
+      queryClient.invalidateQueries(['studentschedule']);
       onClose();
     }
   };
@@ -18,16 +24,15 @@ export default function CancelModal({ open, session, onClose, onSubmit }) {
         <h2 className="text-xl font-semibold text-slate-800 mb-2">
           Hủy buổi học
         </h2>
-        <p className="text-sm text-slate-600 mb-4">
-          Bạn có chắc chắn muốn hủy buổi học{" "}
+        <p className="text-sm text-slate-600">
+          Bạn có chắc chắn muốn hủy buổi học {' '}
           <span className="font-medium text-slate-800">
-            {session?.subject}
-          </span>{" "}
-          với <span className="font-medium">{session?.tutor}</span>?
+            {slot.title}
+          </span>?
         </p>
 
         <textarea
-          className="w-full border rounded-md p-2 text-sm mb-4 focus:outline-none focus:ring-2 focus:ring-red-400"
+          className="w-full border rounded-md p-2 text-sm mb-4 mt-2 focus:outline-none focus:ring-2 focus:ring-red-400"
           placeholder="Nhập lý do hủy (bắt buộc)..."
           rows={4}
           value={reason}

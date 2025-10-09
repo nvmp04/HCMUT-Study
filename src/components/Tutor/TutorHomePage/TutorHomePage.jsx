@@ -1,12 +1,11 @@
 import { useState } from "react";
-import { Star, User, BookOpen, Mail } from "lucide-react";
+import { Star, User, BookOpen, Mail, XCircle } from "lucide-react";
 import avt from '../../../assets/avt.jpg';
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import {fetchAPI} from '../../../utils/fetchAPI'
 import {LoadingModal} from '../../../App'
 function TutorHomePage() {
-  const sessions = [{id: 123, topic: 'Cơ sở dữ liệu', date: '04/10/2025', location: 'Phòng 101', tutor: 'Nguyễn Văn A'}];
   const url = 'http://localhost:5000/tutor/gettutordata'
   const {data, isLoading} = useQuery({
     queryKey: ['tutor'], 
@@ -16,10 +15,7 @@ function TutorHomePage() {
   return (
     <div className="min-h-screen flex justify-center bg-gray-100 pt-10">
       <div className="w-full max-w-[900px] flex flex-col gap-6">
-
-        {/* Tutor Info */}
         <div className="bg-white rounded-2xl p-6 shadow-md border border-gray-200 flex flex-col lg:flex-row gap-6">
-          {/* Left: Avatar & Rating */}
           <div className="flex flex-col items-center gap-3 lg:w-[300px]">
             <img
               src={avt}
@@ -38,8 +34,6 @@ function TutorHomePage() {
               </div>
             </div>
           </div>
-
-          {/* Right: Basic Info + Subjects */}
           <div className="flex-1">
             <div className="bg-gray-50 rounded-xl p-4 grid grid-cols-1 gap-3 mb-5">
               <div className="flex items-center gap-2 text-sm font-medium text-gray-600">
@@ -72,7 +66,6 @@ function TutorHomePage() {
           </div>
         </div>
 
-        {/* Sessions */}
         <div className="bg-white border rounded-lg border-[#ddd] shadow-[0_2px_6px_rgba(0,0,0,0.05)]">
           <div className="px-6 py-4 border-b border-[#eee] flex items-center justify-between">
             <h2 className="text-[1.3rem] font-semibold">LỊCH DẠY</h2>
@@ -84,22 +77,23 @@ function TutorHomePage() {
             </Link>
           </div>
           <div className="p-6">
-            {sessions.length === 0 ? (
+            {data.appointment.length === 0 ? (
               <p>Chưa có buổi nào được lên lịch.</p>
             ) : (
               <ul className="list-none p-0 m-0">
-                {sessions.map((s) => (
+                {data.appointment.map((a) => (
                   <li
-                    key={s.id}
+                    key={a.id}
                     className="flex justify-between items-center py-3 border-b border-[#eee]"
                   >
                     <div>
-                      <p className="font-bold">{s.topic}</p>
+                      <p className="font-bold">{a.title}</p>
                       <p className="text-sm text-gray-700">
-                        {s.date} · {s.location} · Tutor: {s.tutor}
+                        {a.date} · {a.location} · {a.studentName}
                       </p>
                     </div>
-                    <button className="bg-[#e53935] text-white px-4 py-2 rounded-md cursor-pointer">
+                    <button className="flex items-center gap-2 bg-[#e53935] hover:bg-[#c62828] text-white px-4 py-2 rounded-md transition">
+                      <XCircle size={18} />
                       Hủy lịch
                     </button>
                   </li>

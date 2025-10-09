@@ -1,15 +1,17 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchAPI } from "../../../utils/fetchAPI";
 import { LoadingModal } from "../../../App";
-
+import io from "socket.io-client";
 import HeaderSection from "./HeaderSection";
 import InfoSection from "./InfoSection";
 import ScheduleSection from "./ScheduleSection";
 import BookingModal from "./BookingModal";
 
+const socket = io("http://localhost:5000");
 export default function TutorReviewPage() {
+  const queryClient = useQueryClient();
   const { id } = useParams();
   const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
   const [sessionTitle, setSessionTitle] = useState("");
@@ -19,7 +21,14 @@ export default function TutorReviewPage() {
     queryKey: [id],
     queryFn: async () => await fetchAPI(url, "POST", { id }, true),
   });
-
+  useEffect(() => {
+    socket.on("tutorScheduleUpdated", ({ tutorId }) => {
+      queryClient.invalidateQueries([tutorId]);
+    });
+    return () => {
+      socket.off("tutorScheduleUpdated");
+    };
+  }, [queryClient]);
   if (isLoading) return <LoadingModal />;
 
   const handleBookAppointment = () => {

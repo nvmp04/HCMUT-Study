@@ -135,15 +135,16 @@ function NavigationBar() {
     { to: '/tutor/mystudent', name: 'HỌC VIÊN CỦA TÔI' },
     { to: '/tutor/library', name: 'THƯ VIỆN' }
   ];
-  else return;
+  else return null;
+
   const { pathname } = useLocation();
 
   return (
     <div className="sticky top-0 z-10 mt-[2px] bg-white h-[50px] border-b border-gray-300">
-      <div className="flex items-center justify-center h-full gap-12 list-none p-0 m-0">
+      <div className="flex items-center justify-center h-full gap-5 list-none p-0 m-0">
         <Link
           to={'/' + role}
-          className={`flex items-center justify-center h-full px-5 font-semibold text-sm sm:text-base md:text-[1.1rem] cursor-pointer ${
+          className={`flex items-center justify-center h-full px-5 font-semibold text-[clamp(0.65rem,1.5vw,0.9rem)] cursor-pointer ${
             pathname === '/'+role ? "bg-[#00274d] text-white" : "text-[#222] hover:bg-[#00274d] hover:text-white"
           }`}
         >
@@ -154,7 +155,7 @@ function NavigationBar() {
           <Link
             key={link.to}
             to={link.to}
-            className={`flex items-center justify-center h-full px-5 font-semibold text-sm sm:text-base md:text-[1.1rem] cursor-pointer ${
+            className={`flex items-center justify-center h-full px-5 font-semibold text-[clamp(0.65rem,1.5vw,0.9rem)] cursor-pointer ${
               pathname === link.to
                 ? "bg-[#00274d] text-white"
                 : "text-[#222] hover:bg-[#00274d] hover:text-white"
@@ -163,7 +164,6 @@ function NavigationBar() {
             {link.name}
           </Link>
         ))}
-
 
         <NotificationDropdown />
       </div>

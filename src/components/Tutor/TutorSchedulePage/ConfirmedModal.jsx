@@ -32,7 +32,7 @@ export default function ConfirmedModal({ slot, day, date, onClose }) {
     else setShowForm(true);
   }
   async function handleFinalCancel(){
-    const content = {status:'cancelled', slotId: slot.id, reason};
+    const content = {status:'cancelled', slotId: slot.slotId, reason};
     const url = 'http://localhost:5000/tutor/response';
     await fetchAPI(url, 'PUT', content, true);
     queryClient.invalidateQueries(['schedule']);

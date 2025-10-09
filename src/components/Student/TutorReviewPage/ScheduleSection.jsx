@@ -39,7 +39,6 @@ export default function ScheduleSection({ selectedTimeSlot, setSelectedTimeSlot 
         date: dateformat,
         timeSlots: slotsFromAPI.map((time) => {
           const matched = data.status?.find(appt => appt.slotId === (time + ' ' + dateformat));
-          console.log(matched);
           return {
           id: time + ' ' + dateformat,
           time, 

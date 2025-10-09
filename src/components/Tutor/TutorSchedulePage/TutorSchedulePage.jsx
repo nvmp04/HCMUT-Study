@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Calendar, Clock, Plus } from "lucide-react";
 import RequestModal from "./RequestModal";
 import ConfirmedModal from "./ConfirmedModal";
@@ -7,6 +7,7 @@ import {AddTimeModal, weekdayMap2} from "./AddTimeModal";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchAPI } from "../../../utils/fetchAPI";
 import { EndModal } from "./EndModal";
+import { io } from "socket.io-client";
 
 export default function TutorSchedule() {
   const queryClient = useQueryClient();
@@ -15,6 +16,16 @@ export default function TutorSchedule() {
     queryKey: ['schedule'], 
     queryFn: async ()=> await fetchAPI(url, 'GET', null, true)
   })
+  useEffect(() => {
+    const socket = io("http://localhost:5000"); 
+    socket.on("bookSession", () => {
+      queryClient.invalidateQueries({ queryKey: ["schedule"] });
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, [queryClient]);
   const weeklySchedule = useMemo(() => {
     if (!data) return [];
     const today = new Date();
@@ -45,7 +56,7 @@ export default function TutorSchedule() {
         timeSlots: slotsFromAPI.map((time) => {
           const matched = data.appointment?.find(appt => appt.slotId === (time + ' ' + dateformat));
           return{
-            id: time + ' ' + dateformat,
+            slotId: time + ' ' + dateformat,
             time,
             status: matched ? matched.status : 'available',
             studentName: matched ? matched.studentName : '',
@@ -137,7 +148,7 @@ export default function TutorSchedule() {
 
               <div className="grid grid-cols-[repeat(auto-fit,minmax(120px,120px))] gap-2">
                 {day.timeSlots.map((slot, slotIndex) => (
-                  <div key={slot.id}>
+                  <div key={slot.slotId}>
                     <button
                       onClick={() => handleTimeSlotClick(day.day, slotIndex)}
                       className={`flex flex-col items-center justify-center gap-1 min-h-[60px] p-2 border-2 rounded-lg text-sm font-medium transition-all ${slotClassByStatus(
