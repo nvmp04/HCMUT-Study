@@ -1,7 +1,7 @@
-import React, { useRef, useState } from 'react';
+import  {useState } from 'react';
 import '../../style/LogIn/ssoLogIn.css'
 import { AlertTriangle } from 'lucide-react';
-import { LogIn } from '../../services/LogIn';
+import { LogIn } from '../../services/LogIn'
 import { userNameRef, passwordRef, check } from '../../utils/checkUserNamePass';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
@@ -46,7 +46,6 @@ export default function SSOLogin() {
             Enter your Username and Password
           </h1>
           <div className="sso-form">
-            {/* Username Field */}
             <div className="form-group">
               <label className="form-label">
                 Username
@@ -58,8 +57,6 @@ export default function SSOLogin() {
                 placeholder="Enter username"
               />
             </div>
-
-            {/* Password Field */}
             <div className="form-group">
               <label className="form-label">
                 Password
@@ -71,8 +68,6 @@ export default function SSOLogin() {
                 placeholder="Enter password"
               />
             </div>
-
-            {/* Buttons */}
             <div className="button-group">
               <button
                 type="button"

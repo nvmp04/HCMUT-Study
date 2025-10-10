@@ -1,19 +1,19 @@
-import Homepage from '../components/Homepage/Homepage'
+import Homepage from '../pages/Homepage/Homepage'
 import { Route, Routes } from 'react-router-dom'
-import LogIn from '../components/LogInPage/LogInPage';
-import StudentHomepage from '../components/Student/StudentHomepage/StudentHomepage';
-import StudentSchedulePage from '../components/Student/StudentSchedulePage/StudentSchedulePage';
-import TutorProfile from '../components/Student/TutorReviewPage/TutorReviewPage';
-import SSOLogin from '../components/LogInPage/SSOlogInPage';
+import LogIn from '../pages/LogInPage/LogInPage';
+import StudentHomepage from '../pages/Student/StudentHomepage/StudentHomepage';
+import StudentSchedulePage from '../pages/Student/StudentSchedulePage/StudentSchedulePage';
+import TutorProfile from '../pages/Student/TutorReviewPage/TutorReviewPage';
+import SSOLogin from '../pages/LogInPage/SSOlogInPage';
 import {StudentLayout, TutorLayout} from '../layouts/Layout';
 import { useAuth } from '../hooks/useAuth';
 import {ProtectedRoute, ProtectedLogInRoute} from './ProtectedRoute';
-import StudentMySchedulePage from '../components/Student/StudentMySchedulePage/StudentMySchedulePage';
-import StudentPairingPage from '../components/Student/StudentPairingPage/StudentPairingPage';
-import StudentProgressPage from '../components/Student/StudentProgressPage/StudentProgressPage';
-import StudentLibraryPage from '../components/Student/StudentLibraryPage/StudentLibraryPage';
-import TutorHomePage from '../components/Tutor/TutorHomePage/TutorHomePage';
-import TutorSchedule from '../components/Tutor/TutorSchedulePage/TutorSchedulePage';
+import StudentMySchedulePage from '../pages/Student/StudentMySchedulePage/StudentMySchedulePage';
+import StudentPairingPage from '../pages/Student/StudentPairingPage/StudentPairingPage';
+import StudentProgressPage from '../pages/Student/StudentProgressPage/StudentProgressPage';
+import StudentLibraryPage from '../pages/Student/StudentLibraryPage/StudentLibraryPage';
+import TutorHomePage from '../pages/Tutor/TutorHomePage/TutorHomePage';
+import TutorSchedule from '../pages/Tutor/TutorSchedulePage/TutorSchedulePage';
 function AppRoutes(){
   const {auth} = useAuth();
   return(

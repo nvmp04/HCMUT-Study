@@ -8,34 +8,35 @@ import HeaderSection from "./HeaderSection";
 import InfoSection from "./InfoSection";
 import ScheduleSection from "./ScheduleSection";
 import BookingModal from "./BookingModal";
+import SuccessModal from "./SuccessModal";
 
 const socket = io("http://localhost:5000");
 export default function TutorReviewPage() {
   const queryClient = useQueryClient();
   const { id } = useParams();
   const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
+  const [success, setSucess] = useState(false);
   const [sessionTitle, setSessionTitle] = useState("");
-
   const url = "http://localhost:5000/student/gettutordata";
   const { data, isLoading } = useQuery({
     queryKey: [id],
     queryFn: async () => await fetchAPI(url, "POST", { id }, true),
   });
   useEffect(() => {
-    socket.on("tutorScheduleUpdated", ({ tutorId }) => {
-      queryClient.invalidateQueries([tutorId]);
-    });
+    function handleEvent({tutorId}){
+      if(tutorId === id) queryClient.invalidateQueries([id]);
+    }
+    const events = ["tutorScheduleUpdated", "decline"];
+    events.forEach((e)=>socket.on(e, handleEvent))
     return () => {
-      socket.off("tutorScheduleUpdated");
+      events.forEach((e)=>socket.off(e, handleEvent));
+      socket.disconnect();
     };
   }, [queryClient]);
   if (isLoading) return <LoadingModal />;
 
   const handleBookAppointment = () => {
-    alert(
-      `Đặt lịch thành công!\nTutor: ${data?.tutor.name}\nThời gian: ${selectedTimeSlot.day}, ${selectedTimeSlot.date}\nGiờ: ${selectedTimeSlot.time}`
-    );
-    setSelectedTimeSlot(null);
+    setSucess(true);
     setSessionTitle("");
   };
 
@@ -58,7 +59,7 @@ export default function TutorReviewPage() {
       {/* Modal đặt lịch */}
       {selectedTimeSlot && (
         <BookingModal
-          tutor={data?.tutor}
+          tutor={data.tutor}
           selectedTimeSlot={selectedTimeSlot}
           sessionTitle={sessionTitle}
           setSessionTitle={setSessionTitle}
@@ -66,6 +67,15 @@ export default function TutorReviewPage() {
           onCancel={() => setSelectedTimeSlot(null)}
         />
       )}
+      {success && 
+        <SuccessModal
+        tutor={data.tutor}
+        timeSlot={selectedTimeSlot}
+        onClose={()=>{
+          setSucess(false);
+          setSelectedTimeSlot(null);
+        }}
+        />}
     </div>
   );
 }

@@ -25,7 +25,7 @@ export default function RequestModal({ slot, day, date, onClose}) {
   };
   async function handleDecline(){
     if (!declineReason.trim()) return alert("Vui lòng nhập lý do từ chối!");
-    const content = {reason: declineReason, slotId: slot.id};
+    const content = {reason: declineReason, slotId: slot.slotId};
     const url = 'http://localhost:5000/tutor/decline';
     await fetchAPI(url, 'DELETE', content, true);
     queryClient.invalidateQueries(['schedule']);

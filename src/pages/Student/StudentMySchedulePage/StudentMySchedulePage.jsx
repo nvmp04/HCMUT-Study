@@ -9,6 +9,7 @@ import CancelBeforeAcceptModal from "./CancelBeforeAcceptModal";
 import RescheduleModal from "./RescheduleModal";
 import FeedbackModal from "./FeedbackModal";
 
+const socket = io("http://localhost:5000");
 export default function StudentMySchedulePage() {
   const queryClient = useQueryClient();
   const url = "http://localhost:5000/student/getmyschedule";
@@ -22,18 +23,21 @@ export default function StudentMySchedulePage() {
   const [cancelBeforeAccept, setCancelBeforeAccept] = useState(false);
   const [rescheduleModal, setRescheduleModal] = useState(false);
   const [feedbackModal, setFeedbackModal] = useState(false);
-  useEffect(() => {
-    const socket = io("http://localhost:5000");
 
-    socket.on("appointment-updated", (data) => {
-      console.log("📡 Nhận event realtime:", data);
-      queryClient.invalidateQueries(["studentschedule"]);
-    });
+  useEffect(() => {
+    function handleEvent({ studentId }) {
+      console.log(studentId);
+      const id = sessionStorage.getItem("id");
+      if (id === studentId) {
+        queryClient.invalidateQueries(["studentschedule"]);
+      }
+    }
+    const events = ["appointment-updated", "decline"];
+    events.forEach((event) => socket.on(event, handleEvent));
     return () => {
-      socket.disconnect();
+      events.forEach((event) => socket.off(event, handleEvent));
     };
   }, [queryClient]);
-
   if (isLoading) return <LoadingModal />;
   const filteredSessions =
     data?.appointment?.filter((s) => {
@@ -60,7 +64,7 @@ export default function StudentMySchedulePage() {
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-slate-800">Lịch học của tôi</h1>
         <p className="text-sm text-slate-500">
-          Xem và quản lý các buổi học của bạn (đồng bộ realtime)
+          Xem và quản lý các buổi học của bạn 
         </p>
       </div>
       <div className="flex gap-2 mb-6 border-b">

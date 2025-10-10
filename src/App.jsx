@@ -1,5 +1,5 @@
-import Header from './components/HeaderFooter/Header';
-import Footer from './components/HeaderFooter/Footer';
+import Header from './components/HeaderFooterNav/Header';
+import Footer from './components/HeaderFooterNav/Footer';
 import AppRoutes from './routes/AppRoutes';
 import { useAuth } from './hooks/useAuth';
 // LoadingModal.jsx

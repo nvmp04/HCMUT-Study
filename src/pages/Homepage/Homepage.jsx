@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import Benefits from "./Benefits";
-import NavigationBar from "../HeaderFooter/NavigationBar";
+import NavigationBar from "../../components/HeaderFooterNav/NavigationBar";
 
 function Homepage() {
   const navigate = useNavigate();
