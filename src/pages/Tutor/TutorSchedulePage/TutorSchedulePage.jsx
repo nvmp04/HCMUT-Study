@@ -16,14 +16,17 @@ export default function TutorSchedule() {
     queryKey: ['schedule'], 
     queryFn: async ()=> await fetchAPI(url, 'GET', null, true)
   })
+  const id = sessionStorage.getItem('id');
   useEffect(() => {
     const socket = io("http://localhost:5000"); 
-    socket.on("bookSession", () => {
+    const events = ["booksession", "studentcancel", "cancelbeforeaccept"];
+    function handleEvent({tutorId}){
+      if(id !== tutorId) return;
       queryClient.invalidateQueries({ queryKey: ["schedule"] });
-    });
-
+    }
+    events.forEach((e)=>{socket.on(e, handleEvent)}); 
     return () => {
-      socket.disconnect();
+      events.forEach((e)=>{socket.off(e, handleEvent)});
     };
   }, [queryClient]);
   const weeklySchedule = useMemo(() => {

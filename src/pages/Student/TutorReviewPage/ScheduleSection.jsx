@@ -3,10 +3,10 @@ import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { fetchAPI } from "../../../utils/fetchAPI";
-export default function ScheduleSection({ selectedTimeSlot, setSelectedTimeSlot }) {
+export default function ScheduleSection({ selectedTimeSlot, setSelectedTimeSlot, setBooking }) {
   const {id} = useParams();
   const url = 'http://localhost:5000/student/getschedule';
-  const {data, isLoading} = useQuery({
+  const {data} = useQuery({
     queryKey: ['tutorschedule'], 
     queryFn: async ()=> await fetchAPI(url, 'POST', {id}, true)
   })
@@ -40,7 +40,7 @@ export default function ScheduleSection({ selectedTimeSlot, setSelectedTimeSlot 
         timeSlots: slotsFromAPI.map((time) => {
           const matched = data.status?.find(appt => appt.slotId === (time + ' ' + dateformat));
           return {
-          id: time + ' ' + dateformat,
+          slotId: time + ' ' + dateformat,
           time, 
           status: matched ? matched.status : 'available'
         }}),
@@ -65,8 +65,9 @@ export default function ScheduleSection({ selectedTimeSlot, setSelectedTimeSlot 
         day: day.day,
         date: day.date,
         time: timeSlot.time,
-        id: timeSlot.id,
+        slotId: timeSlot.slotId,
       });
+      setBooking(true);
     }
   };
 
@@ -92,7 +93,7 @@ export default function ScheduleSection({ selectedTimeSlot, setSelectedTimeSlot 
                   className={`flex flex-col items-center justify-center gap-1 min-h-[60px] p-2 border-2 rounded-lg text-sm font-medium transition-all ${
                     slot.status !== 'available'
                       ? "bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed opacity-60"
-                      : selectedTimeSlot?.id === slot.id
+                      : selectedTimeSlot?.slotId === slot.slotId
                       ? "bg-blue-500 border-blue-500 text-white"
                       : "bg-white border-gray-200 text-gray-600 hover:bg-blue-50 hover:border-blue-500"
                   }`}
@@ -101,11 +102,8 @@ export default function ScheduleSection({ selectedTimeSlot, setSelectedTimeSlot 
                 >
                   <Clock size={14} />
                   {slot.time}
-                  {slot.status !== 'available' && slot.status !== 'cancelled' && (
+                  {slot.status !== 'available' && (
                     <span className="text-[10px] font-normal">Đã đặt</span>
-                  )}
-                  {slot.status === 'cancelled' && (
-                    <span className="text-[10px] font-normal">Đã bị hủy</span>
                   )}
                 </button>
               ))}
@@ -135,7 +133,7 @@ function ExpiredTimeModal({onClose}) {
             onClick={onClose}
             className="px-5 py-2 rounded-lg font-medium bg-blue-500 text-white hover:bg-blue-600 transition-colors"
           >
-            Đã hiểu
+            OK
           </button>
         </div>
       </div>

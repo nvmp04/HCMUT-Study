@@ -5,6 +5,7 @@ import { useAuth } from './hooks/useAuth';
 // LoadingModal.jsx
 import React from "react";
 import { useLocation } from 'react-router-dom';
+import  NotificationModal  from './components/Notification/NotificationModal';
 
 export function LoadingModal() {
   return (
@@ -24,6 +25,7 @@ function App() {
   const token = auth.token;
   return (
     <>
+      <NotificationModal/>
       <Header/>
       <AppRoutes/>
       {(!token || path === '/') && <Footer/>}

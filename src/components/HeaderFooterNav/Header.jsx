@@ -84,13 +84,7 @@ function Header() {
             Liên hệ
           </a>
           {auth.token && (
-            <button
-              onClick={() => setIsOpen(true)}
-              className="flex items-center gap-[2px] text-[13px] font-medium py-[5px] px-[10px] bg-[#ef4444] text-white rounded-lg border-0 hover:bg-[#dc2626] transition-colors"
-            >
-              <LogOut size={20} />
-              <span>Đăng xuất</span>
-            </button>
+            <LogOut size={20} className="cursor-pointer hover:text-teal-500 transition-colors duration-100" onClick={() => setIsOpen(true)}/>
           )}
         </nav>
       </header>

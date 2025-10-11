@@ -16,6 +16,7 @@ export default function TutorReviewPage() {
   const { id } = useParams();
   const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
   const [success, setSucess] = useState(false);
+  const [booking, setBooking] = useState(false);
   const [sessionTitle, setSessionTitle] = useState("");
   const url = "http://localhost:5000/student/gettutordata";
   const { data, isLoading } = useQuery({
@@ -26,16 +27,16 @@ export default function TutorReviewPage() {
     function handleEvent({tutorId}){
       if(tutorId === id) queryClient.invalidateQueries([id]);
     }
-    const events = ["tutorScheduleUpdated", "decline"];
+    const events = ["appointment-updated", "tutorScheduleUpdated", "decline"];
     events.forEach((e)=>socket.on(e, handleEvent))
     return () => {
       events.forEach((e)=>socket.off(e, handleEvent));
-      socket.disconnect();
     };
   }, [queryClient]);
   if (isLoading) return <LoadingModal />;
 
   const handleBookAppointment = () => {
+    setBooking(false);
     setSucess(true);
     setSessionTitle("");
   };
@@ -51,13 +52,14 @@ export default function TutorReviewPage() {
 
         {/* Lịch */}
         <ScheduleSection
+          setBooking={setBooking}
           selectedTimeSlot={selectedTimeSlot}
           setSelectedTimeSlot={setSelectedTimeSlot}
         />
       </div>
 
       {/* Modal đặt lịch */}
-      {selectedTimeSlot && (
+      {booking && (
         <BookingModal
           tutor={data.tutor}
           selectedTimeSlot={selectedTimeSlot}

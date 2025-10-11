@@ -4,7 +4,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchAPI } from "../../../utils/fetchAPI";
 import { LoadingModal } from "../../../App";
 import SessionCard from "./SessionCard";
-import CancelModal from "./CancelModal";
+import CancelModal from "../../../components/CancelModal";
 import CancelBeforeAcceptModal from "./CancelBeforeAcceptModal";
 import RescheduleModal from "./RescheduleModal";
 import FeedbackModal from "./FeedbackModal";
@@ -17,13 +17,15 @@ export default function StudentMySchedulePage() {
     queryKey: ["studentschedule"],
     queryFn: async () => await fetchAPI(url, "GET", null, true),
   });
+  const [warning, setWarning] = useState(false);
+  const [superWarning, setSuperWarning] = useState(false);
   const [tab, setTab] = useState("upcoming");
   const [selectedSession, setSelectedSession] = useState(null);
   const [cancelModal, setCancelModal] = useState(false);
   const [cancelBeforeAccept, setCancelBeforeAccept] = useState(false);
   const [rescheduleModal, setRescheduleModal] = useState(false);
   const [feedbackModal, setFeedbackModal] = useState(false);
-
+  const [reason, setReason] = useState("");
   useEffect(() => {
     function handleEvent({ studentId }) {
       console.log(studentId);
@@ -108,13 +110,18 @@ export default function StudentMySchedulePage() {
       <CancelModal
         slot={selectedSession}
         open={cancelModal}
-        session={selectedSession}
-        onClose={() => setCancelModal(false)}
+        onClose={() => {
+          setCancelModal(false);
+          setWarning(false);
+          setSuperWarning(false);
+          setReason('');
+        }}
+        isWarning={warning}
+        isSuperWarning={superWarning}
       />
       <CancelBeforeAcceptModal
         slot={selectedSession}
         open={cancelBeforeAccept}
-        session={selectedSession}
         onClose={() => setCancelBeforeAccept(false)}
       />
       <RescheduleModal

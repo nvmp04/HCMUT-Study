@@ -13,6 +13,8 @@ function TutorHomePage() {
     queryFn: async () => await fetchAPI(url, 'GET', null, true)
   })
   if(isLoading) return <LoadingModal/>
+  const {id} = data.tutor;
+  sessionStorage.setItem("id", id);
   return (
     <div className="min-h-screen flex justify-center bg-gray-100 pt-10">
       <div className="w-full max-w-[900px] flex flex-col gap-6">
