@@ -7,7 +7,6 @@ export default function HomepageProfileCard({ data }) {
   const isTutor = role === "tutor";
   const info = isTutor ? data.tutor : data.student;
 
-  // Tutor 
   if (isTutor) {
     return (
       <div className="bg-gradient-to-br from-slate-50 to-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden">

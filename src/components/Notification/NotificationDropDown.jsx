@@ -1,45 +1,32 @@
-import { Bell } from "lucide-react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { Bell, Trash2 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
+import { fetchAPI } from "../../utils/fetchAPI";
+import { io } from "socket.io-client";
 
 export default function NotificationDropdown() {
+  const socketRef = useRef(null);
+  const queryClient = useQueryClient();
   const [isOpen, setIsOpen] = useState(false);
-  const [notifications, setNotifications] = useState([
-    {
-      id: 1,
-      type: 'success',
-      title: 'Xác nhận lịch học thành công',
-      message: 'Lịch học "Cấu trúc dữ liệu" vào 10:00 - 05/10/2025 đã được xác nhận.',
-      time: '5 phút trước',
-      read: false
-    },
-    {
-      id: 2,
-      type: 'cancel',
-      title: 'Lịch học đã bị hủy',
-      message: 'Buổi học "Lập trình Web" vào 14:00 - 07/10/2025 đã bị hủy. Lý do: Tutor có việc đột xuất.',
-      time: '1 giờ trước',
-      read: false
-    },
-    {
-      id: 3,
-      type: 'reminder',
-      title: 'Nhắc nhở: Buổi học sắp diễn ra',
-      message: 'Buổi học "Cơ sở dữ liệu" sẽ bắt đầu sau 30 phút tại phòng H6-305.',
-      time: '2 giờ trước',
-      read: true
-    },
-    {
-      id: 4,
-      type: 'reschedule',
-      title: 'Yêu cầu đổi lịch được chấp nhận',
-      message: 'Lịch học "Trí tuệ nhân tạo" đã được đổi sang 15:00 - 08/10/2025.',
-      time: '1 ngày trước',
-      read: true
+  const id = sessionStorage.getItem('id');
+  const url = 'http://localhost:5000/notification/get'
+  const {data, isLoading} = useQuery({
+    queryKey: ['getnotifications'], 
+    queryFn: ()=> fetchAPI(url, 'GET', null, true)
+  })
+  useEffect(()=>{
+    socketRef.current = io("http://localhost:5000");
+    const socket = socketRef.current;
+    function handleEvent({notifId}){
+      if(id !== notifId) return;
+      queryClient.invalidateQueries(['getnotifications']);
     }
-  ]);
-
+    socket.on('notification', handleEvent);
+    return () => {
+      socket.off('notification', handleEvent);
+    };
+  },[id])
   const dropdownRef = useRef(null);
-  const unreadCount = notifications.filter(n => !n.read).length;
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -51,12 +38,41 @@ export default function NotificationDropdown() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const markAsRead = (id) => {
-    setNotifications(notifications.map(n => n.id === id ? { ...n, read: true } : n));
+  if(isLoading) return <></>
+
+  const formatTime = (timestamp) => {
+    const now = new Date();
+    const time = new Date(timestamp);
+    const diff = Math.floor((now - time) / 1000);
+    const minutes = Math.floor(diff / 60);
+    const hours = Math.floor(diff / 3600);
+    const days = Math.floor(diff / 86400);
+
+    if (diff < 60) return "Vừa xong";
+    if (minutes < 60) return `${minutes} phút trước`;
+    if (hours < 24) return `${hours} giờ trước`;
+    if (days === 1) return "Hôm qua";
+    if (days < 6) return `${days} ngày trước`;
+    return time.toLocaleDateString("vi-VN");
   };
 
-  const markAllAsRead = () => {
-    setNotifications(notifications.map(n => ({ ...n, read: true })));
+  const notifications = data?.notifications?.map(n => ({
+    ...n,
+    time: formatTime(n.time),
+  })) || [];
+
+  const unreadCount = notifications.filter(n => !n.read).length;
+
+  const markAsRead = (_id) => {
+    const url = 'http://localhost:5000/notification/read'
+    fetchAPI(url, 'PUT', {_id}, true);
+    queryClient.invalidateQueries(['getnotifications']);
+  };
+
+  const deleteNotification = (_id) => {
+    const url = 'http://localhost:5000/notification/delete';
+    fetchAPI(url, 'DELETE', { _id }, true);
+    queryClient.invalidateQueries(['getnotifications']);
   };
 
   return (
@@ -74,33 +90,35 @@ export default function NotificationDropdown() {
         <div className="absolute top-[calc(100%+0.5rem)] right-0 w-[380px] max-h-[500px] bg-white rounded-lg shadow-[0_10px_25px_rgba(0,0,0,0.15)] z-[1000] flex flex-col">
           <div className="flex justify-between items-center p-4 border-b border-gray-200">
             <h3 className="text-base font-semibold text-gray-800 m-0">Thông báo</h3>
-            {unreadCount > 0 && (
-              <button
-                className="text-blue-500 text-xs cursor-pointer px-2 py-1 rounded transition-colors hover:bg-blue-50"
-                onClick={markAllAsRead}
-              >
-                Đánh dấu đã đọc
-              </button>
-            )}
           </div>
 
           <div className="overflow-y-auto max-h-[360px]">
             {notifications.length > 0 ? (
               notifications.map((notif) => (
                 <div
-                  key={notif.id}
+                  key={notif._id}
                   className={`flex gap-3 px-4 py-3 border-b border-gray-100 cursor-pointer transition-colors relative ${
                     !notif.read ? "bg-blue-50" : "hover:bg-gray-50"
                   }`}
-                  onClick={() => markAsRead(notif.id)}
+                  onClick={() => markAsRead(notif._id)}
                 >
                   <div className="flex-1 min-w-0">
                     <h4 className="text-sm font-semibold text-gray-800 mb-1">{notif.title}</h4>
                     <p className="text-[0.8125rem] text-gray-500 leading-snug line-clamp-2 mb-1">{notif.message}</p>
                     <span className="text-xs text-gray-400">{notif.time}</span>
                   </div>
+                  {/* nút thùng rác nhỏ */}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      deleteNotification(notif._id);
+                    }}
+                    className="absolute top-1/2 right-2 -translate-y-1/2 text-gray-400 hover:text-red-500"
+                  >
+                    <Trash2 size={16} />
+                  </button>
                   {!notif.read && (
-                    <div className="absolute top-1/2 right-4 -translate-y-1/2 w-2 h-2 bg-blue-500 rounded-full"></div>
+                    <div className="absolute top-1/2 right-7 -translate-y-1/2 w-2 h-2 bg-blue-500 rounded-full"></div>
                   )}
                 </div>
               ))

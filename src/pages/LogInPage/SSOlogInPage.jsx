@@ -5,6 +5,7 @@ import { LogIn } from '../../services/LogIn'
 import { userNameRef, passwordRef, check } from '../../utils/checkUserNamePass';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
+import { jwtDecode } from 'jwt-decode';
 export default function SSOLogin() {
   const {setAuth} = useAuth();
   const navigate = useNavigate();
@@ -19,6 +20,9 @@ export default function SSOLogin() {
       if (res.user) {
         const {token} = res;
         const {role} = res.user;
+        const decoded = jwtDecode(token);
+        const {id} = decoded;
+        sessionStorage.setItem("id", id);
         sessionStorage.setItem("token", token);
         sessionStorage.setItem("role", role);
         setAuth({token: token, role: role});

@@ -25,7 +25,6 @@ export default function StudentHomepage() {
   });
 
   if (isLoading) return <LoadingModal />;
-  sessionStorage.setItem("id", data.student.id);
   sessionStorage.setItem("name", data.student.name);
   sessionStorage.setItem("phone", data.student.phone);
 

@@ -25,7 +25,6 @@ function App() {
   const token = auth.token;
   return (
     <>
-      <NotificationModal/>
       <Header/>
       <AppRoutes/>
       {(!token || path === '/') && <Footer/>}
