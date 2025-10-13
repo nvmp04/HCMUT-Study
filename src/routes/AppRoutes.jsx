@@ -3,7 +3,6 @@ import { Route, Routes } from 'react-router-dom'
 import LogIn from '../pages/LogInPage/LogInPage';
 import StudentHomepage from '../pages/Student/StudentHomepage/StudentHomepage';
 import StudentSchedulePage from '../pages/Student/StudentSchedulePage/StudentSchedulePage';
-import TutorProfile from '../pages/Student/TutorReviewPage/TutorReviewPage';
 import SSOLogin from '../pages/LogInPage/SSOlogInPage';
 import {StudentLayout, TutorLayout} from '../layouts/Layout';
 import { useAuth } from '../hooks/useAuth';
@@ -14,6 +13,7 @@ import StudentProgressPage from '../pages/Student/StudentProgressPage/StudentPro
 import StudentLibraryPage from '../pages/Student/StudentLibraryPage/StudentLibraryPage';
 import TutorHomePage from '../pages/Tutor/TutorHomePage/TutorHomePage';
 import TutorSchedule from '../pages/Tutor/TutorSchedulePage/TutorSchedulePage';
+import StudentViewTutorPage from '../pages/Student/StudentViewTutorPage/StudentViewTutorPage';
 function AppRoutes(){
   const {auth} = useAuth();
   return(
@@ -29,7 +29,7 @@ function AppRoutes(){
           <Route path='/student' element={<StudentLayout/>}>
             <Route index element={<StudentHomepage/>} />
             <Route path='schedule' element={<StudentSchedulePage/>} />
-            <Route path='schedule/:id' element={<TutorProfile/>} />
+            <Route path='schedule/:id' element={<StudentViewTutorPage/>} />
             <Route path='myschedule' element={<StudentMySchedulePage/>}/>
             <Route path='pairing' element={<StudentPairingPage/>}/>
             <Route path='progress' element={<StudentProgressPage/>}/>

@@ -1,8 +1,9 @@
-import React from 'react';
-import { Calendar, Clock, User, MapPin, Video, AlertCircle, FileText, CheckCircle, XCircle, Edit, Star } from 'lucide-react';
+import { Calendar, Clock, User, MapPin, Video, AlertCircle, FileText, CheckCircle, XCircle, Edit, Star, Trash } from 'lucide-react';
 import StatusBadge from './StatusBadge';
-
+import {fetchAPI} from '../../../utils/fetchAPI'
+import { Link } from 'react-router-dom';
 export default function SessionCard({
+  refetch,
   session,
   isPast,
   isFailed,
@@ -10,6 +11,12 @@ export default function SessionCard({
   onReschedule,
   onFeedback
 }) {
+    async function handleDeleteCancelled (){
+      const content = {_id: session._id}
+      const url = 'http://localhost:5000/student/deletecancelled';
+      await fetchAPI(url, 'DELETE', content, true);
+      refetch();
+    }
     return (
     <div className="bg-white rounded-lg shadow-sm p-6 mb-4 border-l-4 border-[#00274d]">
       <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
@@ -37,7 +44,7 @@ export default function SessionCard({
             {session.type === "online" ? (
               <>
               <Video size={16} className="text-blue-500" />
-              <span>{session.link}</span>
+              <span>Online</span>
               </>
             ) : (
               <>
@@ -67,21 +74,29 @@ export default function SessionCard({
       )}
       <div className="flex flex-wrap gap-2">
         {isFailed ? (
-          <button
-            onClick={() => onReschedule(session)}
+          <>
+          <Link to={'/student/schedule'}
             className="flex items-center gap-2 px-4 py-2 rounded-md bg-blue-800 text-white text-sm font-medium"
           >
             <Calendar size={16} />
             Đặt lại lịch học
+          </Link>
+          <button
+            onClick={handleDeleteCancelled}
+            className="flex items-center gap-2 px-4 py-2 rounded-md bg-red-500 text-white text-sm font-medium"
+          >
+            <Trash size={16} />
+            Xóa lịch
           </button>
+          </>
         ) : !isPast ? (
           <>
-            <button
+            {session.status === 'pending' && <button
               onClick={() => onReschedule(session)}
-              className="flex items-center gap-2 px-4 py-2 rounded-md bg-blue-800 text-white text-sm font-medium"
+              className="flex items-center gap-2 px-4 py-2 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium"
             >
               <Edit size={16} /> Đổi lịch
-            </button>
+            </button>}
 
             <button
               onClick={() => onCancel(session)}
@@ -90,9 +105,9 @@ export default function SessionCard({
               <XCircle size={16} /> Hủy lịch
             </button>
             {session.type === "online" && (
-              <button className="flex items-center gap-2 px-4 py-2 rounded-md bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-medium">
+              <a href={session.link} target='_blank' className="flex items-center gap-2 px-4 py-2 rounded-md bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-medium">
                 <Video size={16} /> Tham gia
-              </button>
+              </a>
             )}
           </>
         ) : (

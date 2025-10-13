@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { io } from "socket.io-client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchAPI } from "../../../utils/fetchAPI";
@@ -89,23 +89,26 @@ export default function StudentMySchedulePage() {
         ))}
       </div>
       <div>
+        
         {filteredSessions.length === 0 ? (
           <div className="text-center text-slate-500 py-10">
             Không có buổi học nào trong mục này
           </div>
         ) : (
           filteredSessions.map((session) => (
-            <SessionCard
-              key={session._id || session.id}
-              session={session}
-              isPast={session.status === "completed"}
-              isFailed={session.status === "cancelled"}
-              onCancel={handleCancelSession}
-              onReschedule={handleRescheduleSession}
-              onFeedback={handleProvideFeedback}
-            />
-          ))
-        )}
+            
+              <SessionCard
+                refetch={()=>queryClient.invalidateQueries(["studentschedule"])}
+                key={session._id || session.id}
+                session={session}
+                isPast={session.status === "completed"}
+                isFailed={session.status === "cancelled"}
+                onCancel={handleCancelSession}
+                onReschedule={handleRescheduleSession}
+                onFeedback={handleProvideFeedback}
+              />
+          )
+        ))}
       </div>
       <CancelModal
         slot={selectedSession}
@@ -125,6 +128,7 @@ export default function StudentMySchedulePage() {
         onClose={() => setCancelBeforeAccept(false)}
       />
       <RescheduleModal
+        appointment={data.appointment}
         open={rescheduleModal}
         session={selectedSession}
         onClose={() => setRescheduleModal(false)}

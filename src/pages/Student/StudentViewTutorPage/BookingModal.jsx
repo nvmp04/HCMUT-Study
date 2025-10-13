@@ -1,36 +1,17 @@
-import { jwtDecode } from 'jwt-decode';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchAPI } from '../../../utils/fetchAPI';
 import { useQueryClient } from '@tanstack/react-query';
+import studentBooking from '../../../services/studentBooking';
 
 export default function BookingModal({ tutor, selectedTimeSlot, onConfirm, onCancel }) {
   const queryClient = useQueryClient();
   const [sessionTitle, setSessionTitle] = useState('');
   const {id} = useParams();
+  
   async function handleConfirm(){
-    const token = sessionStorage.getItem('token');
-    const decoded = jwtDecode(token);
-    const stuID = decoded.id;
     if (sessionTitle.trim()) {
-      const content = {
-        id: id + stuID,
-        status: 'pending',
-        studentName: sessionStorage.getItem('name'),
-        studentPhone: sessionStorage.getItem('phone'),
-        tutorName: tutor.name,
-        tutorPhone: tutor.phone,
-        date: selectedTimeSlot.day + ', ' + selectedTimeSlot.date,
-        time: selectedTimeSlot.time,
-        slotId: selectedTimeSlot.time + ' ' + selectedTimeSlot.date,
-        title: sessionTitle,
-        type: '',
-        location: '',
-        link: '',
-        reason: ''
-      }
-      const url = 'http://localhost:5000/student/booksession'
-      await fetchAPI(url, 'POST', content, true);
+      studentBooking(tutor, selectedTimeSlot, sessionTitle);
       queryClient.invalidateQueries( {queryKey:['tutorschedule']});
       onConfirm(sessionTitle);
       setSessionTitle('');

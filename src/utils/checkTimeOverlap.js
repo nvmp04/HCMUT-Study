@@ -1,6 +1,7 @@
 export function checkTimeOverlap(timeSlots, newStartTime, newEndTime){
     const today = new Date()
     for(let i = 0; i<timeSlots.length;i++){
+        const {slotId, title, tutorName} = timeSlots[i];
         const startTime = timeSlots[i].time.split(' - ')[0];
         const endTime = timeSlots[i].time.split(' - ')[1];
 
@@ -17,7 +18,11 @@ export function checkTimeOverlap(timeSlots, newStartTime, newEndTime){
         const newEndDateTime = new Date(today.getFullYear(), today.getMonth(), today.getDate(), h2, m2);
 
         if (!(newEndDateTime <= startDateTime || newStartDateTime >= endDateTime)) {
-            return{
+            return (slotId && tutorName && title) ? 
+            {
+                res:true, slotId, tutorName, title, 
+            }:
+            {
                 res: true,
                 err: `Trùng lịch: [${startTime} - ${endTime}]`
             };

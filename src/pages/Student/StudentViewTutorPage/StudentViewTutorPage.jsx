@@ -9,25 +9,27 @@ import InfoSection from "./InfoSection";
 import ScheduleSection from "./ScheduleSection";
 import BookingModal from "./BookingModal";
 import SuccessModal from "./SuccessModal";
+import ScheduleConflictModal from '../../../components/ScheduleConflictModal'
 
 const socket = io("http://localhost:5000");
-export default function TutorReviewPage() {
+function StudentViewTutorPage() {
   const queryClient = useQueryClient();
   const { id } = useParams();
   const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
   const [success, setSucess] = useState(false);
   const [booking, setBooking] = useState(false);
   const [sessionTitle, setSessionTitle] = useState("");
+  const [conflict, setConflict] = useState({state:false, tutorName: '', title: '', slotId: ''});
   const url = "http://localhost:5000/student/gettutordata";
   const { data, isLoading } = useQuery({
-    queryKey: [id],
+    queryKey: ['tutorschedule', id],
     queryFn: async () => await fetchAPI(url, "POST", { id }, true),
   });
   useEffect(() => {
     function handleEvent({tutorId}){
-      if(tutorId === id) queryClient.invalidateQueries([id]);
+      if(tutorId === id) queryClient.invalidateQueries(['tutorschedule', id]);
     }
-    const events = ["appointment-updated", "tutorScheduleUpdated", "decline"];
+    const events = ["appointment-updated", "tutorScheduleUpdated", "decline", "booksession"];
     events.forEach((e)=>socket.on(e, handleEvent))
     return () => {
       events.forEach((e)=>socket.off(e, handleEvent));
@@ -35,12 +37,16 @@ export default function TutorReviewPage() {
   }, [queryClient]);
   if (isLoading) return <LoadingModal />;
 
-  const handleBookAppointment = () => {
+  const handleBookAppointment = () =>{
     setBooking(false);
     setSucess(true);
     setSessionTitle("");
   };
-
+  const handleConflict = () =>{
+    setBooking(false);
+    setSessionTitle("");
+    setSelectedTimeSlot(null);
+  }
   return (
     <div className="max-w-[1200px] mx-auto p-5 min-h-screen bg-gray-50 font-sans">
       {/* Header */}
@@ -65,8 +71,13 @@ export default function TutorReviewPage() {
           selectedTimeSlot={selectedTimeSlot}
           sessionTitle={sessionTitle}
           setSessionTitle={setSessionTitle}
+          setConflict={setConflict}
+          handleConflict={handleConflict}
           onConfirm={handleBookAppointment}
-          onCancel={() => setSelectedTimeSlot(null)}
+          onCancel={() => {
+            setBooking(false);
+            setSelectedTimeSlot(null)}
+          }
         />
       )}
       {success && 
@@ -78,6 +89,14 @@ export default function TutorReviewPage() {
           setSelectedTimeSlot(null);
         }}
         />}
+      <ScheduleConflictModal
+        open={conflict.state} 
+        onClose={()=>setConflict({...conflict, state:false})} 
+        title={conflict.title} 
+        name={conflict.tutorName}
+        slotId={conflict.slotId}
+      />
     </div>
   );
 }
+export default StudentViewTutorPage;

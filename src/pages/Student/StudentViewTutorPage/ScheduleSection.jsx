@@ -3,6 +3,9 @@ import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { fetchAPI } from "../../../utils/fetchAPI";
+import ExpiredTimeModal from "../../../components/ExpiredTimeModal";
+import ScheduleConflictModal from "../../../components/ScheduleConflictModal";
+import { checkTimeOverlap } from "../../../utils/checkTimeOverlap";
 export default function ScheduleSection({ selectedTimeSlot, setSelectedTimeSlot, setBooking }) {
   const {id} = useParams();
   const url = 'http://localhost:5000/student/getschedule';
@@ -47,8 +50,9 @@ export default function ScheduleSection({ selectedTimeSlot, setSelectedTimeSlot,
       };
     });
   }, [data]);
+  const [conflict, setConflict] = useState({state:false, tutorName: '', title: '', slotId: ''});
   const [expiredTimeModal, setExpiredTimeModal] = useState(false); 
-  const handleTimeSlotClick = (day, timeSlot) => {
+  const handleTimeSlotClick = async (day, timeSlot) => {
     const time = timeSlot.time;
     const start = time.split(' - ')[0];
     const hour = Number(start.split(':')[0]);
@@ -58,6 +62,22 @@ export default function ScheduleSection({ selectedTimeSlot, setSelectedTimeSlot,
     const target = new Date(y, m - 1, d, hour, min, 0, 0);
     if (now >= target) {
       setExpiredTimeModal(true);
+      return;
+    }
+    const url = "http://localhost:5000/student/getmyschedule";
+    const data = await fetchAPI(url, "GET", null, true);
+    const {appointment} = data;
+    const sameDayAppt = appointment.filter((a)=>{
+      return (
+        a.date.split(' ')[2] ===  timeSlot.slotId.split(' ')[3]
+        && (a.status === 'accepted' || a.status === 'pending')
+      )
+    })
+    const newStartTime = timeSlot.time.split(' - ')[0];
+    const newEndTime = timeSlot.time.split(' - ')[1];
+    const {res, tutorName, title, slotId} = checkTimeOverlap(sameDayAppt, newStartTime, newEndTime);
+    if(res){
+      setConflict({state:true, tutorName, title, slotId})
       return;
     }
     if (timeSlot.status === 'available') {
@@ -103,7 +123,7 @@ export default function ScheduleSection({ selectedTimeSlot, setSelectedTimeSlot,
                   <Clock size={14} />
                   {slot.time}
                   {slot.status !== 'available' && (
-                    <span className="text-[10px] font-normal">Đã đặt</span>
+                    <span className="text-[10px] font-normal">Đã được đặt</span>
                   )}
                 </button>
               ))}
@@ -112,31 +132,13 @@ export default function ScheduleSection({ selectedTimeSlot, setSelectedTimeSlot,
         ))}
       </div>
       {expiredTimeModal && <ExpiredTimeModal onClose={()=>setExpiredTimeModal(false)}/>}
-    </div>
-  );
-}
-function ExpiredTimeModal({onClose}) {
-  return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-      <div className="bg-white rounded-2xl p-6 max-w-[400px] w-[90%] text-center shadow-lg">
-        <h3 className="text-xl font-semibold text-gray-900 mb-4">
-          Thời gian đã trôi qua
-        </h3>
-
-        <p className="text-gray-600 mb-6">
-          Buổi học này đã <strong>quá thời gian bắt đầu</strong>.  
-          Vui lòng chọn một khung giờ khác phù hợp hơn.
-        </p>
-
-        <div className="flex justify-center">
-          <button
-            onClick={onClose}
-            className="px-5 py-2 rounded-lg font-medium bg-blue-500 text-white hover:bg-blue-600 transition-colors"
-          >
-            OK
-          </button>
-        </div>
-      </div>
+      <ScheduleConflictModal
+        open={conflict.state} 
+        onClose={()=>setConflict({...conflict, state:false})} 
+        title={conflict.title} 
+        name={conflict.tutorName}
+        slotId={conflict.slotId}
+      />
     </div>
   );
 }

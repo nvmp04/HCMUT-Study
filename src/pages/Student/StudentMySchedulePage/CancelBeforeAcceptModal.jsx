@@ -2,7 +2,7 @@ import React from "react";
 import { fetchAPI } from "../../../utils/fetchAPI";
 import { useQueryClient } from "@tanstack/react-query";
 
-export default function CancelBeforeAcceptModal({ slot, open, session, onClose }) {
+export default function CancelBeforeAcceptModal({ slot, open, onClose }) {
   const queryClient = useQueryClient();
 
   if (!open) return null;

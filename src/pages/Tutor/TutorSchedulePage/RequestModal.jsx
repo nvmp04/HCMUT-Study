@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { X, XCircle, CheckCircle } from "lucide-react";
+import { X, XCircle, CheckCircle, Link } from "lucide-react";
 import { fetchAPI } from "../../../utils/fetchAPI";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -135,6 +135,7 @@ export default function RequestModal({ slot, day, date, onClose}) {
               <label className="block text-sm font-medium text-slate-700 mb-2">
                 {method === "offline" ? "Địa điểm học" : "Liên kết cuộc họp"}
               </label>
+
               <input
                 type="text"
                 value={detail}
@@ -142,12 +143,23 @@ export default function RequestModal({ slot, day, date, onClose}) {
                 placeholder={
                   method === "offline"
                     ? "Nhập địa điểm học"
-                    : "Nhập liên kết Zoom/Google Meet "
+                    : "Nhập liên kết Zoom/Google Meet"
                 }
                 className="w-full border rounded-md p-2 text-sm focus:ring focus:ring-blue-200"
               />
+              {method === "online" && (
+                <div className="mt-2">
+                  <a
+                    href="https://meet.google.com/landing"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 text-sm flex items-center gap-1"
+                  >
+                    <Link/> Tạo link Google Meet
+                  </a>
+                </div>
+              )}
             </div>
-
             <div className="flex justify-end gap-3 pt-2">
               <button
                 onClick={() => setStep("info")}
