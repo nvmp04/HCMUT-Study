@@ -1,8 +1,8 @@
 import { Star, Calendar, User } from "lucide-react";
 import { Link } from "react-router-dom";
-import avt from "../../../assets/avt.jpg";
+import avt from "../assets/avt.jpg";
 
-export default function Card({ tutor }) {
+export default function TutorCard({ tutor }) {
   return (
     <div className="flex flex-col items-center bg-white p-6 rounded-lg shadow-md border border-gray-100 transition hover:shadow-xl hover:border-gray-200">
       <div className="relative flex justify-center mb-4">
@@ -26,7 +26,7 @@ export default function Card({ tutor }) {
             <Star className="text-yellow-400 fill-current" size={16} />
             <span className="font-semibold text-gray-900 text-sm">{tutor.rating}</span>
           </div>
-          <span className="text-gray-400 text-xs">({tutor.reviews} đánh giá)</span>
+          <span className="text-gray-400 text-xs">({tutor.totalReviews} đánh giá)</span>
         </div>
       </div>
 

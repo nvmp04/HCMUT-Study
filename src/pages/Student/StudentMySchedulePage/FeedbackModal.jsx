@@ -1,27 +1,30 @@
 import React, { useState } from "react";
 import { Star } from "lucide-react";
+import { fetchAPI } from "../../../utils/fetchAPI";
+import { useQueryClient } from "@tanstack/react-query";
 
-export default function FeedbackModal({ open, session, onClose, onSubmit }) {
+export default function FeedbackModal({ open, session, onClose}) {
+  const queryClient = useQueryClient();
   const [rating, setRating] = useState(0);
-  const [comment, setComment] = useState("");
-
   if (!open) return null;
-
+  const tutorId = session.tutorId;
   const handleSubmit = () => {
     if (rating > 0) {
-      onSubmit({ ...session, rating, comment });
+      const url = 'http://localhost:5000/student/rating'
+      fetchAPI(url, 'PUT', {tutorId, rating, _id: session._id}, true);
+      queryClient.invalidateQueries(["studentschedule"]);
       onClose();
     }
   };
 
   return (
     <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
-      <div className="bg-white rounded-xl shadow-lg p-6 max-w-md w-full">
+      <div className="bg-white flex-col item-center rounded-xl shadow-lg p-6 max-w-md w-full">
         <h2 className="text-xl font-semibold text-slate-800 mb-2">
           Đánh giá buổi học
         </h2>
         <p className="text-sm text-slate-600 mb-4">
-          Hãy chia sẻ cảm nhận của bạn về buổi học{" "}
+          Hãy đánh giá chất lượng của buổi học{" "}
           <span className="font-medium text-slate-800">{session?.subject}</span>
         </p>
 
@@ -39,15 +42,6 @@ export default function FeedbackModal({ open, session, onClose, onSubmit }) {
             </button>
           ))}
         </div>
-
-        <textarea
-          className="w-full border rounded-md p-2 text-sm mb-4 focus:ring-2 focus:ring-yellow-400"
-          placeholder="Nhận xét của bạn (không bắt buộc)..."
-          rows={4}
-          value={comment}
-          onChange={(e) => setComment(e.target.value)}
-        />
-
         <div className="flex justify-end gap-2">
           <button
             onClick={onClose}
@@ -58,12 +52,7 @@ export default function FeedbackModal({ open, session, onClose, onSubmit }) {
           <button
             onClick={handleSubmit}
             disabled={rating === 0}
-            className={`px-4 py-2 rounded-md text-sm text-white ${
-              rating > 0
-                ? "bg-yellow-500 hover:bg-yellow-600"
-                : "bg-yellow-300 cursor-not-allowed"
-            }`}
-          >
+            className="px-4 py-2 rounded-md text-sm text-white bg-yellow-500 hover:bg-yellow-600">
             Gửi đánh giá
           </button>
         </div>

@@ -1,13 +1,16 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 const AuthContext = createContext();
 export function AuthProvider({children}){
+    const queryClient = useQueryClient();
     const navigate = useNavigate();
     const [auth, setAuth] = useState({token: sessionStorage.getItem("token"), role: sessionStorage.getItem("role")});
+    const [banned, setBanned] = useState(sessionStorage.getItem("banned")==='true');
     const logout = () => {
-        sessionStorage.removeItem("token");
-        sessionStorage.removeItem("role");
+        queryClient.clear();
+        sessionStorage.clear();
         setAuth({ token: null, role: null });
         navigate('/login');
     };
@@ -24,7 +27,7 @@ export function AuthProvider({children}){
         }
     },[auth.token]);
     return (
-        <AuthContext.Provider value={{auth, setAuth}}>
+        <AuthContext.Provider value={{auth, setAuth, banned, setBanned}}>
             {children}
         </AuthContext.Provider>
     ) 

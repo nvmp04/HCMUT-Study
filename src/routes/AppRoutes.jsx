@@ -4,44 +4,53 @@ import LogIn from '../pages/LogInPage/LogInPage';
 import StudentHomepage from '../pages/Student/StudentHomepage/StudentHomepage';
 import StudentSchedulePage from '../pages/Student/StudentSchedulePage/StudentSchedulePage';
 import SSOLogin from '../pages/LogInPage/SSOlogInPage';
-import {StudentLayout, TutorLayout} from '../layouts/Layout';
-import { useAuth } from '../hooks/useAuth';
-import {ProtectedRoute, ProtectedLogInRoute} from './ProtectedRoute';
+import {AdminLayout, StudentLayout, TutorLayout} from '../layouts/Layout';
+import {ProtectedRoute, ProtectedLogInRoute, ProtectedBannedRoute} from './ProtectedRoute';
 import StudentMySchedulePage from '../pages/Student/StudentMySchedulePage/StudentMySchedulePage';
-import StudentPairingPage from '../pages/Student/StudentPairingPage/StudentPairingPage';
-import StudentProgressPage from '../pages/Student/StudentProgressPage/StudentProgressPage';
 import StudentLibraryPage from '../pages/Student/StudentLibraryPage/StudentLibraryPage';
 import TutorHomePage from '../pages/Tutor/TutorHomePage/TutorHomePage';
 import TutorSchedule from '../pages/Tutor/TutorSchedulePage/TutorSchedulePage';
 import StudentViewTutorPage from '../pages/Student/StudentViewTutorPage/StudentViewTutorPage';
+import TutorAppointmentsPage from '../pages/Tutor/TutorAppointmentsPage/TutorAppointmentsPage';
+import AdminDashboard from '../pages/Admin/AdminDashboard';
+import BanPage from '../pages/BanPage';
+import StudentAIpage from '../pages/Student/StudentAIpage/StudentAIpage';
 function AppRoutes(){
-  const {auth} = useAuth();
   return(
     <>
       <Routes>
         <Route path='/' element={<Homepage/>} />
-        <Route element={<ProtectedLogInRoute auth={auth}/>}>
+        <Route element={<ProtectedLogInRoute />}>
           <Route path='/login' element={<LogIn/>} />
           <Route path='/login/cas' element={<SSOLogin/>} />
         </Route>
 
-        <Route element={<ProtectedRoute allowedRole='student' auth={auth}/>}>
+        <Route element={<ProtectedRoute allowedRole='student' />}>
           <Route path='/student' element={<StudentLayout/>}>
             <Route index element={<StudentHomepage/>} />
             <Route path='schedule' element={<StudentSchedulePage/>} />
             <Route path='schedule/:id' element={<StudentViewTutorPage/>} />
+            <Route path='ai' element={<StudentAIpage/>} />
             <Route path='myschedule' element={<StudentMySchedulePage/>}/>
-            <Route path='pairing' element={<StudentPairingPage/>}/>
-            <Route path='progress' element={<StudentProgressPage/>}/>
             <Route path='library' element={<StudentLibraryPage/>}/>
           </Route>
         </Route>
 
-        <Route element={<ProtectedRoute allowedRole='tutor' auth={auth}/>}>
+        <Route element={<ProtectedRoute allowedRole='tutor' />}>
           <Route path='/tutor' element={<TutorLayout/>}>
             <Route index element={<TutorHomePage/>}/>
             <Route path='myschedule' element={<TutorSchedule/>} />
+            <Route path='appointments' element={<TutorAppointmentsPage/>} />
           </Route>
+        </Route>
+
+        <Route element={<ProtectedRoute allowedRole='admin' />}>
+          <Route path='admin' element={<AdminLayout/>}>
+            <Route index element={<AdminDashboard/>} />
+          </Route>
+        </Route>
+        <Route element={<ProtectedBannedRoute/>}>
+          <Route path='/banned' element={<BanPage/>}/>
         </Route>
       </Routes>
     </>

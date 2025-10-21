@@ -2,17 +2,17 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchAPI } from "../../../utils/fetchAPI";
-import { LoadingModal } from "../../../App";
-import io from "socket.io-client";
+import { LoadingModal } from "../../../components/LoadingModal";
 import HeaderSection from "./HeaderSection";
 import InfoSection from "./InfoSection";
 import ScheduleSection from "./ScheduleSection";
 import BookingModal from "./BookingModal";
 import SuccessModal from "./SuccessModal";
 import ScheduleConflictModal from '../../../components/ScheduleConflictModal'
+import { useSocket } from "../../../hooks/useSocket";
 
-const socket = io("http://localhost:5000");
 function StudentViewTutorPage() {
+  const socket = useSocket();
   const queryClient = useQueryClient();
   const { id } = useParams();
   const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
@@ -26,6 +26,7 @@ function StudentViewTutorPage() {
     queryFn: async () => await fetchAPI(url, "POST", { id }, true),
   });
   useEffect(() => {
+    if(!socket) return;
     function handleEvent({tutorId}){
       if(tutorId === id) queryClient.invalidateQueries(['tutorschedule', id]);
     }
@@ -34,7 +35,7 @@ function StudentViewTutorPage() {
     return () => {
       events.forEach((e)=>socket.off(e, handleEvent));
     };
-  }, [queryClient]);
+  }, [queryClient, socket]);
   if (isLoading) return <LoadingModal />;
 
   const handleBookAppointment = () =>{

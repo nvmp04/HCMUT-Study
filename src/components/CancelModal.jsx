@@ -19,8 +19,7 @@ export default function CancelModal({
   if (!open) return null;
   async function handleSubmit() {
     if (!reason.trim()) return;
-
-    const content = { status: "cancelled", slotId: slot.slotId, reason };
+    const content = { slotId: slot.slotId, _id: slot._id, reason };
 
     const url =
       role === "tutor"
@@ -29,7 +28,7 @@ export default function CancelModal({
 
     await fetchAPI(url, "PUT", content, true);
     queryClient.invalidateQueries([
-      role === "tutor" ? "schedule" : "studentschedule",
+      role === "tutor" ? "tutorappointments" : "studentschedule",
     ]);
     setReason('');
     onClose();
@@ -41,7 +40,7 @@ export default function CancelModal({
       role === "tutor" ? slot.studentName : slot.tutorName;
 
     return (
-      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+      <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
         <div className="bg-white p-8 rounded-2xl shadow-lg border-4 border-red-600 text-center relative">
           <AlertTriangle
             size={60}
@@ -72,7 +71,7 @@ export default function CancelModal({
     role === "tutor" ? slot.studentPhone : slot.tutorPhone;
 
   return (
-    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
       <div className="bg-white rounded-xl shadow-lg p-6 max-w-md w-full relative">
         {/* Nút đóng */}
         <button

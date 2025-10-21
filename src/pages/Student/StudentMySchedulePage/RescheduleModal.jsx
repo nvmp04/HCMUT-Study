@@ -4,14 +4,14 @@ import { useEffect, useMemo, useState } from "react";
 import { fetchAPI } from "../../../utils/fetchAPI";
 import ExpiredTimeModal from "../../../components/ExpiredTimeModal";
 import ConfirmRescheduleModal from "./ConfirmRescheduleModal";
-import io from "socket.io-client";
 import ScheduleConflictModal from "../../../components/ScheduleConflictModal";
 import { checkTimeOverlap } from "../../../utils/checkTimeOverlap";
+import { useSocket } from "../../../hooks/useSocket";
 
-const socket = io("http://localhost:5000");
 export default function RescheduleModal({ appointment, open, session, onClose }) {
   if (!open) return null;
-  const id = session.id.slice(0, 7);
+  const socket = useSocket();
+  const id = session.tutorId;
   const url = "http://localhost:5000/student/getschedule";
   const { data, isLoading } = useQuery({
     queryKey: ["tutorschedule", id],
@@ -19,15 +19,16 @@ export default function RescheduleModal({ appointment, open, session, onClose })
   });
   const queryClient = useQueryClient();
   useEffect(() => {
-      function handleEvent({tutorId}){
-        if(tutorId === id) queryClient.invalidateQueries(['tutorschedule', id]);
-      }
-      const events = ["appointment-updated", "tutorScheduleUpdated", "decline", "booksession"];
-      events.forEach((e)=>socket.on(e, handleEvent))
-      return () => {
-        events.forEach((e)=>socket.off(e, handleEvent));
-      };
-    }, [queryClient]);
+    if(!socket) return;
+    function handleEvent({tutorId}){
+      if(tutorId === id) queryClient.invalidateQueries(['tutorschedule', id]);
+    }
+    const events = ["appointment-updated", "tutorScheduleUpdated", "decline", "booksession"];
+    events.forEach((e)=>socket.on(e, handleEvent))
+    return () => {
+      events.forEach((e)=>socket.off(e, handleEvent));
+    };
+  }, [queryClient, socket]);
   const weeklySchedule = useMemo(() => {
     if (!data) return [];
     const today = new Date();
@@ -163,7 +164,11 @@ export default function RescheduleModal({ appointment, open, session, onClose })
           open={confirm}
           slot={session}
           timeSlot={selectedTimeSlot}
-          onClose={() => setConfirm(false)}
+          onClose={() => {
+            setConfirm(false);
+            onClose();
+          }
+          }
         />
 
         {expiredTimeModal && (

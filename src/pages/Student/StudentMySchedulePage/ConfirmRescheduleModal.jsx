@@ -8,10 +8,9 @@ export default function ConfirmRescheduleModal({ slot, open, timeSlot, onClose }
   if (!open || !timeSlot) return null;
   const currentTime = slot.slotId;
   const { slotId } = timeSlot;
-  const tutor = {id: slot.id.slice(0, 7), name: slot.tutorName, phone: slot.tutorPhone}
-  console.log(tutor)
+  const tutor = {id: slot.tutorId, name: slot.tutorName, phone: slot.tutorPhone}
   async function handleConfirm(){
-    const content = { slotId: slot.slotId };
+    const content = { _id: slot._id, slotId: slot.slotId };
     const url = "http://localhost:5000/student/cancelbeforeaccept";
     fetchAPI(url, "DELETE", content, true);
     studentBooking(tutor, timeSlot, slot.title);

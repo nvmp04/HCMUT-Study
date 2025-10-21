@@ -20,3 +20,10 @@ export function TutorLayout(){
         </>
     )
 }
+export function AdminLayout(){
+    return(
+        <>
+            <Outlet/>
+        </>
+    )
+}

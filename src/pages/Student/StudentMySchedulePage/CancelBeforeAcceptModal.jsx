@@ -8,7 +8,7 @@ export default function CancelBeforeAcceptModal({ slot, open, onClose }) {
   if (!open) return null;
 
   async function handleSubmit() {
-    const content = { slotId: slot.slotId };
+    const content = { _id: slot._id, slotId: slot.slotId };
     const url = "http://localhost:5000/student/cancelbeforeaccept";
     await fetchAPI(url, "DELETE", content, true);
     queryClient.invalidateQueries(["studentschedule"]);

@@ -14,7 +14,7 @@ export default function HomepageProfileCard({ data }) {
         <div className="bg-[#014181] h-32 relative">
           <div className="absolute -bottom-16 left-8">
             <img
-              src={info.avatar || avt}
+              src={avt}
               alt={info.name}
               className="w-32 h-32 rounded-2xl object-cover border-4 border-white shadow-xl"
             />

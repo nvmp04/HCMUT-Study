@@ -1,0 +1,71 @@
+"filename", "language", "JavaScript", "PostCSS", "JavaScript JSX", "JSON", "Markdown", "HTML", "comment", "blank", "total"
+"c:\Users\Admin\Downloads\HCMUT-Study\README.md", "Markdown", 0, 0, 0, 0, 7, 0, 0, 6, 13
+"c:\Users\Admin\Downloads\HCMUT-Study\eslint.config.js", "JavaScript", 28, 0, 0, 0, 0, 0, 0, 2, 30
+"c:\Users\Admin\Downloads\HCMUT-Study\index.html", "HTML", 0, 0, 0, 0, 0, 13, 0, 1, 14
+"c:\Users\Admin\Downloads\HCMUT-Study\package-lock.json", "JSON", 0, 0, 0, 3822, 0, 0, 0, 1, 3823
+"c:\Users\Admin\Downloads\HCMUT-Study\package.json", "JSON", 0, 0, 0, 37, 0, 0, 0, 1, 38
+"c:\Users\Admin\Downloads\HCMUT-Study\postcss.config.js", "JavaScript", 6, 0, 0, 0, 0, 0, 0, 1, 7
+"c:\Users\Admin\Downloads\HCMUT-Study\src\App.jsx", "JavaScript JSX", 0, 0, 31, 0, 0, 0, 1, 4, 36
+"c:\Users\Admin\Downloads\HCMUT-Study\src\components\CancelModal.jsx", "JavaScript JSX", 0, 0, 136, 0, 0, 0, 3, 10, 149
+"c:\Users\Admin\Downloads\HCMUT-Study\src\components\ExpiredTimeModal.jsx", "JavaScript JSX", 0, 0, 23, 0, 0, 0, 0, 2, 25
+"c:\Users\Admin\Downloads\HCMUT-Study\src\components\HeaderFooterNav\Footer.jsx", "JavaScript JSX", 0, 0, 64, 0, 0, 0, 0, 4, 68
+"c:\Users\Admin\Downloads\HCMUT-Study\src\components\HeaderFooterNav\Header.jsx", "JavaScript JSX", 0, 0, 85, 0, 0, 0, 0, 11, 96
+"c:\Users\Admin\Downloads\HCMUT-Study\src\components\HeaderFooterNav\NavigationBar.jsx", "JavaScript JSX", 0, 0, 53, 0, 0, 0, 0, 7, 60
+"c:\Users\Admin\Downloads\HCMUT-Study\src\components\HomepageProfileCard.jsx", "JavaScript JSX", 0, 0, 169, 0, 0, 0, 11, 14, 194
+"c:\Users\Admin\Downloads\HCMUT-Study\src\components\HomepageScheduleCard.jsx", "JavaScript JSX", 0, 0, 78, 0, 0, 0, 2, 6, 86
+"c:\Users\Admin\Downloads\HCMUT-Study\src\components\Notification\NotificationDropDown.jsx", "JavaScript JSX", 0, 0, 122, 0, 0, 0, 0, 13, 135
+"c:\Users\Admin\Downloads\HCMUT-Study\src\components\Notification\NotificationModal.jsx", "JavaScript JSX", 0, 0, 148, 0, 0, 0, 0, 17, 165
+"c:\Users\Admin\Downloads\HCMUT-Study\src\components\ScheduleConflictModal.jsx", "JavaScript JSX", 0, 0, 26, 0, 0, 0, 0, 4, 30
+"c:\Users\Admin\Downloads\HCMUT-Study\src\hooks\useAuth.jsx", "JavaScript JSX", 0, 0, 34, 0, 0, 0, 0, 0, 34
+"c:\Users\Admin\Downloads\HCMUT-Study\src\index.css", "PostCSS", 0, 17, 0, 0, 0, 0, 0, 0, 17
+"c:\Users\Admin\Downloads\HCMUT-Study\src\layouts\Layout.jsx", "JavaScript JSX", 0, 0, 21, 0, 0, 0, 0, 2, 23
+"c:\Users\Admin\Downloads\HCMUT-Study\src\main.jsx", "JavaScript JSX", 0, 0, 19, 0, 0, 0, 0, 1, 20
+"c:\Users\Admin\Downloads\HCMUT-Study\src\pages\Homepage\Homepage.jsx", "JavaScript JSX", 0, 0, 19, 0, 0, 0, 0, 2, 21
+"c:\Users\Admin\Downloads\HCMUT-Study\src\pages\Homepage\components\About.jsx", "JavaScript JSX", 0, 0, 35, 0, 0, 0, 0, 3, 38
+"c:\Users\Admin\Downloads\HCMUT-Study\src\pages\Homepage\components\Benefits.jsx", "JavaScript JSX", 0, 0, 59, 0, 0, 0, 0, 3, 62
+"c:\Users\Admin\Downloads\HCMUT-Study\src\pages\Homepage\components\Features.jsx", "JavaScript JSX", 0, 0, 65, 0, 0, 0, 0, 4, 69
+"c:\Users\Admin\Downloads\HCMUT-Study\src\pages\Homepage\components\Hero.jsx", "JavaScript JSX", 0, 0, 30, 0, 0, 0, 0, 0, 30
+"c:\Users\Admin\Downloads\HCMUT-Study\src\pages\LogInPage\LogInPage.jsx", "JavaScript JSX", 0, 0, 34, 0, 0, 0, 0, 7, 41
+"c:\Users\Admin\Downloads\HCMUT-Study\src\pages\LogInPage\SSOlogInPage.jsx", "JavaScript JSX", 0, 0, 94, 0, 0, 0, 0, 1, 95
+"c:\Users\Admin\Downloads\HCMUT-Study\src\pages\Student\StudentHomepage\StudentHomepage.jsx", "JavaScript JSX", 0, 0, 36, 0, 0, 0, 2, 4, 42
+"c:\Users\Admin\Downloads\HCMUT-Study\src\pages\Student\StudentLibraryPage\StudentLibraryPage.jsx", "JavaScript JSX", 0, 0, 7, 0, 0, 0, 0, 0, 7
+"c:\Users\Admin\Downloads\HCMUT-Study\src\pages\Student\StudentMySchedulePage\CancelBeforeAcceptModal.jsx", "JavaScript JSX", 0, 0, 42, 0, 0, 0, 0, 6, 48
+"c:\Users\Admin\Downloads\HCMUT-Study\src\pages\Student\StudentMySchedulePage\ConfirmRescheduleModal.jsx", "JavaScript JSX", 0, 0, 52, 0, 0, 0, 0, 6, 58
+"c:\Users\Admin\Downloads\HCMUT-Study\src\pages\Student\StudentMySchedulePage\FeedbackModal.jsx", "JavaScript JSX", 0, 0, 66, 0, 0, 0, 0, 8, 74
+"c:\Users\Admin\Downloads\HCMUT-Study\src\pages\Student\StudentMySchedulePage\RescheduleModal.jsx", "JavaScript JSX", 0, 0, 174, 0, 0, 0, 0, 9, 183
+"c:\Users\Admin\Downloads\HCMUT-Study\src\pages\Student\StudentMySchedulePage\SessionCard.jsx", "JavaScript JSX", 0, 0, 131, 0, 0, 0, 0, 3, 134
+"c:\Users\Admin\Downloads\HCMUT-Study\src\pages\Student\StudentMySchedulePage\StatusBadge.jsx", "JavaScript JSX", 0, 0, 19, 0, 0, 0, 0, 3, 22
+"c:\Users\Admin\Downloads\HCMUT-Study\src\pages\Student\StudentMySchedulePage\StudentMySchedulePage.jsx", "JavaScript JSX", 0, 0, 140, 0, 0, 0, 0, 4, 144
+"c:\Users\Admin\Downloads\HCMUT-Study\src\pages\Student\StudentPairingPage\StudentPairingPage.jsx", "JavaScript JSX", 0, 0, 7, 0, 0, 0, 0, 0, 7
+"c:\Users\Admin\Downloads\HCMUT-Study\src\pages\Student\StudentProgressPage\StudentProgressPage.jsx", "JavaScript JSX", 0, 0, 7, 0, 0, 0, 0, 0, 7
+"c:\Users\Admin\Downloads\HCMUT-Study\src\pages\Student\StudentSchedulePage\Card.jsx", "JavaScript JSX", 0, 0, 40, 0, 0, 0, 0, 5, 45
+"c:\Users\Admin\Downloads\HCMUT-Study\src\pages\Student\StudentSchedulePage\FilterBar.jsx", "JavaScript JSX", 0, 0, 38, 0, 0, 0, 0, 3, 41
+"c:\Users\Admin\Downloads\HCMUT-Study\src\pages\Student\StudentSchedulePage\StudentSchedulePage.jsx", "JavaScript JSX", 0, 0, 102, 0, 0, 0, 0, 16, 118
+"c:\Users\Admin\Downloads\HCMUT-Study\src\pages\Student\StudentViewTutorPage\BookingModal.jsx", "JavaScript JSX", 0, 0, 72, 0, 0, 0, 1, 7, 80
+"c:\Users\Admin\Downloads\HCMUT-Study\src\pages\Student\StudentViewTutorPage\HeaderSection.jsx", "JavaScript JSX", 0, 0, 40, 0, 0, 0, 0, 4, 44
+"c:\Users\Admin\Downloads\HCMUT-Study\src\pages\Student\StudentViewTutorPage\InfoSection.jsx", "JavaScript JSX", 0, 0, 37, 0, 0, 0, 0, 6, 43
+"c:\Users\Admin\Downloads\HCMUT-Study\src\pages\Student\StudentViewTutorPage\ScheduleSection.jsx", "JavaScript JSX", 0, 0, 140, 0, 0, 0, 0, 5, 145
+"c:\Users\Admin\Downloads\HCMUT-Study\src\pages\Student\StudentViewTutorPage\StudentViewTutorPage.jsx", "JavaScript JSX", 0, 0, 93, 0, 0, 0, 4, 5, 102
+"c:\Users\Admin\Downloads\HCMUT-Study\src\pages\Student\StudentViewTutorPage\SuccessModal.jsx", "JavaScript JSX", 0, 0, 29, 0, 0, 0, 0, 2, 31
+"c:\Users\Admin\Downloads\HCMUT-Study\src\pages\Tutor\TutorHomePage\TutorHomePage.jsx", "JavaScript JSX", 0, 0, 26, 0, 0, 0, 2, 2, 30
+"c:\Users\Admin\Downloads\HCMUT-Study\src\pages\Tutor\TutorSchedulePage\AddTimeModal.jsx", "JavaScript JSX", 0, 0, 114, 0, 0, 0, 0, 9, 123
+"c:\Users\Admin\Downloads\HCMUT-Study\src\pages\Tutor\TutorSchedulePage\AvailableModal.jsx", "JavaScript JSX", 0, 0, 33, 0, 0, 0, 0, 5, 38
+"c:\Users\Admin\Downloads\HCMUT-Study\src\pages\Tutor\TutorSchedulePage\ConfirmedModal.jsx", "JavaScript JSX", 0, 0, 86, 0, 0, 0, 0, 6, 92
+"c:\Users\Admin\Downloads\HCMUT-Study\src\pages\Tutor\TutorSchedulePage\DaySchedule.jsx", "JavaScript JSX", 0, 0, 30, 0, 0, 0, 0, 4, 34
+"c:\Users\Admin\Downloads\HCMUT-Study\src\pages\Tutor\TutorSchedulePage\EndModal.jsx", "JavaScript JSX", 0, 0, 24, 0, 0, 0, 0, 0, 24
+"c:\Users\Admin\Downloads\HCMUT-Study\src\pages\Tutor\TutorSchedulePage\RequestModal.jsx", "JavaScript JSX", 0, 0, 174, 0, 0, 0, 0, 9, 183
+"c:\Users\Admin\Downloads\HCMUT-Study\src\pages\Tutor\TutorSchedulePage\SlotButton.jsx", "JavaScript JSX", 0, 0, 26, 0, 0, 0, 0, 4, 30
+"c:\Users\Admin\Downloads\HCMUT-Study\src\pages\Tutor\TutorSchedulePage\TutorSchedulePage.jsx", "JavaScript JSX", 0, 0, 200, 0, 0, 0, 2, 10, 212
+"c:\Users\Admin\Downloads\HCMUT-Study\src\routes\AppRoutes.jsx", "JavaScript JSX", 0, 0, 48, 0, 0, 0, 0, 2, 50
+"c:\Users\Admin\Downloads\HCMUT-Study\src\routes\ProtectedRoute.jsx", "JavaScript JSX", 0, 0, 13, 0, 0, 0, 0, 1, 14
+"c:\Users\Admin\Downloads\HCMUT-Study\src\services\LogIn.js", "JavaScript", 10, 0, 0, 0, 0, 0, 0, 1, 11
+"c:\Users\Admin\Downloads\HCMUT-Study\src\services\studentBooking.js", "JavaScript", 23, 0, 0, 0, 0, 0, 0, 1, 24
+"c:\Users\Admin\Downloads\HCMUT-Study\src\style\LogIn\loginPage.css", "PostCSS", 0, 81, 0, 0, 0, 0, 0, 7, 88
+"c:\Users\Admin\Downloads\HCMUT-Study\src\style\LogIn\ssoLogIn.css", "PostCSS", 0, 127, 0, 0, 0, 0, 0, 19, 146
+"c:\Users\Admin\Downloads\HCMUT-Study\src\style\StudentSchedulePage\studentSchedulePage.css", "PostCSS", 0, 260, 0, 0, 0, 0, 4, 45, 309
+"c:\Users\Admin\Downloads\HCMUT-Study\src\utils\checkTimeOverlap.js", "JavaScript", 27, 0, 0, 0, 0, 0, 2, 3, 32
+"c:\Users\Admin\Downloads\HCMUT-Study\src\utils\checkUserNamePass.js", "JavaScript", 17, 0, 0, 0, 0, 0, 0, 1, 18
+"c:\Users\Admin\Downloads\HCMUT-Study\src\utils\fetchAPI.js", "JavaScript", 38, 0, 0, 0, 0, 0, 0, 4, 42
+"c:\Users\Admin\Downloads\HCMUT-Study\tailwind.config.js", "JavaScript", 7, 0, 0, 0, 0, 0, 1, 2, 10
+"c:\Users\Admin\Downloads\HCMUT-Study\vite.config.js", "JavaScript", 6, 0, 0, 0, 0, 0, 1, 2, 9
+"Total", "-", 162, 485, 3391, 3859, 7, 13, 36, 360, 8313

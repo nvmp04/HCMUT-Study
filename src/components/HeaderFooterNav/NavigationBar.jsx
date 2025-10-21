@@ -8,15 +8,14 @@ function NavigationBar() {
   if (role === 'student')  
     headerLinks = [
     { to: '/student/schedule', name: 'ĐẶT LỊCH' },
-    { to: '/student/pairing', name: 'GHÉP CẶP TUTOR' },
     { to: '/student/myschedule', name: 'LỊCH CỦA TÔI' },
-    { to: '/student/progress', name: 'TIẾN ĐỘ HỌC TẬP' },
+    { to: '/student/ai', name: 'TRỢ LÝ AI' },
     { to: '/student/library', name: 'THƯ VIỆN' }
   ]
   else if (role === 'tutor')
     headerLinks = [
     { to: '/tutor/myschedule', name: 'LỊCH CỦA TÔI' },
-    { to: '/tutor/appointments', name: 'CÁC BUỔI HẸN'},
+    { to: '/tutor/appointments', name: 'CÁC CUỘC HẸN'},
     { to: '/tutor/mystudent', name: 'HỌC VIÊN CỦA TÔI' },
     { to: '/tutor/library', name: 'THƯ VIỆN' }
   ];

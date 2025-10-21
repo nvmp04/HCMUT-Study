@@ -7,10 +7,11 @@ import {AddTimeModal, weekdayMap2} from "./AddTimeModal";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchAPI } from "../../../utils/fetchAPI";
 import { EndModal } from "./EndModal";
-import { io } from "socket.io-client";
+import { useSocket } from "../../../hooks/useSocket";
 
 export default function TutorSchedule() {
   const queryClient = useQueryClient();
+  const socket = useSocket();
   const url = 'http://localhost:5000/tutor/getschedule';
   const {data, isLoading} = useQuery({
     queryKey: ['schedule'], 
@@ -18,7 +19,7 @@ export default function TutorSchedule() {
   })
   const id = sessionStorage.getItem('id');
   useEffect(() => {
-    const socket = io("http://localhost:5000"); 
+    if(!socket) return;
     const events = ["booksession", "studentcancel", "cancelbeforeaccept"];
     function handleEvent({tutorId}){
       if(id !== tutorId) return;
@@ -28,7 +29,7 @@ export default function TutorSchedule() {
     return () => {
       events.forEach((e)=>{socket.off(e, handleEvent)});
     };
-  }, [queryClient]);
+  }, [queryClient, socket]);
   const weeklySchedule = useMemo(() => {
     if (!data) return [];
     const today = new Date();
@@ -59,6 +60,7 @@ export default function TutorSchedule() {
         timeSlots: slotsFromAPI.map((time) => {
           const matched = data.appointment?.find(appt => appt.slotId === (time + ' ' + dateformat));
           return{
+            _id: matched ? matched._id : '',
             slotId: time + ' ' + dateformat,
             time,
             status: matched ? matched.status : 'available',

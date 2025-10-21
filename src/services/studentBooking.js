@@ -3,7 +3,8 @@ import { fetchAPI } from "../utils/fetchAPI";
 export default function studentBooking(tutor, selectedTimeSlot, sessionTitle){
     const stuID = sessionStorage.getItem("id");
     const content = {
-        id: tutor.id + stuID,
+        studentId: stuID, 
+        tutorId: tutor.id,
         status: 'pending',
         studentName: sessionStorage.getItem('name'),
         studentPhone: sessionStorage.getItem('phone'),

@@ -2,10 +2,10 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Bell, Trash2 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { fetchAPI } from "../../utils/fetchAPI";
-import { io } from "socket.io-client";
+import { useSocket } from "../../hooks/useSocket";
 
 export default function NotificationDropdown() {
-  const socketRef = useRef(null);
+  const socket = useSocket();
   const queryClient = useQueryClient();
   const [isOpen, setIsOpen] = useState(false);
   const id = sessionStorage.getItem('id');
@@ -15,8 +15,7 @@ export default function NotificationDropdown() {
     queryFn: ()=> fetchAPI(url, 'GET', null, true)
   })
   useEffect(()=>{
-    socketRef.current = io("http://localhost:5000");
-    const socket = socketRef.current;
+    if(!socket) return;
     function handleEvent({notifId}){
       if(id !== notifId) return;
       queryClient.invalidateQueries(['getnotifications']);
@@ -25,7 +24,7 @@ export default function NotificationDropdown() {
     return () => {
       socket.off('notification', handleEvent);
     };
-  },[id])
+  },[id, socket]);
   const dropdownRef = useRef(null);
 
   useEffect(() => {
@@ -55,14 +54,11 @@ export default function NotificationDropdown() {
     if (days < 6) return `${days} ngày trước`;
     return time.toLocaleDateString("vi-VN");
   };
-
   const notifications = data?.notifications?.map(n => ({
     ...n,
     time: formatTime(n.time),
   })) || [];
-
   const unreadCount = notifications.filter(n => !n.read).length;
-
   const markAsRead = (_id) => {
     const url = 'http://localhost:5000/notification/read'
     fetchAPI(url, 'PUT', {_id}, true);
@@ -107,7 +103,6 @@ export default function NotificationDropdown() {
                     <p className="text-[0.8125rem] text-gray-500 leading-snug line-clamp-2 mb-1">{notif.message}</p>
                     <span className="text-xs text-gray-400">{notif.time}</span>
                   </div>
-                  {/* nút thùng rác nhỏ */}
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
