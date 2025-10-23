@@ -65,7 +65,7 @@ function TutorList() {
                     </td>
                     <td className="px-6 py-4 text-center">
                       <div className="inline-flex items-center gap-1.5 px-3 py-1.5 ">
-                        <span className="font-semibold text-orange-700">{unsuccessfulSchedules[tutor.id].declineSchedule.length}
+                        <span className="font-semibold text-orange-700">{unsuccessfulSchedules[tutor.id]?.declineSchedule?.length}
                         </span>
                         <X className="w-4 h-4 text-orange-600" />
                       </div>
@@ -73,7 +73,7 @@ function TutorList() {
                     <td className="px-6 py-4 text-center">
                       <div className="inline-flex items-center gap-1.5 px-3 py-1.5 ">
                         <span className="font-semibold text-red-700">
-                          {unsuccessfulSchedules[tutor.id]?.cancelSchedule.length}
+                          {unsuccessfulSchedules[tutor.id]?.cancelSchedule?.length}
                         </span>
                         <XCircle className="w-4 h-4 text-red-600" />
                       </div>

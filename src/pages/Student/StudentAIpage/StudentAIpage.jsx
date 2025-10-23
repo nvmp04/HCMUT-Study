@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Sparkles, Plus, Calendar, Users, Target, Clock, Brain, TrendingUp, Zap } from "lucide-react";
+import { Plus} from "lucide-react";
 import GenerateModal from "./components/GenarateModal";
 import Roadmap from "./components/RoadMap";
 

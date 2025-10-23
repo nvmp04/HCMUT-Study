@@ -30,21 +30,28 @@ export default function StudentMySchedulePage() {
   const [feedbackModal, setFeedbackModal] = useState(false);
   const [reportModal, setReportModal] = useState(false);
   const [reason, setReason] = useState("");
-
+  const id = sessionStorage.getItem("id");
   useEffect(() => {
     if (!socket) return;
-    function handleEvent({ studentId }) {
-      const id = sessionStorage.getItem("id");
-      if (id === studentId) {
-        queryClient.invalidateQueries(["studentschedule"]);
+    function handleEvent({ studentId, _id }) {
+      console.log(selectedSession);
+      if(id !== studentId) return;
+      if(_id === selectedSession._id) {
+        setCancelBeforeAccept(false);
+        setCancelModal(false);
+        setFeedbackModal(false);
+        setReportModal(false);
+        setSelectedSession(null);
+        setReason("");
       }
+      queryClient.invalidateQueries(["studentschedule"]);
     }
     const events = ["appointment-updated", "decline"];
     events.forEach((event) => socket.on(event, handleEvent));
     return () => {
       events.forEach((event) => socket.off(event, handleEvent));
     };
-  }, [queryClient, socket]);
+  }, [socket, selectedSession]);
 
   if (isLoading) return <LoadingModal />;
 

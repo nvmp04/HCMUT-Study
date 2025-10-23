@@ -59,15 +59,15 @@ export default function NotificationDropdown() {
     time: formatTime(n.time),
   })) || [];
   const unreadCount = notifications.filter(n => !n.read).length;
-  const markAsRead = (_id) => {
+  const markAsRead = async (_id) => {
     const url = 'http://localhost:5000/notification/read'
-    fetchAPI(url, 'PUT', {_id}, true);
+    await fetchAPI(url, 'PUT', {_id}, true);
     queryClient.invalidateQueries(['getnotifications']);
   };
 
-  const deleteNotification = (_id) => {
+  const deleteNotification = async (_id) => {
     const url = 'http://localhost:5000/notification/delete';
-    fetchAPI(url, 'DELETE', { _id }, true);
+    await fetchAPI(url, 'DELETE', { _id }, true);
     queryClient.invalidateQueries(['getnotifications']);
   };
 
@@ -100,7 +100,7 @@ export default function NotificationDropdown() {
                 >
                   <div className="flex-1 min-w-0">
                     <h4 className="text-sm font-semibold text-gray-800 mb-1">{notif.title}</h4>
-                    <p className="text-[0.8125rem] text-gray-500 leading-snug line-clamp-2 mb-1">{notif.message}</p>
+                    <p className="text-[0.8125rem] text-gray-500 leading-snug mb-1">{notif.message}</p>
                     <span className="text-xs text-gray-400">{notif.time}</span>
                   </div>
                   <button

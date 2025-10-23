@@ -38,7 +38,7 @@ export default function ConfirmedModal({ slot, day, date, onClose }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
-      <div className="bg-white rounded-2xl p-6 max-w-md w-[92%] relative shadow-lg">
+      {!showCancelModal && <div className="bg-white rounded-2xl p-6 max-w-md w-[92%] relative shadow-lg">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 p-1 text-gray-400 hover:text-gray-600 transition"
@@ -73,19 +73,19 @@ export default function ConfirmedModal({ slot, day, date, onClose }) {
             <XCircle size={18} /> Hủy lịch
           </button>
         </div>
-        <CancelModal
-          slot={slot}
-          open={showCancelModal}
-          onClose={() => {
-            setShowCancelModal(false);
-            setWarning(false);
-            setSuperWarning(false);
-            onClose();
-          }}
-          isWarning={warning}
-          isSuperWarning={superWarning}
-        />
-      </div>
+      </div>}
+      <CancelModal
+        slot={slot}
+        open={showCancelModal}
+        onClose={() => {
+          setShowCancelModal(false);
+          setWarning(false);
+          setSuperWarning(false);
+          onClose();
+        }}
+        isWarning={warning}
+        isSuperWarning={superWarning}
+      />
     </div>
   );
 }

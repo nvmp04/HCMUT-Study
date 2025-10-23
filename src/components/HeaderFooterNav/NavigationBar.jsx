@@ -9,7 +9,7 @@ function NavigationBar() {
     headerLinks = [
     { to: '/student/schedule', name: 'ĐẶT LỊCH' },
     { to: '/student/myschedule', name: 'LỊCH CỦA TÔI' },
-    { to: '/student/ai', name: 'TRỢ LÝ AI' },
+    { to: '/student/ai', name: 'LỘ TRÌNH HỌC TẬP' },
     { to: '/student/library', name: 'THƯ VIỆN' }
   ]
   else if (role === 'tutor')

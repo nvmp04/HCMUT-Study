@@ -1,7 +1,11 @@
 import { fetchAPI } from "../utils/fetchAPI";
+import { checkTitleRequest } from "./AIcheck";
 
-export default function studentBooking(tutor, selectedTimeSlot, sessionTitle){
+export default async function studentBooking(tutor, selectedTimeSlot, sessionTitle){
     const stuID = sessionStorage.getItem("id");
+    const res = await checkTitleRequest(sessionTitle);
+    const {error, message, ban} = res;
+    if(error === 'true' || error === true) return {error, message, ban};
     const content = {
         studentId: stuID, 
         tutorId: tutor.id,
@@ -20,6 +24,6 @@ export default function studentBooking(tutor, selectedTimeSlot, sessionTitle){
         reason: ''
     }
     const url = 'http://localhost:5000/student/booksession'
-    fetchAPI(url, 'POST', content, true);
-    return;
+    await fetchAPI(url, 'POST', content, true);
+    return {error, message, ban};
 }

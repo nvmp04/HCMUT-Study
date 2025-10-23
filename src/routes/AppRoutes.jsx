@@ -4,7 +4,7 @@ import LogIn from '../pages/LogInPage/LogInPage';
 import StudentHomepage from '../pages/Student/StudentHomepage/StudentHomepage';
 import StudentSchedulePage from '../pages/Student/StudentSchedulePage/StudentSchedulePage';
 import SSOLogin from '../pages/LogInPage/SSOlogInPage';
-import {AdminLayout, StudentLayout, TutorLayout} from '../layouts/Layout';
+import {AdminLayout, Layout} from '../layouts/Layout';
 import {ProtectedRoute, ProtectedLogInRoute, ProtectedBannedRoute} from './ProtectedRoute';
 import StudentMySchedulePage from '../pages/Student/StudentMySchedulePage/StudentMySchedulePage';
 import StudentLibraryPage from '../pages/Student/StudentLibraryPage/StudentLibraryPage';
@@ -26,7 +26,7 @@ function AppRoutes(){
         </Route>
 
         <Route element={<ProtectedRoute allowedRole='student' />}>
-          <Route path='/student' element={<StudentLayout/>}>
+          <Route path='/student' element={<Layout/>}>
             <Route index element={<StudentHomepage/>} />
             <Route path='schedule' element={<StudentSchedulePage/>} />
             <Route path='schedule/:id' element={<StudentViewTutorPage/>} />
@@ -37,7 +37,7 @@ function AppRoutes(){
         </Route>
 
         <Route element={<ProtectedRoute allowedRole='tutor' />}>
-          <Route path='/tutor' element={<TutorLayout/>}>
+          <Route path='/tutor' element={<Layout/>}>
             <Route index element={<TutorHomePage/>}/>
             <Route path='myschedule' element={<TutorSchedule/>} />
             <Route path='appointments' element={<TutorAppointmentsPage/>} />

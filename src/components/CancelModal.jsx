@@ -3,6 +3,9 @@ import { X, AlertTriangle } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { fetchAPI } from "../utils/fetchAPI";
 import { useAuth } from "../hooks/useAuth";
+import AIcheckingModal from "./AIchekingModal";
+import AIwarningModal from "./AIwarningModal";
+import { checkTutorReason } from "../services/AIcheck";
 
 export default function CancelModal({
   slot,
@@ -13,31 +16,67 @@ export default function CancelModal({
 }) {
   const [reason, setReason] = useState("");
   const queryClient = useQueryClient();
-
   const { auth } = useAuth();
   const { role } = auth;
+
+  // AI check states
+  const [aiModalType, setAiModalType] = useState("main"); 
+  const [aiMessage, setAiMessage] = useState("");
+  const [ban, setBan] = useState(false);
+
   if (!open) return null;
+
   async function handleSubmit() {
     if (!reason.trim()) return;
-    const content = { slotId: slot.slotId, _id: slot._id, reason };
+    setAiModalType("checking");
+    try {
+      const res = await checkTutorReason(reason);
+      const { error, message, ban } = res;
+      console.log(res);
+      if (error === true || error === "true") {
+        setAiMessage(message);
+        setBan(ban === true || ban === "true");
+        setAiModalType("error");
+        return;
+      }
 
-    const url =
-      role === "tutor"
-        ? "http://localhost:5000/tutor/response"
-        : "http://localhost:5000/student/cancelled";
+      const content = { slotId: slot.slotId, _id: slot._id, reason };
+      const url =
+        role === "tutor"
+          ? "http://localhost:5000/tutor/response"
+          : "http://localhost:5000/student/cancelled";
 
-    await fetchAPI(url, "PUT", content, true);
-    queryClient.invalidateQueries([
-      role === "tutor" ? "tutorappointments" : "studentschedule",
-    ]);
-    setReason('');
-    onClose();
+      await fetchAPI(url, "PUT", content, true);
+      queryClient.invalidateQueries([
+        role === "tutor" ? "tutorappointments" : "studentschedule",
+      ]);
+      setReason("");
+      onClose();
+      setAiModalType("main");
+    } catch (err) {
+      console.error(err);
+      setAiMessage("Lỗi hệ thống khi xử lý yêu cầu hủy.");
+      setAiModalType("error");
+    }
   }
+
+  // --- AI modals ---
+  if (aiModalType === "checking") return <AIcheckingModal type="lý do hủy" />;
+
+  if (aiModalType === "error") {
+    return (
+      <AIwarningModal
+        title={ban ? "Cảnh báo" : "Lý do hủy không hợp lệ"}
+        content={aiMessage}
+        onClose={() => setAiModalType("main")}
+      />
+    );
+  }
+
+  // --- UI gốc CancelModal ---
   if (isSuperWarning) {
-    const phone =
-      role === "tutor" ? slot.studentPhone : slot.tutorPhone;
-    const name =
-      role === "tutor" ? slot.studentName : slot.tutorName;
+    const phone = role === "tutor" ? slot.studentPhone : slot.tutorPhone;
+    const name = role === "tutor" ? slot.studentName : slot.tutorName;
 
     return (
       <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
@@ -64,11 +103,10 @@ export default function CancelModal({
       </div>
     );
   }
+
   const otherRole = role === "tutor" ? "học viên" : "giảng viên";
-  const otherName =
-    role === "tutor" ? slot.studentName : slot.tutorName;
-  const otherPhone =
-    role === "tutor" ? slot.studentPhone : slot.tutorPhone;
+  const otherName = role === "tutor" ? slot.studentName : slot.tutorName;
+  const otherPhone = role === "tutor" ? slot.studentPhone : slot.tutorPhone;
 
   return (
     <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
@@ -96,24 +134,26 @@ export default function CancelModal({
         {isWarning ? (
           <>
             <p className="text-sm text-slate-600 mb-3">
-            Buổi học sẽ diễn ra trong vòng <strong>1 giờ</strong>.  
-            Hãy liên hệ {otherRole} để thông báo.
+              Buổi học sẽ diễn ra trong vòng <strong>1 giờ</strong>.  
+              Hãy liên hệ {otherRole} để thông báo.
             </p>
             <div className="bg-red-50 border border-red-200 p-3 rounded-lg mb-4 text-sm">
-            <p>
+              <p>
                 <strong>Tên {otherRole}:</strong> {otherName}
-            </p>
-            <p>
+              </p>
+              <p>
                 <strong>Số điện thoại:</strong> {otherPhone}
-            </p>
+              </p>
             </div>
           </>
         ) : (
-        <p className="text-sm text-slate-600 mb-3">
+          <p className="text-sm text-slate-600 mb-3">
             Bạn có chắc chắn muốn hủy buổi học{" "}
             <span className="font-medium text-slate-800">{slot.title}</span> với {otherRole} <strong>{otherName}</strong>
-        </p>
+          </p>
         )}
+
+        {/* Lý do hủy */}
         <textarea
           className="w-full border rounded-md p-2 text-sm mb-4 mt-2 focus:outline-none focus:ring-2 focus:ring-red-400"
           placeholder="Nhập lý do hủy (bắt buộc)..."
@@ -122,6 +162,8 @@ export default function CancelModal({
           onChange={(e) => setReason(e.target.value)}
           required
         />
+
+        {/* Nút hành động */}
         <div className="flex justify-end gap-2">
           <button
             onClick={onClose}

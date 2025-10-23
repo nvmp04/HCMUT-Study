@@ -11,6 +11,8 @@ import { useSocket } from "../../../hooks/useSocket";
 
 export default function TutorSchedule() {
   const queryClient = useQueryClient();
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
+  const [modalType, setModalType] = useState(null);
   const socket = useSocket();
   const url = 'http://localhost:5000/tutor/getschedule';
   const {data, isLoading} = useQuery({
@@ -20,11 +22,18 @@ export default function TutorSchedule() {
   const id = sessionStorage.getItem('id');
   useEffect(() => {
     if(!socket) return;
-    const events = ["booksession", "studentcancel", "cancelbeforeaccept"];
+    const events = ["booksession", "studentcancel"];
     function handleEvent({tutorId}){
       if(id !== tutorId) return;
       queryClient.invalidateQueries({ queryKey: ["schedule"] });
     }
+    function handleCBA({tutorId}){
+      if(id !== tutorId) return;
+      setSelectedTimeSlot(null);
+      setModalType(null);
+      queryClient.invalidateQueries({ queryKey: ["schedule"] });
+    } 
+    socket.on('cancelbeforeaccept', handleCBA);
     events.forEach((e)=>{socket.on(e, handleEvent)}); 
     return () => {
       events.forEach((e)=>{socket.off(e, handleEvent)});
@@ -71,8 +80,7 @@ export default function TutorSchedule() {
       };
     });
   }, [data]);
-  const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
-  const [modalType, setModalType] = useState(null);
+  
   const handleTimeSlotClick = (day, slotIndex) => {
     const Day = weeklySchedule.find((d)=>d.day === day);
     const slot = Day.timeSlots[slotIndex];
