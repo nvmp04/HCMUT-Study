@@ -44,7 +44,7 @@ function GenerateModal({ isOpen, onClose }) {
   const generateAIPlan = async () => {
     try {
       setIsLoading(true);
-      const url = "http://localhost:5000/student/ai";
+      const url = "https://hcmut-study-backend.onrender.com/student/ai";
       await fetchAPI(url, "POST", formData, true);
     } catch (err) {
       alert(err.message);

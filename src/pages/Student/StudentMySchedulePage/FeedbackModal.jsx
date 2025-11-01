@@ -10,7 +10,7 @@ export default function FeedbackModal({ open, session, onClose}) {
   const tutorId = session.tutorId;
   const handleSubmit = () => {
     if (rating > 0) {
-      const url = 'http://localhost:5000/student/rating'
+      const url = 'https://hcmut-study-backend.onrender.com/student/rating'
       fetchAPI(url, 'PUT', {tutorId, rating, _id: session._id}, true);
       queryClient.invalidateQueries(["studentschedule"]);
       onClose();

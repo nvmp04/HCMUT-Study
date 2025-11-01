@@ -4,8 +4,13 @@ export async function fetchAPI(url, method = "GET", content = null, auth = false
     const options = { method, headers };
 
     if (content && method.toUpperCase() !== "GET") {
-      headers["Content-Type"] = "application/json";
-      options.body = JSON.stringify(content);
+      if (content instanceof FormData) {
+        options.body = content;
+      } 
+      else{
+        headers["Content-Type"] = "application/json";
+        options.body = JSON.stringify(content);
+      }
     }
 
     if (auth) {

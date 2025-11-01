@@ -6,7 +6,7 @@ import { useState } from 'react';
 import {ConfirmUnbanModal} from './UserInfoModal/ConfirmUnbanModal'
 function BanList() {
   const queryClient = useQueryClient();
-  const url = "http://localhost:5000/admin/getbanlist";
+  const url = "https://hcmut-study-backend.onrender.com/admin/getbanlist";
   const {data, isLoading} = useQuery({
     queryKey: ['banlist'], 
     queryFn: ()=>fetchAPI(url, 'GET', null, true)
@@ -15,7 +15,7 @@ function BanList() {
   if(isLoading) return <LoadingModal/>
   const handleUnban = (id, role) => {
     if(role!=='student') role = 'tutor';
-    const url = "http://localhost:5000/admin/unban";
+    const url = "https://hcmut-study-backend.onrender.com/admin/unban";
     fetchAPI(url, 'PUT', {id, role}, true);
     queryClient.invalidateQueries(['banlist']);
     queryClient.invalidateQueries([role==='tutor' ? 'tutorsboard' : 'studentsboard']);

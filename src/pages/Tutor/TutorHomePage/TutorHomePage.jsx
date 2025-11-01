@@ -4,7 +4,7 @@ import {fetchAPI} from '../../../utils/fetchAPI'
 import {LoadingModal} from '../../../components/LoadingModal'
 import HomepageProfileCard from "../../../components/HomepageProfileCard";
 function TutorHomePage() {
-  const url = 'http://localhost:5000/tutor/gettutordata'
+  const url = 'https://hcmut-study-backend.onrender.com/tutor/gettutordata'
   const {data, isLoading} = useQuery({
     queryKey: ['tutor'], 
     queryFn: async () => await fetchAPI(url, 'GET', null, true)

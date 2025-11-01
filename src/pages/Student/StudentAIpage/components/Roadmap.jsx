@@ -6,7 +6,7 @@ import {LoadingModal} from '../../../../components/LoadingModal'
 import { TutorList } from './TutorList';
 
 function Roadmap(){
-  const url = 'http://localhost:5000/student/getroadmap';
+  const url = 'https://hcmut-study-backend.onrender.com/student/getroadmap';
   const {data, isLoading} = useQuery({
     queryKey: ['roadmap'], 
     queryFn: async()=> fetchAPI(url, 'GET', null, true)

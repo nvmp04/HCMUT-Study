@@ -38,7 +38,7 @@ export function AddTimeModal({ onClose, day }) {
       return;
     }
     else{
-      const url = 'http://localhost:5000/tutor/adddeleteslot';
+      const url = 'https://hcmut-study-backend.onrender.com/tutor/adddeleteslot';
       const content = {day: weekdayMap2[day.day], time: `${startTime} - ${endTime}`, type: 'add'};
       await fetchAPI(url, 'PUT', content, true);
       queryClient.invalidateQueries(['schedule']);

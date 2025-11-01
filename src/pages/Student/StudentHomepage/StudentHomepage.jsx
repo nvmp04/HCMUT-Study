@@ -5,7 +5,7 @@ import HomepageProfileCard from "../../../components/HomepageProfileCard";
 import {LoadingModal} from '../../../components/LoadingModal' 
 
 export default function StudentHomepage() {
-  const url = "http://localhost:5000/student/getstudentdata";
+  const url = "https://hcmut-study-backend.onrender.com/student/getstudentdata";
   const { data, isLoading } = useQuery({
     queryKey: [],
     queryFn: async () => await fetchAPI(url, "GET", null, true),

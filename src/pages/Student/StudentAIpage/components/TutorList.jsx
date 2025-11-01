@@ -5,7 +5,7 @@ import { LoadingModal } from "../../../../components/LoadingModal";
 import TutorCard from "../../../../components/TutorCard";
 
 export function TutorList({ tutorsId }) {
-  const url = "http://localhost:5000/student/getsuitabletutors";
+  const url = "https://hcmut-study-backend.onrender.com/student/getsuitabletutors";
   const { data, isLoading } = useQuery({
     queryKey: ["suitabletutors"],
     queryFn: async () => await fetchAPI(url, "POST", { tutorsId }, true),

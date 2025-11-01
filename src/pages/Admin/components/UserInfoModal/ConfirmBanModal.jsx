@@ -13,7 +13,7 @@ export function ConfirmBanModal({selectedUser, onOpen, onClose, setShowConfirmBa
           return;
         }
         const role = selectedUser.role === 'student' ? 'student' : 'tutor';
-        const url = "http://localhost:5000/admin/ban";
+        const url = "https://hcmut-study-backend.onrender.com/admin/ban";
         fetchAPI(url, 'PUT', {id: selectedUser.id, role, email: selectedUser.email, message: banMessage}, true);
         queryClient.invalidateQueries(['banlist']);
         queryClient.invalidateQueries([role==='tutor' ? 'tutorsboard' : 'studentsboard']);

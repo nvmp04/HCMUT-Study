@@ -16,7 +16,7 @@ export function ConfirmUnbanModal({ selectedUser, onOpen, onClose }) {
     }
 
     const role = selectedUser.role === "student" ? "student" : "tutor";
-    const url = "http://localhost:5000/admin/unban";
+    const url = "https://hcmut-study-backend.onrender.com/admin/unban";
 
     try {
       await fetchAPI(url, "PUT", { id: selectedUser.id, email: selectedUser.email, role, message }, true);

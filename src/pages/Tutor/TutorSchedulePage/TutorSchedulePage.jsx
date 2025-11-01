@@ -14,7 +14,7 @@ export default function TutorSchedule() {
   const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
   const [modalType, setModalType] = useState(null);
   const socket = useSocket();
-  const url = 'http://localhost:5000/tutor/getschedule';
+  const url = 'https://hcmut-study-backend.onrender.com/tutor/getschedule';
   const {data, isLoading} = useQuery({
     queryKey: ['schedule'], 
     queryFn: async ()=> await fetchAPI(url, 'GET', null, true)
@@ -104,7 +104,7 @@ export default function TutorSchedule() {
   };
 
   async function handleConfirmDeleteAvailable(){
-    const url = 'http://localhost:5000/tutor/adddeleteslot';
+    const url = 'https://hcmut-study-backend.onrender.com/tutor/adddeleteslot';
     const {day, slot} = selectedTimeSlot;
     const {time} = slot;
     const content = {day: weekdayMap2[day], time, type: 'delete'};

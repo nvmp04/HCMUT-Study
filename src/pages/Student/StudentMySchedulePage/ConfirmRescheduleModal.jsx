@@ -11,7 +11,7 @@ export default function ConfirmRescheduleModal({ slot, open, timeSlot, onClose }
   const tutor = {id: slot.tutorId, name: slot.tutorName, phone: slot.tutorPhone}
   async function handleConfirm(){
     const content = { _id: slot._id, slotId: slot.slotId };
-    const url = "http://localhost:5000/student/cancelbeforeaccept";
+    const url = "https://hcmut-study-backend.onrender.com/student/cancelbeforeaccept";
     fetchAPI(url, "DELETE", content, true);
     studentBooking(tutor, timeSlot, slot.title);
     queryClient.invalidateQueries(["studentschedule"]);

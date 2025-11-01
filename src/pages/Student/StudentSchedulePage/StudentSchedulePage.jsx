@@ -22,7 +22,7 @@ function StudentSchedulePage() {
     { id: 'Khoa Kinh tế', name: 'Kinh tế' }
   ];
 
-  const url = 'http://localhost:5000/student/gettutorsdata';
+  const url = 'https://hcmut-study-backend.onrender.com/student/gettutorsdata';
   const { data, isLoading } = useQuery({
     queryKey: ["tutors"],
     queryFn: async () => await fetchAPI(url, 'GET', null, true)

@@ -1,4 +1,4 @@
-import { User, Mail, BookOpen, Phone, Star, CreditCard, Clock, Award, GraduationCap } from "lucide-react";
+import { User, Mail, BookOpen, Phone, Star, CreditCard, Award, GraduationCap } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
 import avt from '../assets/avt.jpg'
 export default function HomepageProfileCard({ data }) {
@@ -182,7 +182,7 @@ export default function HomepageProfileCard({ data }) {
                 </div>
                 <div>
                   <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">Vai trò</p>
-                  <p className="text-lg font-bold text-gray-900 mt-1">{info.role}</p>
+                  <p className="text-lg font-bold text-gray-900 mt-1">{info.role === 'student' ? "Sinh viên" : "Giảng viên"}</p>
                 </div>
               </div>
             </div>

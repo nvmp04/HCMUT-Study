@@ -9,7 +9,7 @@ export default function CancelBeforeAcceptModal({ slot, open, onClose }) {
 
   async function handleSubmit() {
     const content = { _id: slot._id, slotId: slot.slotId };
-    const url = "http://localhost:5000/student/cancelbeforeaccept";
+    const url = "https://hcmut-study-backend.onrender.com/student/cancelbeforeaccept";
     await fetchAPI(url, "DELETE", content, true);
     queryClient.invalidateQueries(["studentschedule"]);
     onClose();

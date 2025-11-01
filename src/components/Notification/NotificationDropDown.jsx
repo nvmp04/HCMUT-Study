@@ -9,7 +9,7 @@ export default function NotificationDropdown() {
   const queryClient = useQueryClient();
   const [isOpen, setIsOpen] = useState(false);
   const id = sessionStorage.getItem('id');
-  const url = 'http://localhost:5000/notification/get'
+  const url = 'https://hcmut-study-backend.onrender.com/notification/get'
   const {data, isLoading} = useQuery({
     queryKey: ['getnotifications'], 
     queryFn: ()=> fetchAPI(url, 'GET', null, true)
@@ -60,13 +60,13 @@ export default function NotificationDropdown() {
   })) || [];
   const unreadCount = notifications.filter(n => !n.read).length;
   const markAsRead = async (_id) => {
-    const url = 'http://localhost:5000/notification/read'
+    const url = 'https://hcmut-study-backend.onrender.com/notification/read'
     await fetchAPI(url, 'PUT', {_id}, true);
     queryClient.invalidateQueries(['getnotifications']);
   };
 
   const deleteNotification = async (_id) => {
-    const url = 'http://localhost:5000/notification/delete';
+    const url = 'https://hcmut-study-backend.onrender.com/notification/delete';
     await fetchAPI(url, 'DELETE', { _id }, true);
     queryClient.invalidateQueries(['getnotifications']);
   };

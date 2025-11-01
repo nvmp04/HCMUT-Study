@@ -14,7 +14,7 @@ export default function SessionCard({
 }) {
     async function handleDeleteCancelled (){
       const content = {_id: session._id}
-      const url = 'http://localhost:5000/student/deletecancelled';
+      const url = 'https://hcmut-study-backend.onrender.com/student/deletecancelled';
       await fetchAPI(url, 'DELETE', content, true);
       refetch();
     }

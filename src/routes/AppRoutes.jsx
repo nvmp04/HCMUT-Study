@@ -7,7 +7,6 @@ import SSOLogin from '../pages/LogInPage/SSOlogInPage';
 import {AdminLayout, Layout} from '../layouts/Layout';
 import {ProtectedRoute, ProtectedLogInRoute, ProtectedBannedRoute} from './ProtectedRoute';
 import StudentMySchedulePage from '../pages/Student/StudentMySchedulePage/StudentMySchedulePage';
-import StudentLibraryPage from '../pages/Student/StudentLibraryPage/StudentLibraryPage';
 import TutorHomePage from '../pages/Tutor/TutorHomePage/TutorHomePage';
 import TutorSchedule from '../pages/Tutor/TutorSchedulePage/TutorSchedulePage';
 import StudentViewTutorPage from '../pages/Student/StudentViewTutorPage/StudentViewTutorPage';
@@ -15,6 +14,7 @@ import TutorAppointmentsPage from '../pages/Tutor/TutorAppointmentsPage/TutorApp
 import AdminDashboard from '../pages/Admin/AdminDashboard';
 import BanPage from '../pages/BanPage';
 import StudentAIpage from '../pages/Student/StudentAIpage/StudentAIpage';
+import LibraryPage from '../pages/LibraryPage/LibraryPage';
 function AppRoutes(){
   return(
     <>
@@ -32,7 +32,7 @@ function AppRoutes(){
             <Route path='schedule/:id' element={<StudentViewTutorPage/>} />
             <Route path='ai' element={<StudentAIpage/>} />
             <Route path='myschedule' element={<StudentMySchedulePage/>}/>
-            <Route path='library' element={<StudentLibraryPage/>}/>
+            <Route path='library' element={<LibraryPage/>}/>
           </Route>
         </Route>
 
@@ -41,6 +41,7 @@ function AppRoutes(){
             <Route index element={<TutorHomePage/>}/>
             <Route path='myschedule' element={<TutorSchedule/>} />
             <Route path='appointments' element={<TutorAppointmentsPage/>} />
+            <Route path='library' element={<LibraryPage/>} />
           </Route>
         </Route>
 

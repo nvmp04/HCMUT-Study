@@ -43,8 +43,8 @@ export default function CancelModal({
       const content = { slotId: slot.slotId, _id: slot._id, reason };
       const url =
         role === "tutor"
-          ? "http://localhost:5000/tutor/response"
-          : "http://localhost:5000/student/cancelled";
+          ? "https://hcmut-study-backend.onrender.com/tutor/response"
+          : "https://hcmut-study-backend.onrender.com/student/cancelled";
 
       await fetchAPI(url, "PUT", content, true);
       queryClient.invalidateQueries([

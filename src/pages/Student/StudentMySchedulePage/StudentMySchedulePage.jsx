@@ -13,7 +13,7 @@ import ReportModal from "../../../components/ReportModal";
 export default function StudentMySchedulePage() {
   const socket = useSocket();
   const queryClient = useQueryClient();
-  const url = "http://localhost:5000/student/getmyschedule";
+  const url = "https://hcmut-study-backend.onrender.com/student/getmyschedule";
 
   const { data, isLoading } = useQuery({
     queryKey: ["studentschedule"],

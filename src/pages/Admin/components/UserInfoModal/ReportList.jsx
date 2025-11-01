@@ -5,7 +5,7 @@ import { useState } from "react";
 import ReportModal from "./ReportModal";
 
 export default function ReportList({ id }) {
-  const url = "http://localhost:5000/admin/getreportlist";
+  const url = "https://hcmut-study-backend.onrender.com/admin/getreportlist";
   const { data, isLoading } = useQuery({
     queryKey: ["reportlist", id],
     queryFn: async () => fetchAPI(url, "POST", { studentId: id }, true),

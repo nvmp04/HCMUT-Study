@@ -10,7 +10,7 @@ import ReportModal from "../../../components/ReportModal";
 export default function TutorAppointmentsPage() {
   const socket = useSocket();
   const queryClient = useQueryClient();
-  const url = "http://localhost:5000/tutor/getappointments";
+  const url = "https://hcmut-study-backend.onrender.com/tutor/getappointments";
 
   const { data, isLoading } = useQuery({
     queryKey: ["tutorappointments"],
@@ -57,7 +57,7 @@ export default function TutorAppointmentsPage() {
     setReportModal(true);
   };
   const handleSubmitReport = async (reportData) => {
-    const url = 'http://localhost:5000/tutor/report'
+    const url = 'https://hcmut-study-backend.onrender.com/tutor/report'
     await fetchAPI(url, 'PUT', {report: reportData}, true);
     queryClient.invalidateQueries({queryKey: ["tutorappointments"]});
   };

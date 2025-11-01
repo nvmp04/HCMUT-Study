@@ -20,7 +20,7 @@ function StudentViewTutorPage() {
   const [booking, setBooking] = useState(false);
   const [sessionTitle, setSessionTitle] = useState("");
   const [conflict, setConflict] = useState({state:false, tutorName: '', title: '', slotId: ''});
-  const url = "http://localhost:5000/student/gettutordata";
+  const url = "https://hcmut-study-backend.onrender.com/student/gettutordata";
   const { data, isLoading } = useQuery({
     queryKey: ['tutorschedule', id],
     queryFn: async () => await fetchAPI(url, "POST", { id }, true),

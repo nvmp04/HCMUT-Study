@@ -8,7 +8,7 @@ import ScheduleConflictModal from "../../../components/ScheduleConflictModal";
 import { checkTimeOverlap } from "../../../utils/checkTimeOverlap";
 export default function ScheduleSection({ selectedTimeSlot, setSelectedTimeSlot, setBooking }) {
   const {id} = useParams();
-  const url = 'http://localhost:5000/student/getschedule';
+  const url = 'https://hcmut-study-backend.onrender.com/student/getschedule';
   const {data} = useQuery({
     queryKey: ['tutorschedule'], 
     queryFn: async ()=> await fetchAPI(url, 'POST', {id}, true)
@@ -64,7 +64,7 @@ export default function ScheduleSection({ selectedTimeSlot, setSelectedTimeSlot,
       setExpiredTimeModal(true);
       return;
     }
-    const url = "http://localhost:5000/student/getmyschedule";
+    const url = "https://hcmut-study-backend.onrender.com/student/getmyschedule";
     const data = await fetchAPI(url, "GET", null, true);
     const {appointment} = data;
     const sameDayAppt = appointment.filter((a)=>{

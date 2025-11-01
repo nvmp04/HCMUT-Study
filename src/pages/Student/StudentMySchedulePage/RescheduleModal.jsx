@@ -12,7 +12,7 @@ export default function RescheduleModal({ appointment, open, session, onClose })
   if (!open) return null;
   const socket = useSocket();
   const id = session.tutorId;
-  const url = "http://localhost:5000/student/getschedule";
+  const url = "https://hcmut-study-backend.onrender.com/student/getschedule";
   const { data, isLoading } = useQuery({
     queryKey: ["tutorschedule", id],
     queryFn: () => fetchAPI(url, "POST", { id }, true)

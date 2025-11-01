@@ -26,7 +26,7 @@ export default function RequestModal({ slot, day, date, onClose }) {
       );
     }
     const content = { _id: slot._id, slotId: slot.slotId, type: method, detail };
-    const url = "http://localhost:5000/tutor/response";
+    const url = "https://hcmut-study-backend.onrender.com/tutor/response";
     await fetchAPI(url, "PUT", content, true);
     queryClient.invalidateQueries(["schedule"]);
     onClose();
@@ -55,7 +55,7 @@ export default function RequestModal({ slot, day, date, onClose }) {
         reason: declineReason,
         slotId: slot.slotId,
       };
-      const url = "http://localhost:5000/tutor/decline";
+      const url = "https://hcmut-study-backend.onrender.com/tutor/decline";
       await fetchAPI(url, "DELETE", content, true);
       queryClient.invalidateQueries(["schedule"]);
     } catch (err) {

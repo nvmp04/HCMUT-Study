@@ -6,7 +6,7 @@ import { LoadingModal } from "../../../components/LoadingModal";
 import UserInfoModal from "./UserInfoModal/UserInfoModal";
 
 function TutorList() {
-  const url = "http://localhost:5000/admin/gettutors";
+  const url = "https://hcmut-study-backend.onrender.com/admin/gettutors";
   const { data, isLoading } = useQuery({
     queryKey: ["tutorsboard"],
     queryFn: () => fetchAPI(url, "GET", null, true),

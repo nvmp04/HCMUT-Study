@@ -23,7 +23,7 @@ export default async function studentBooking(tutor, selectedTimeSlot, sessionTit
         link: '',
         reason: ''
     }
-    const url = 'http://localhost:5000/student/booksession'
+    const url = 'https://hcmut-study-backend.onrender.com/student/booksession'
     await fetchAPI(url, 'POST', content, true);
     return {error, message, ban};
 }

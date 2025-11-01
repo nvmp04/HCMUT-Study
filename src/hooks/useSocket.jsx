@@ -15,7 +15,7 @@ export function SocketProvider({ children }) {
       }
       return;
     }
-    const newSocket = io("http://localhost:5000", {
+    const newSocket = io("https://hcmut-study-backend.onrender.com", {
       auth: { token: auth.token },
       reconnection: true,
       reconnectionDelay: 1000,

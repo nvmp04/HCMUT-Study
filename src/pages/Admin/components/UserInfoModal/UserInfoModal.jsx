@@ -21,7 +21,7 @@ export default function UserInfoModal({
   // Gửi thông báo
   const handleSendNotification = async () => {
     if (notification.trim()) {
-      const url = "http://localhost:5000/admin/sendnotification";
+      const url = "https://hcmut-study-backend.onrender.com/admin/sendnotification";
       await fetchAPI(url, "POST", { id: selectedUser.id, notification }, true);
       alert(`Đã gửi thông báo đến ${selectedUser.name}:\n"${notification}"`);
       setNotification("");
