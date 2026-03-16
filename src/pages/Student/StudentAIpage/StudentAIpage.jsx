@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Plus} from "lucide-react";
 import GenerateModal from "./components/GenarateModal";
-import Roadmap from "./components/RoadMap";
+import Roadmap from "./components/Roadmap";
 
 function StudentAIpage() {
   const [showModal, setShowModal] = useState(false);

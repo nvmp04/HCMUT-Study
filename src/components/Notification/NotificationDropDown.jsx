@@ -17,7 +17,6 @@ export default function NotificationDropdown() {
   useEffect(()=>{
     if(!socket) return;
     function handleEvent({notifId}){
-      if(id !== notifId) return;
       queryClient.invalidateQueries(['getnotifications']);
     }
     socket.on('notification', handleEvent);
