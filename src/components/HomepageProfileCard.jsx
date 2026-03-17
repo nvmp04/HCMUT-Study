@@ -1,5 +1,5 @@
 import { User, Mail, BookOpen, Phone, Star, CreditCard, Award, GraduationCap } from "lucide-react";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "../features/auth/hooks/useAuth";
 import avt from '../assets/avt.jpg'
 export default function HomepageProfileCard({ data }) {
   const {auth} = useAuth();

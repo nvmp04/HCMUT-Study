@@ -2,7 +2,7 @@ import { useState } from "react";
 import { X, XCircle, CheckCircle, Link } from "lucide-react";
 import { fetchAPI } from "../../../utils/fetchAPI";
 import { useQueryClient } from "@tanstack/react-query";
-import AIcheckingModal from "../../../components/AIchekingModal";
+import AIcheckingModal from "../../../components/AIcheckingModal";
 import AIwarningModal from "../../../components/AIwarningModal";
 import { checkTutorReason } from "../../../services/AIcheck";
 

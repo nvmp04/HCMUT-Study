@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { io } from "socket.io-client";
-import { useAuth } from "./useAuth";
+import { useAuth } from "../features/auth/hooks/useAuth";
 const SocketContext = createContext(null);
 
 export function SocketProvider({ children }) {
@@ -18,7 +18,7 @@ export function SocketProvider({ children }) {
     const newSocket = io("https://hcmut-study-backend.onrender.com", {
       auth: { token: auth.token },
       reconnection: true,
-      reconnectionDelay: 1000,
+      reconnectionDelay: 1000
     });
     setSocket(newSocket);
     return () => {

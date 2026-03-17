@@ -1,6 +1,6 @@
 import { Calendar, PlusCircle, BookOpen, Clock, MapPin, User, X } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "../features/auth/hooks/useAuth";
 
 export default function HomePage({ data }) {
   const {auth} = useAuth();

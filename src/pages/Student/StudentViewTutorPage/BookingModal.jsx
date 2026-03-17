@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import studentBooking  from '../../../services/studentBooking';
-import AIcheckingModal from '../../../components/AIchekingModal';
+import AIcheckingModal from '../../../components/AIcheckingModal';
 import AIwarningModal from '../../../components/AIwarningModal';
 
 export default function BookingModal({ tutor, selectedTimeSlot, onConfirm, onCancel }) {

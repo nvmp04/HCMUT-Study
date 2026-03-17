@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import {useAuth} from '../../../hooks/useAuth'
+import { useAuth } from "../../../features/auth/hooks/useAuth";
 export default function Hero(){
     const navigate = useNavigate();
     const { auth } = useAuth();

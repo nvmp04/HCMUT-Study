@@ -3,7 +3,6 @@ import { Route, Routes } from 'react-router-dom'
 import LogIn from '../pages/LogInPage/LogInPage';
 import StudentHomepage from '../pages/Student/StudentHomepage/StudentHomepage';
 import StudentSchedulePage from '../pages/Student/StudentSchedulePage/StudentSchedulePage';
-import SSOLogin from '../pages/LogInPage/SSOlogInPage';
 import {AdminLayout, Layout} from '../layouts/Layout';
 import {ProtectedRoute, ProtectedLogInRoute, ProtectedBannedRoute} from './ProtectedRoute';
 import StudentMySchedulePage from '../pages/Student/StudentMySchedulePage/StudentMySchedulePage';
@@ -22,7 +21,6 @@ function AppRoutes(){
         <Route path='/' element={<Homepage/>} />
         <Route element={<ProtectedLogInRoute />}>
           <Route path='/login' element={<LogIn/>} />
-          <Route path='/login/cas' element={<SSOLogin/>} />
         </Route>
 
         <Route element={<ProtectedRoute allowedRole='student' />}>

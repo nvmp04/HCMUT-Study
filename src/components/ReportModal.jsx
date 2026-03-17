@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "../features/auth/hooks/useAuth";
 import { useQueryClient } from "@tanstack/react-query";
 
 export default function ReportModal({ open, onClose, session, onSubmit }) {

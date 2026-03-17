@@ -1,7 +1,7 @@
-import Header from './components/HeaderFooterNav/Header';
-import Footer from './components/HeaderFooterNav/Footer';
-import AppRoutes from './routes/AppRoutes';
-import { useAuth } from './hooks/useAuth';
+import Header from '../components/HeaderFooterNav/Header';
+import Footer from '../components/HeaderFooterNav/Footer';
+import AppRoutes from '../routes/AppRoutes';
+import { useAuth } from '../features/auth/hooks/useAuth';
 import { useLocation } from 'react-router-dom';
 
 

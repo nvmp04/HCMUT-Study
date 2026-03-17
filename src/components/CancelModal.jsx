@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { X, AlertTriangle } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { fetchAPI } from "../utils/fetchAPI";
-import { useAuth } from "../hooks/useAuth";
-import AIcheckingModal from "./AIchekingModal";
+import { useAuth } from "../features/auth/hooks/useAuth";
+import AIcheckingModal from "./AIcheckingModal";
 import AIwarningModal from "./AIwarningModal";
 import { checkTutorReason } from "../services/AIcheck";
 

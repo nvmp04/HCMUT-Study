@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../../hooks/useAuth";
+import { useAuth } from "../../features/auth/hooks/useAuth";
 import {fetchAPI} from '../../utils/fetchAPI'
 import { useSocket } from "../../hooks/useSocket";
 
