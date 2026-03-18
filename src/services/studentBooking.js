@@ -1,5 +1,6 @@
 import { fetchAPI } from "../utils/fetchAPI";
 import { checkTitleRequest } from "./AIcheck";
+import { API_ENDPOINTS, buildAPIUrl } from "../config/api.config";
 
 export default async function studentBooking(tutor, selectedTimeSlot, sessionTitle){
     const stuID = sessionStorage.getItem("id");
@@ -23,7 +24,7 @@ export default async function studentBooking(tutor, selectedTimeSlot, sessionTit
         link: '',
         reason: ''
     }
-    const url = 'https://hcmut-study-backend.onrender.com/student/booksession'
+    const url = buildAPIUrl(API_ENDPOINTS.STUDENT.BOOK_SESSION)
     await fetchAPI(url, 'POST', content, true);
     return {error, message, ban};
 }

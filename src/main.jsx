@@ -5,9 +5,9 @@ import { BrowserRouter } from 'react-router-dom'
 import { AuthProvider } from './features/auth/context/auth.context.jsx'
 import './index.css'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { AuthInitializer } from './app/providers/AuthInitializer.jsx'
+import { AuthInitializer } from './app/init/AuthInitializer.jsx'
 import { SocketProvider } from './features/websocket/context/websocket.context.jsx'
-import { SocketInitializer } from './app/providers/SocketInitializer.jsx'
+import { SocketInitializer } from './app/init/SocketInitializer.jsx'
 const queryClient = new QueryClient();
 createRoot(document.getElementById('root')).render(
   <StrictMode>

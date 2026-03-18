@@ -8,7 +8,7 @@ export function Layout(){
         <>
             <NotificationModal/>
             <NavigationBar/>
-            <AIchatbot/>
+            {/*<AIchatbot/>*/}
             <Outlet/>
         </>
     )

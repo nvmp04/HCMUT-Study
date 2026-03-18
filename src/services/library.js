@@ -1,23 +1,25 @@
 import { fetchAPI } from '../utils/fetchAPI';
+import { buildAPIUrl } from '../config/api.config';
+import { API_ENDPOINTS } from '../config/api.config';
 
-const BASE_URL = 'https://hcmut-study-backend.onrender.com/library';
+const url = buildAPIUrl(API_ENDPOINTS.LIBRARY.DOCUMENTS);
 
 export const getDocuments = async () => {
-    return await fetchAPI(`${BASE_URL}/documents`, 'GET', null, true);
+    return await fetchAPI(`${url}`, 'GET', null, true);
 };
 
 export const uploadDocument = async (formData) => {
-    return await fetchAPI(`${BASE_URL}/documents`, 'POST', formData, true, true);
+    return await fetchAPI(`${url}`, 'POST', formData, true, true);
 };
 
 export const deleteDocument = async (id) => {
-    return await fetchAPI(`${BASE_URL}/documents/${id}`, 'DELETE', null, true);
+    return await fetchAPI(`${url}/${id}`, 'DELETE', null, true);
 };
 
 export const updateDocument = async (id, data) => {
-    return await fetchAPI(`${BASE_URL}/documents/${id}`, 'PUT', data, true);
+    return await fetchAPI(`${url}/${id}`, 'PUT', data, true);
 };
 
 export const getDocumentById = async (id) => {
-    return await fetchAPI(`${BASE_URL}/documents/${id}`, 'GET', null, true);
+    return await fetchAPI(`${url}/${id}`, 'GET', null, true);
 };

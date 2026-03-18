@@ -9,7 +9,6 @@ export default function HomePage({ data }) {
   const title = isTutor ? "Lịch dạy" : "Lịch học";
   const actionLabel = isTutor ? "Quản lý lịch dạy" : "Đặt lịch mới";
   const actionLink = isTutor ? "/tutor/myschedule" : "/student/schedule";
-
   return (
     <div className="bg-white mb-8 rounded-2xl shadow-lg border border-slate-200 overflow-hidden">
       {/* Header */}

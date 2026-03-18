@@ -1,6 +1,8 @@
 import { fetchAPI } from "../../../utils/fetchAPI";
+import { API_ENDPOINTS, buildAPIUrl } from "../../../config/api.config";
+
 export async function loginAPI(credentials) {
-    const url = `https://hcmut-study-backend.onrender.com/sso/login`;
+    const url = buildAPIUrl(API_ENDPOINTS.AUTH.LOGIN);
     const response = await fetchAPI(url, 'POST', credentials, false);
     if(response.banned) return {banned: response.banned};
     if(response?.ssoToken){

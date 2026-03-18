@@ -1,19 +1,14 @@
-import { useQuery } from "@tanstack/react-query";
 import HomepageScheduleCard from "../../../components/HomepageScheduleCard";
-import { fetchAPI } from "../../../utils/fetchAPI";
 import HomepageProfileCard from "../../../components/HomepageProfileCard";
-import {LoadingModal} from '../../../components/LoadingModal' 
+import {LoadingModal} from '../../../components/LoadingModal'
+import { useProfile } from "../../../features/profile/hooks/useProfile";
 
 export default function StudentHomepage() {
-  const url = "https://hcmut-study-backend.onrender.com/student/getstudentdata";
-  const { data, isLoading } = useQuery({
-    queryKey: [],
-    queryFn: async () => await fetchAPI(url, "GET", null, true),
-  });
-
+  const { data, isLoading } = useProfile();
   if (isLoading) return <LoadingModal />;
-  sessionStorage.setItem("name", data.student.name);
-  sessionStorage.setItem("phone", data.student.phone);
+  console.log(data)
+  // sessionStorage.setItem("name", data.student.name);
+  // sessionStorage.setItem("phone", data.student.phone);
 
   return (
     <div className="min-h-screen flex justify-center bg-gray-100 pt-10">
