@@ -7,13 +7,13 @@ import {AddTimeModal, weekdayMap2} from "./AddTimeModal";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchAPI } from "../../../utils/fetchAPI";
 import { EndModal } from "./EndModal";
-import { useSocket } from "../../../hooks/useSocket";
+import { useSocket } from "../../../features/websocket/hooks/useSocket";
 
 export default function TutorSchedule() {
   const queryClient = useQueryClient();
   const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
   const [modalType, setModalType] = useState(null);
-  const socket = useSocket();
+  const {socket} = useSocket();
   const url = 'https://hcmut-study-backend.onrender.com/tutor/getschedule';
   const {data, isLoading} = useQuery({
     queryKey: ['schedule'], 

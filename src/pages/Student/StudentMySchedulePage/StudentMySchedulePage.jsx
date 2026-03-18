@@ -7,11 +7,11 @@ import CancelModal from "../../../components/CancelModal";
 import CancelBeforeAcceptModal from "./CancelBeforeAcceptModal";
 import RescheduleModal from "./RescheduleModal";
 import FeedbackModal from "./FeedbackModal";
-import { useSocket } from "../../../hooks/useSocket";
+import { useSocket } from "../../../features/websocket/hooks/useSocket";
 import ReportModal from "../../../components/ReportModal";
 
 export default function StudentMySchedulePage() {
-  const socket = useSocket();
+  const {socket} = useSocket();
   const queryClient = useQueryClient();
   const url = "https://hcmut-study-backend.onrender.com/student/getmyschedule";
 

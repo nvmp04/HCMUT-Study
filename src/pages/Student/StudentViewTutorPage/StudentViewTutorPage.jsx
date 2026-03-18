@@ -9,10 +9,10 @@ import ScheduleSection from "./ScheduleSection";
 import BookingModal from "./BookingModal";
 import SuccessModal from "./SuccessModal";
 import ScheduleConflictModal from '../../../components/ScheduleConflictModal'
-import { useSocket } from "../../../hooks/useSocket";
+import { useSocket } from "../../../features/websocket/hooks/useSocket";
 
 function StudentViewTutorPage() {
-  const socket = useSocket();
+  const {socket} = useSocket();
   const queryClient = useQueryClient();
   const { id } = useParams();
   const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);

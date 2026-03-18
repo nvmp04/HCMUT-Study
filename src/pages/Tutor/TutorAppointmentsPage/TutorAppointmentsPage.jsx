@@ -4,11 +4,11 @@ import { fetchAPI } from "../../../utils/fetchAPI";
 import { LoadingModal } from "../../../components/LoadingModal";
 import SessionCard from "./SessionCard";
 import CancelModal from "../../../components/CancelModal";
-import { useSocket } from "../../../hooks/useSocket";
+import { useSocket } from "../../../features/websocket/hooks/useSocket";
 import ReportModal from "../../../components/ReportModal";
 
 export default function TutorAppointmentsPage() {
-  const socket = useSocket();
+  const {socket} = useSocket();
   const queryClient = useQueryClient();
   const url = "https://hcmut-study-backend.onrender.com/tutor/getappointments";
 

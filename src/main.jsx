@@ -5,19 +5,20 @@ import { BrowserRouter } from 'react-router-dom'
 import { AuthProvider } from './features/auth/context/auth.context.jsx'
 import './index.css'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { SocketProvider } from './hooks/useSocket.jsx'
 import { AuthInitializer } from './app/providers/AuthInitializer.jsx'
+import { SocketProvider } from './features/websocket/context/websocket.context.jsx'
+import { SocketInitializer } from './app/providers/SocketInitializer.jsx'
 const queryClient = new QueryClient();
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <AuthInitializer>
-            <SocketProvider>
-                <App />
-            </SocketProvider>
-          </AuthInitializer>
+          <SocketProvider>
+            <AuthInitializer/>
+            <SocketInitializer/>
+              <App />
+          </SocketProvider>
         </AuthProvider>
       </QueryClientProvider>
     </BrowserRouter>

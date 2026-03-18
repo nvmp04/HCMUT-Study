@@ -6,11 +6,11 @@ import ExpiredTimeModal from "../../../components/ExpiredTimeModal";
 import ConfirmRescheduleModal from "./ConfirmRescheduleModal";
 import ScheduleConflictModal from "../../../components/ScheduleConflictModal";
 import { checkTimeOverlap } from "../../../utils/checkTimeOverlap";
-import { useSocket } from "../../../hooks/useSocket";
+import { useSocket } from "../../../features/websocket/hooks/useSocket";
 
 export default function RescheduleModal({ appointment, open, session, onClose }) {
   if (!open) return null;
-  const socket = useSocket();
+  const {socket} = useSocket();
   const id = session.tutorId;
   const url = "https://hcmut-study-backend.onrender.com/student/getschedule";
   const { data, isLoading } = useQuery({

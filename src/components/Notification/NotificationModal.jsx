@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../features/auth/hooks/useAuth";
-import {fetchAPI} from '../../utils/fetchAPI'
-import { useSocket } from "../../hooks/useSocket";
+import { useSocket } from "../../features/websocket/hooks/useSocket";
 
 const modalStyles = {
   accepted: {
@@ -31,7 +30,7 @@ function NotificationModal() {
   const [notifiModal, setNotifiModal] = useState(false);
   const [data, setData] = useState({});
   const [type, setType] = useState("");
-  const socket = useSocket();
+  const{ socket} = useSocket();
   const { auth } = useAuth();
   const { role } = auth;
   const id = sessionStorage.getItem("id");

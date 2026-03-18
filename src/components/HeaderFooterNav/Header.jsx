@@ -3,19 +3,12 @@ import { useAuth } from '../../features/auth/hooks/useAuth';
 import { LogOut, AlertCircle } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSocket } from '../../hooks/useSocket';
-import { useQueryClient } from '@tanstack/react-query';
 
 function LogoutModal({ setIsOpen, isOpen }) {
-  const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const { setAuth } = useAuth();
-  const socket = useSocket();
+  const {logout} = useAuth();
   function handleLogOut() {
-    socket.disconnect();
-    sessionStorage.clear();
-    queryClient.clear();
-    setAuth({ token: null, role: null });
+    logout();
     setIsOpen(false);
     navigate('/');
   }

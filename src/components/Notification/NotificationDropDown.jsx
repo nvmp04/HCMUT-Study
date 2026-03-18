@@ -2,10 +2,10 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Bell, Trash2 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { fetchAPI } from "../../utils/fetchAPI";
-import { useSocket } from "../../hooks/useSocket";
+import { useSocket } from "../../features/websocket/hooks/useSocket";
 
 export default function NotificationDropdown() {
-  const socket = useSocket();
+  const {socket} = useSocket();
   const queryClient = useQueryClient();
   const [isOpen, setIsOpen] = useState(false);
   const id = sessionStorage.getItem('id');
