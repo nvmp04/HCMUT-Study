@@ -1,47 +1,36 @@
 import { useState, useEffect } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { fetchAPI } from "../../../utils/fetchAPI";
+import { useQueryClient } from "@tanstack/react-query";
 import { LoadingModal } from "../../../components/LoadingModal";
-import SessionCard from "./SessionCard";
+import AppointmentCard from "./AppointmentCard";
 import CancelModal from "../../../components/CancelModal";
 import CancelBeforeAcceptModal from "./CancelBeforeAcceptModal";
 import RescheduleModal from "./RescheduleModal";
 import FeedbackModal from "./FeedbackModal";
 import { useSocket } from "../../../features/websocket/hooks/useSocket";
 import ReportModal from "../../../components/ReportModal";
+import { useStudentAppointment } from "../../../features/schedule/hooks/useStudentAppointment";
+import { useAppointmentFilter } from "../../../features/schedule/hooks/useAppointmentFilter";
 
 export default function StudentMySchedulePage() {
   const {socket} = useSocket();
+  const { data, isLoading } = useStudentAppointment();
   const queryClient = useQueryClient();
-  const url = "https://hcmut-study-backend.onrender.com/student/getmyschedule";
-
-  const { data, isLoading } = useQuery({
-    queryKey: ["studentschedule"],
-    queryFn: async () => await fetchAPI(url, "GET", null, true),
-  });
-
   const [warning, setWarning] = useState(false);
   const [superWarning, setSuperWarning] = useState(false);
-  const [tab, setTab] = useState("upcoming");
-  const [selectedSession, setSelectedSession] = useState(null);
-  const [cancelModal, setCancelModal] = useState(false);
-  const [cancelBeforeAccept, setCancelBeforeAccept] = useState(false);
-  const [rescheduleModal, setRescheduleModal] = useState(false);
-  const [feedbackModal, setFeedbackModal] = useState(false);
-  const [reportModal, setReportModal] = useState(false);
+  const [tab, setTab] = useState("pending");
+  
+  const [modalState, setModalState] = useState({
+    type: null, 
+    selectedAppointment: null
+  })
   const [reason, setReason] = useState("");
   const id = sessionStorage.getItem("id");
   useEffect(() => {
     if (!socket) return;
     function handleEvent({ studentId, _id }) {
-      console.log(selectedSession);
       if(id !== studentId) return;
-      if(_id === selectedSession._id) {
-        setCancelBeforeAccept(false);
-        setCancelModal(false);
-        setFeedbackModal(false);
-        setReportModal(false);
-        setSelectedSession(null);
+      if(_id === selectedAppointment._id) {
+        handleCloseModal();
         setReason("");
       }
       queryClient.invalidateQueries(["studentschedule"]);
@@ -51,45 +40,24 @@ export default function StudentMySchedulePage() {
     return () => {
       events.forEach((event) => socket.off(event, handleEvent));
     };
-  }, [socket, selectedSession]);
-
-  if (isLoading) return <LoadingModal />;
+  }, [socket, modalState.selectedAppointment]);
 
   const appointments = data?.appointment || [];
+  const {pendingAppt, cancelledAppt, completedAppt} = useAppointmentFilter(appointments);
+  const filteredAppointments = {
+    "pending": pendingAppt, 
+    "completed": completedAppt, 
+    "cancelled": cancelledAppt
+  }
+  if (isLoading) return <LoadingModal />;
 
-  const upcomingSessions = appointments.filter(
-    (s) => s.status !== "completed" && s.status !== "cancelled"
-  );
-  const pastSessions = appointments.filter((s) => s.status === "completed");
-  const cancelledSessions = appointments.filter((s) => s.status === "cancelled");
-
-  const filteredSessions =
-    tab === "upcoming"
-      ? upcomingSessions
-      : tab === "past"
-      ? pastSessions
-      : cancelledSessions;
-
-  const handleCancelSession = (session) => {
-    setSelectedSession(session);
-    if (session.status === "pending") setCancelBeforeAccept(true);
-    else setCancelModal(true);
-  };
-
-  const handleRescheduleSession = (session) => {
-    setSelectedSession(session);
-    setRescheduleModal(true);
-  };
-
-  const handleProvideFeedback = (session) => {
-    setSelectedSession(session);
-    setFeedbackModal(true);
-  };
-
-  const handleOpenReport = (session) => {
-    setSelectedSession(session);
-    setReportModal(true);
-  };
+  // Hàm đóng mở các Modal
+  const handleModalState = (appointment, type) =>{
+    setModalState({type, selectedAppointment: appointment})
+  }
+  const handleCloseModal = () => {
+    setModalState({type: null, selectedAppointment: null})
+  }
   
   return (
     <div className="max-w-7xl mx-auto p-5 min-h-screen p-6">
@@ -104,9 +72,9 @@ export default function StudentMySchedulePage() {
       {/* Tabs */}
       <div className="flex gap-4 mb-6 border-b">
         {[
-          { id: "upcoming", label: "Sắp tới", count: upcomingSessions.length },
-          { id: "past", label: "Đã diễn ra", count: pastSessions.length },
-          { id: "cancelled", label: "Đã hủy", count: cancelledSessions.length },
+          { id: "pending", label: "Sắp tới", count: pendingAppt.length },
+          { id: "completed", label: "Đã diễn ra", count: completedAppt.length },
+          { id: "cancelled", label: "Đã hủy", count: cancelledAppt.length },
         ].map((t) => (
           <button
             key={t.id}
@@ -126,26 +94,26 @@ export default function StudentMySchedulePage() {
       {/* Nội dung chính */}
       <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
         <div className="max-h-[65vh] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-blue-300 scrollbar-track-transparent space-y-4">
-          {filteredSessions.length === 0 ? (
+          {filteredAppointments[tab].length === 0 ? (
             <div className="text-center text-slate-500 py-10">
-              {tab === "upcoming"
+              {tab === "pending"
                 ? "Không có buổi học sắp tới"
-                : tab === "past"
+                : tab === "completed"
                 ? "Chưa có buổi học nào đã diễn ra"
                 : "Không có buổi học nào đã bị hủy"}
             </div>
           ) : (
-            filteredSessions.map((session) => (
-              <SessionCard
-                refetch={() => queryClient.invalidateQueries(["studentschedule"])}
-                key={session._id || session.id}
-                session={session}
-                isPast={session.status === "completed"}
-                isFailed={session.status === "cancelled"}
-                onCancel={handleCancelSession}
-                onReschedule={handleRescheduleSession}
-                onFeedback={handleProvideFeedback}
-                onReport={handleOpenReport}
+            filteredAppointments[tab].map((appointment) => (
+              <AppointmentCard
+                key={appointment._id || appointment.id}
+                appointment={appointment}
+                isCompleted={appointment.status === "completed"}
+                isCancelled={appointment.status === "cancelled"}
+                onCancel={()=>handleModalState(appointment, 'cancel')}
+                onCancelBeforeAccept={()=>handleModalState(appointment, 'cancel-before-accept')}
+                onReschedule={()=>handleModalState(appointment, 'reschedule')}
+                onFeedback={()=>handleModalState(appointment, 'feedback')}
+                onReport={()=>handleModalState(appointment, 'report')}
               />
             ))
           )}
@@ -154,10 +122,10 @@ export default function StudentMySchedulePage() {
 
       {/* --- Modal --- */}
       <CancelModal
-        slot={selectedSession}
-        open={cancelModal}
+        slot={modalState.selectedAppointment}
+        open={modalState.type === 'cancel'}
         onClose={() => {
-          setCancelModal(false);
+          handleCloseModal();
           setWarning(false);
           setSuperWarning(false);
           setReason("");
@@ -166,25 +134,24 @@ export default function StudentMySchedulePage() {
         isSuperWarning={superWarning}
       />
       <CancelBeforeAcceptModal
-        slot={selectedSession}
-        open={cancelBeforeAccept}
-        onClose={() => setCancelBeforeAccept(false)}
+        appointment={modalState.selectedAppointment}
+        open={modalState.type === 'cancel-before-accept'}
+        onClose={()=>handleCloseModal()}
       />
       <RescheduleModal
-        appointment={data.appointment}
-        open={rescheduleModal}
-        session={selectedSession}
-        onClose={() => setRescheduleModal(false)}
+        open={modalState.type === 'reschedule'}
+        appointment={modalState.selectedAppointment}
+        onClose={()=>handleCloseModal()}
       />
       <FeedbackModal
-        open={feedbackModal}
-        session={selectedSession}
-        onClose={() => setFeedbackModal(false)}
+        open={modalState.type === 'feedback'}
+        appointment={modalState.selectedAppointment}
+        onClose={()=>handleCloseModal()}
       />
       <ReportModal
-        open={reportModal}
-        onClose={() => setReportModal(false)}
-        session={selectedSession}
+        open={modalState.type === 'report'}
+        onClose={()=>handleCloseModal()}
+        appointment={modalState.selectedAppointment}
       />
     </div>
   );

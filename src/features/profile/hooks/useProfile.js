@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getUserProfile } from "../services/profile.service";
+import { getTutorList, getUserProfile } from "../services/profile.service";
 import { useAuth } from "../../auth/hooks/useAuth";
 
 export function useProfile(){
@@ -7,6 +7,7 @@ export function useProfile(){
     const {role} = auth;
     return useQuery({
         queryKey: ["user-profile", role], 
-        queryFn: async () => getUserProfile(role)
+        queryFn: async () => getUserProfile(role),
+        staleTime: 5*60*1000
     });
 }

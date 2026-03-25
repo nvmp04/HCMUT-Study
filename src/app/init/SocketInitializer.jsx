@@ -4,7 +4,7 @@ import { io } from "socket.io-client";
 import { useEffect } from "react";
 export function SocketInitializer({children}){
     const {auth} = useAuth();
-    const {socket, setSocket} = useSocket();
+    const {setSocket} = useSocket();
     useEffect(() => {
         if (!auth.token) {
             setSocket(null);

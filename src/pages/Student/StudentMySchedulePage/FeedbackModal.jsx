@@ -3,15 +3,15 @@ import { Star } from "lucide-react";
 import { fetchAPI } from "../../../utils/fetchAPI";
 import { useQueryClient } from "@tanstack/react-query";
 
-export default function FeedbackModal({ open, session, onClose}) {
+export default function FeedbackModal({ open, appointment, onClose}) {
   const queryClient = useQueryClient();
   const [rating, setRating] = useState(0);
   if (!open) return null;
-  const tutorId = session.tutorId;
+  const tutorId = appointment.tutorId;
   const handleSubmit = () => {
     if (rating > 0) {
       const url = 'https://hcmut-study-backend.onrender.com/student/rating'
-      fetchAPI(url, 'PUT', {tutorId, rating, _id: session._id}, true);
+      fetchAPI(url, 'PUT', {tutorId, rating, _id: appointment._id}, true);
       queryClient.invalidateQueries(["studentschedule"]);
       onClose();
     }
@@ -25,7 +25,7 @@ export default function FeedbackModal({ open, session, onClose}) {
         </h2>
         <p className="text-sm text-slate-600 mb-4">
           Hãy đánh giá chất lượng của buổi học{" "}
-          <span className="font-medium text-slate-800">{session?.subject}</span>
+          <span className="font-medium text-slate-800">{appointment?.subject}</span>
         </p>
 
         <div className="flex gap-2 mb-4">

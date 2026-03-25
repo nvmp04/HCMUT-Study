@@ -3,7 +3,6 @@ import { useAuth } from "../features/auth/hooks/useAuth";
 import { useQueryClient } from "@tanstack/react-query";
 
 export default function ReportModal({ open, onClose, session, onSubmit }) {
-  const queryClient = useQueryClient();
   const { auth } = useAuth();
   const { role } = auth || {};
   const [report, setReport] = useState({

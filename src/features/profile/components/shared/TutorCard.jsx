@@ -1,6 +1,6 @@
 import { Star, Calendar, User } from "lucide-react";
 import { Link } from "react-router-dom";
-import avt from "../assets/avt.jpg";
+import avt from '../../../../assets/avt.jpg';
 
 export default function TutorCard({ tutor }) {
   return (

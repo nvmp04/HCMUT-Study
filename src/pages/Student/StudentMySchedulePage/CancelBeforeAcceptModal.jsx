@@ -2,13 +2,12 @@ import React from "react";
 import { fetchAPI } from "../../../utils/fetchAPI";
 import { useQueryClient } from "@tanstack/react-query";
 
-export default function CancelBeforeAcceptModal({ slot, open, onClose }) {
+export default function CancelBeforeAcceptModal({ appointment, open, onClose }) {
   const queryClient = useQueryClient();
-
   if (!open) return null;
 
   async function handleSubmit() {
-    const content = { _id: slot._id, slotId: slot.slotId };
+    const content = { _id: appointment._id, appointmentId: appointment.slotId };
     const url = "https://hcmut-study-backend.onrender.com/student/cancelbeforeaccept";
     await fetchAPI(url, "DELETE", content, true);
     queryClient.invalidateQueries(["studentschedule"]);
@@ -23,7 +22,7 @@ export default function CancelBeforeAcceptModal({ slot, open, onClose }) {
         </h2>
         <p className="text-sm text-slate-600 mb-6">
           Bạn có chắc chắn muốn hủy buổi học{' '}
-          <span className="font-medium text-slate-800">{slot.title}</span>?
+          <span className="font-medium text-slate-800">{appointment.title}</span>?
           (Hành động này không thể hoàn tác)
         </p>
 

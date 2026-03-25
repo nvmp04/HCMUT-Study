@@ -1,50 +1,33 @@
-const define = `
-        Bạn là AI của hệ thống giáo dục trường Đại học Bách khoa. 
-        Chỉ trả về **duy nhất** một đối tượng JSON:
-        {error:'true hoặc false (string)', message:'custom', ban: 'true hoặc false (string)'}`
+const SYSTEM_DEFINE = `
+    Bạn là AI kiểm duyệt của ĐH Bách Khoa. 
+    NHIỆM VỤ: Kiểm tra nội dung học thuật hoặc lý do giao tiếp.
+    QUY TẮC: Chỉ trả về JSON nguyên bản, không giải thích.
+    FORMAT: {"error": boolean, "message": "string", "ban": boolean}
+`;
 
-export async function checkTitleRequest(text){
-    const prompt = `
-        ${define} 
-        Nhiệm vụ: kiểm tra nội dung môn học (lĩnh vực, chủ đề, nội dung mong muốn được học). 
-        Phân loại mức độ phù hợp của nội dung theo quy định học thuật.
-        Quy tắc:
-        1. Nếu nội dung mang tính học thuật, đúng chủ đề học tập trả về error:'false', message:'', ban: 'false'
-        2. Nếu nội dung vô nghĩa (gõ sai, ký tự linh tinh) hoặc không liên quan học tập trả về 
-        error: 'true', message:'Nội dung không hợp lệ hoặc không rõ ràng. Vui lòng nhập chủ đề học tập cụ thể và phù hợp với môi trường giáo dục.', ban: 'false'
-        3. Nếu nội dung chứa ngôn từ phản cảm, xúc phạm hoặc vi phạm đạo đức trả về 
-        message:'Hệ thống ghi nhận hành vi vi phạm nghiêm trọng đạo đức. Nội dung xúc phạm đã được chuyển đến Phòng Đào Tạo, tài khoản sẽ bị khóa để xử lý.', ban: 'true'
-        Đây là nội dung được yêu cầu: "${text}". 
-    `;
-    const res = await puter.ai.chat(prompt);
-    const replyJSON = res.message.content;
-    const reply = JSON.parse(replyJSON);
-    return reply;
+async function askAI(taskPrompt, content) {
+    try {
+        const fullPrompt = `${SYSTEM_DEFINE}\nNhiệm vụ: ${taskPrompt}\nNội dung cần kiểm tra: "${content}"`;
+        const res = await puter.ai.chat(fullPrompt);
+        const rawContent = res.message.content;
+        
+        const jsonMatch = rawContent.match(/\{.*\}/s);
+        if (!jsonMatch) throw new Error("AI không trả về đúng định dạng JSON");
+        
+        const result = JSON.parse(jsonMatch[0]);
+        return {
+            error: String(result.error) === 'true',
+            message: result.message || "",
+            ban: String(result.ban) === 'true'
+        };
+    } catch (err) {
+        console.error("AI Check Error:", err);
+        return { error: false, message: "", ban: false };
+    }
 }
 
-export async function checkTutorReason(text) {
-  const prompt = `
-   ${define}
-   Nhiệm vụ: kiểm tra lý do hủy lịch hoặc từ chối lịch.
-   Chỉ trả về **duy nhất** một đối tượng JSON:
-   {error:'true hoặc false (string)', message:'custom', ban:'true hoặc false (string)'}
+export const checkTitleRequest = (text) => 
+    askAI("Kiểm tra nội dung môn học. Nếu vô nghĩa hoặc không liên quan học tập thì error:true. Nếu xúc phạm thì ban:true.", text);
 
-   Quy tắc:
-
-   1. Nếu lý do hợp lý, liên quan trực tiếp đến việc hủy hoặc từ chối buổi học, thể hiện sự tôn trọng và chuyên nghiệp → 
-      error:'false', message:'', ban:'false'
-
-   2. Nếu lý do **không liên quan hủy/từ chối buổi học**, quá ngắn, vô nghĩa, gõ ký tự linh tinh, hoặc thiếu tôn trọng → 
-      error:'true', message:'Lý do không hợp lệ, không liên quan đến việc hủy/từ chối buổi học. Vui lòng ghi rõ lý do phù hợp với môi trường giáo dục.', ban:'false'
-
-   3. Nếu lý do chứa **từ ngữ xúc phạm, thù ghét, hoặc gây tổn hại đạo đức** → 
-      error:'true', message:'Hệ thống ghi nhận hành vi vi phạm nghiêm trọng đạo đức. Nội dung xúc phạm đã được chuyển đến Phòng Đào Tạo, tài khoản sẽ bị khóa để xử lý.', ban:'true'
-
-   Đây là lý do được gửi: "${text}".
-
-  `;
-  const res = await puter.ai.chat(prompt);
-  const replyJSON = res.message.content;
-  const reply = JSON.parse(replyJSON);
-  return reply;
-}
+export const checkTutorReason = (text) => 
+    askAI("Kiểm tra lý do hủy/từ chối. Nếu thiếu tôn trọng/vô nghĩa thì error:true. Nếu xúc phạm thì ban:true.", text);

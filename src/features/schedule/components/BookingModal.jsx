@@ -1,38 +1,39 @@
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { useQueryClient } from '@tanstack/react-query';
-import studentBooking  from '../../../services/studentBooking';
 import AIcheckingModal from '../../../components/AIcheckingModal';
 import AIwarningModal from '../../../components/AIwarningModal';
+import { useBooking } from '../hooks/useBooking';
 
 export default function BookingModal({ tutor, selectedTimeSlot, onConfirm, onCancel }) {
-  const queryClient = useQueryClient();
   const [sessionTitle, setSessionTitle] = useState('');
   const [modalType, setModalType] = useState('booking');
   const [warningMessage, setWarningMessage] = useState('');
   const [ban, setBan] = useState(false);
+  const {mutate} = useBooking();
   async function handleConfirm() {
     if (!sessionTitle.trim()) return;
     setModalType('checking');
-    try {
-      const res = await studentBooking(tutor, selectedTimeSlot, sessionTitle);
-      const { error, message, ban } = res;
-      if (error === 'true') {
-        setWarningMessage(message);
-        setModalType('error');
-        if(ban === 'true' || ban === true) {
-          setBan(true);
+    mutate({tutor, selectedTimeSlot, sessionTitle}, 
+      {
+        onSuccess: (data)=>{
+          const { error, message, ban } = data;
+          if (error === 'true') {
+            setWarningMessage(message);
+            setModalType('error');
+            if(ban === 'true' || ban === true) {
+              setBan(true);
+            }
+            return;
+          }
+          onConfirm();
+          setSessionTitle('');
+          setModalType('booking');
+        }, 
+        onError: (err) =>{
+          console.error('Booking failed:', err);
+          setModalType('error');
         }
-        return;
       }
-      queryClient.invalidateQueries({ queryKey: ['tutorschedule'] });
-      onConfirm(sessionTitle);
-      setSessionTitle('');
-      setModalType('booking');
-    } catch (err) {
-      console.error('Booking failed:', err);
-      setModalType('error');
-    }
+    );
   }
 
   return (
@@ -87,7 +88,7 @@ export default function BookingModal({ tutor, selectedTimeSlot, onConfirm, onCan
                     ? 'border-blue-500 bg-blue-500 text-white hover:bg-blue-600'
                     : 'border-gray-300 bg-gray-300 text-gray-500 cursor-not-allowed'
                 }`}
-                onClick={handleConfirm}
+                onClick={()=>handleConfirm()}
                 disabled={!sessionTitle}
               >
                 Xác nhận đặt lịch

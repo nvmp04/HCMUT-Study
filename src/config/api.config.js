@@ -18,13 +18,20 @@ export const API_ENDPOINTS = {
   LIBRARY: {
     DOCUMENTS: '/library/documents',
   },
-  // Student feature
-  STUDENT: {
+  // Schedule feature
+  SCHEDULE: {
     BOOK_SESSION: '/student/booksession',
-    PROFILE_DATA: '/student/getstudentdata'
+    GET_APPOINTMENT: '/student/getmyschedule',
+    CANCEL_BEFORE_ACCEPT: '/student/cancelbeforeaccept',
+    DELETE_CANCELLED: '/student/deletecancelled',
+    GET_TUTOR_SCHEDULE: '/student/getschedule'
   },
   TUTOR: {
-    PROFILE_DATA: '/tutor/gettutordata'
+  },
+  PROFILE: {
+    STUDENT_DETAIL: '/student/getstudentdata',
+    TUTOR_DETAIL: '/tutor/gettutordata',
+    TUTOR_LIST: '/student/gettutorsdata'
   }
   // Add more endpoints as needed for other features
 };

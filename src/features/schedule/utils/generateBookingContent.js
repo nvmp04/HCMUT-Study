@@ -1,13 +1,6 @@
-import { fetchAPI } from "../utils/fetchAPI";
-import { checkTitleRequest } from "./AIcheck";
-import { API_ENDPOINTS, buildAPIUrl } from "../config/api.config";
-
-export default async function studentBooking(tutor, selectedTimeSlot, sessionTitle){
+export function generateBookingContent(tutor, selectedTimeSlot, sessionTitle){
     const stuID = sessionStorage.getItem("id");
-    const res = await checkTitleRequest(sessionTitle);
-    const {error, message, ban} = res;
-    if(error === 'true' || error === true) return {error, message, ban};
-    const content = {
+    return {
         studentId: stuID, 
         tutorId: tutor.id,
         status: 'pending',
@@ -24,7 +17,4 @@ export default async function studentBooking(tutor, selectedTimeSlot, sessionTit
         link: '',
         reason: ''
     }
-    const url = buildAPIUrl(API_ENDPOINTS.STUDENT.BOOK_SESSION)
-    await fetchAPI(url, 'POST', content, true);
-    return {error, message, ban};
 }

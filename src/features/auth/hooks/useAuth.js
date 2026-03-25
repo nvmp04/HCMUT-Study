@@ -26,7 +26,7 @@ export function useAuth(){
         return response.user;
     }
     const logout = () => {
-        queryClient.invalidateQueries();
+        queryClient.clear();
         sessionStorage.clear();
         setAuth({ token: null, role: null });
     }

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { XCircle, X, Bell, Mail, Phone, Calendar, AlertCircle, Hash } from "lucide-react";
+import { XCircle, X, Hash } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchAPI } from "../../../utils/fetchAPI";
 import { LoadingModal } from "../../../components/LoadingModal";

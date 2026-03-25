@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { fetchAPI } from '../../../utils/fetchAPI';
-import { LoadingModal } from '../../../components/LoadingModal';
-import FilterBar from './FilterBar';
-import TutorCard from '../../../components/TutorCard'
+import { LoadingModal } from '../../components/LoadingModal';
+import FilterBar from '../../features/profile/components/StudentViewTutorPage/FilterBar';
+import TutorCard from '../../features/profile/components/shared/TutorCard'
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useTutorList } from '../../features/profile/hooks/useTutorList';
+import { useTutorFilter } from '../../features/profile/hooks/useTutorFilter';
 
 function StudentSchedulePage() {
   const [activeCategory, setActiveCategory] = useState('all');
@@ -22,25 +22,11 @@ function StudentSchedulePage() {
     { id: 'Khoa Kinh tế', name: 'Kinh tế' }
   ];
 
-  const url = 'https://hcmut-study-backend.onrender.com/student/gettutorsdata';
-  const { data, isLoading } = useQuery({
-    queryKey: ["tutors"],
-    queryFn: async () => await fetchAPI(url, 'GET', null, true)
-  });
+  const { data, isLoading } = useTutorList();
 
   if (isLoading) return <LoadingModal />;
 
-  const filteredTutors =
-    data?.tutors.filter(tutor => {
-      const matchesCategory = activeCategory === 'all' || tutor.department === activeCategory;
-      const matchesSearch =
-        tutor.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        tutor.subjects.some(subject =>
-          subject.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-      const banned = tutor.banned === true;
-      return matchesCategory && matchesSearch && !banned;
-    }) || [];
+  const filteredTutors = useTutorFilter(data.tutors, activeCategory, searchTerm);
 
   const totalPages = Math.ceil(filteredTutors.length / tutorsPerPage);
   const indexOfLast = currentPage * tutorsPerPage;

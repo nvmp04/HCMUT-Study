@@ -1,12 +1,11 @@
-import HomepageScheduleCard from "../../../components/HomepageScheduleCard";
-import HomepageProfileCard from "../../../components/HomepageProfileCard";
-import {LoadingModal} from '../../../components/LoadingModal'
-import { useProfile } from "../../../features/profile/hooks/useProfile";
+import HomepageScheduleCard from "../../components/HomepageScheduleCard"
+import HomepageProfileCard from '../../features/profile/components/Homepage/HomepageProfileCard'
+import {LoadingModal} from '../../components/LoadingModal'
+import { useProfile } from "../../features/profile/hooks/useProfile";
 
 export default function StudentHomepage() {
   const { data, isLoading } = useProfile();
   if (isLoading) return <LoadingModal />;
-  console.log(data)
   // sessionStorage.setItem("name", data.student.name);
   // sessionStorage.setItem("phone", data.student.phone);
 

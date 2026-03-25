@@ -1,21 +1,15 @@
 import { X } from "lucide-react";
-import { fetchAPI } from "../../../utils/fetchAPI";
-import { useQueryClient } from "@tanstack/react-query";
-import studentBooking from "../../../services/studentBooking";
+import { useCancelBeforeAccept } from "../../../features/schedule/hooks/useCancelBeforeAccept";
 
-export default function ConfirmRescheduleModal({ slot, open, timeSlot, onClose }) {
-  const queryClient = useQueryClient();
+export default function ConfirmRescheduleModal({ appointment, open, timeSlot, onClose }) {
   if (!open || !timeSlot) return null;
-  const currentTime = slot.slotId;
+  const currentTime = appointment.slotId;
   const { slotId } = timeSlot;
-  const tutor = {id: slot.tutorId, name: slot.tutorName, phone: slot.tutorPhone}
+  const {mutate} = useCancelBeforeAccept(appointment);
   async function handleConfirm(){
-    const content = { _id: slot._id, slotId: slot.slotId };
-    const url = "https://hcmut-study-backend.onrender.com/student/cancelbeforeaccept";
-    fetchAPI(url, "DELETE", content, true);
-    studentBooking(tutor, timeSlot, slot.title);
-    queryClient.invalidateQueries(["studentschedule"]);
-    onClose();
+    mutate({
+      onSuccess: onClose
+    })
   }
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">

@@ -1,76 +1,20 @@
 import { Calendar, Clock, X } from "lucide-react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useMemo, useState } from "react";
-import { fetchAPI } from "../../../utils/fetchAPI";
-import ExpiredTimeModal from "../../../components/ExpiredTimeModal";
+import {  useState } from "react";
+import AlertModal from "../../../components/AlertModal";
 import ConfirmRescheduleModal from "./ConfirmRescheduleModal";
 import ScheduleConflictModal from "../../../components/ScheduleConflictModal";
 import { checkTimeOverlap } from "../../../utils/checkTimeOverlap";
-import { useSocket } from "../../../features/websocket/hooks/useSocket";
+import { useTutorSocket } from "../../../features/websocket/hooks/useTutorSocket";
+import { useTutorSchedule } from "../../../features/schedule/hooks/useTutorSchedule";
+import { useStudentAppointment } from "../../../features/schedule/hooks/useStudentAppointment";
 
-export default function RescheduleModal({ appointment, open, session, onClose }) {
+export default function RescheduleModal({ open, appointment, onClose }) {
   if (!open) return null;
-  const {socket} = useSocket();
-  const id = session.tutorId;
-  const url = "https://hcmut-study-backend.onrender.com/student/getschedule";
-  const { data, isLoading } = useQuery({
-    queryKey: ["tutorschedule", id],
-    queryFn: () => fetchAPI(url, "POST", { id }, true)
-  });
-  const queryClient = useQueryClient();
-  useEffect(() => {
-    if(!socket) return;
-    function handleEvent({tutorId}){
-      if(tutorId === id) queryClient.invalidateQueries(['tutorschedule', id]);
-    }
-    const events = ["appointment-updated", "tutorScheduleUpdated", "decline", "booksession"];
-    events.forEach((e)=>socket.on(e, handleEvent))
-    return () => {
-      events.forEach((e)=>socket.off(e, handleEvent));
-    };
-  }, [queryClient, socket]);
-  const weeklySchedule = useMemo(() => {
-    if (!data) return [];
-    const today = new Date();
-    const weekdayMap = {
-      0: "sun",
-      1: "mon",
-      2: "tues",
-      3: "wed",
-      4: "thur",
-      5: "fri",
-      6: "sat",
-    };
+  const id = appointment.tutorId;
+  const { weeklySchedule } = useTutorSchedule(id);
+  const {data} = useStudentAppointment();
+  useTutorSocket(id);
 
-    return Array.from({ length: 7 }, (_, i) => {
-      const date = new Date(today);
-      date.setDate(today.getDate() + i);
-      const weekday = date.getDay();
-      const scheduleKey = weekdayMap[weekday];
-      const slotsFromAPI = data?.schedule?.[scheduleKey] || [];
-      const dayformat = date.toLocaleDateString("vi-VN", { weekday: "long" });
-      const dateformat = date.toLocaleDateString("vi-VN", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-      });
-
-      return {
-        day: dayformat,
-        date: dateformat,
-        timeSlots: slotsFromAPI.map((time) => {
-          const matched = data.status?.find(
-            (appt) => appt.slotId === `${time} ${dateformat}`
-          );
-          return {
-            slotId: `${time} ${dateformat}`,
-            time,
-            status: matched ? matched.status : "available",
-          };
-        }),
-      };
-    });
-  }, [data]);
   const [conflict, setConflict] = useState({state:false, tutorName: '', title: '', slotId: ''});
   const [expiredTimeModal, setExpiredTimeModal] = useState(false);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
@@ -87,7 +31,7 @@ export default function RescheduleModal({ appointment, open, session, onClose })
       setExpiredTimeModal(true);
       return;
     }
-    const sameDayAppt = appointment.filter((a)=>{
+    const sameDayAppt = data.appointment.filter((a)=>{
       return (
         a.date.split(' ')[2] ===  timeSlot.slotId.split(' ')[3]
         && (a.status === 'accepted' || a.status === 'pending')
@@ -110,7 +54,7 @@ export default function RescheduleModal({ appointment, open, session, onClose })
       setConfirm(true);
     }
   };
-  if (isLoading) return null;
+
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
       <div className="bg-white rounded-2xl p-6 max-w-3xl w-[95%] max-h-[90vh] overflow-y-auto shadow-lg relative">
@@ -162,7 +106,7 @@ export default function RescheduleModal({ appointment, open, session, onClose })
 
         <ConfirmRescheduleModal
           open={confirm}
-          slot={session}
+          appointment={appointment}
           timeSlot={selectedTimeSlot}
           onClose={() => {
             setConfirm(false);
@@ -172,7 +116,7 @@ export default function RescheduleModal({ appointment, open, session, onClose })
         />
 
         {expiredTimeModal && (
-          <ExpiredTimeModal onClose={() => setExpiredTimeModal(false)} />
+          <AlertModal onClose={() => setExpiredTimeModal(false)} />
         )}
         <ScheduleConflictModal
           open={conflict.state} 

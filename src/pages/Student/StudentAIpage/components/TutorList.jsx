@@ -1,8 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import { TrendingUp } from "lucide-react";
 import { fetchAPI } from "../../../../utils/fetchAPI";
 import { LoadingModal } from "../../../../components/LoadingModal";
-import TutorCard from "../../../../components/TutorCard";
+import TutorCard from "../../../../features/profile/components/shared/TutorCard"
 
 export function TutorList({ tutorsId }) {
   const url = "https://hcmut-study-backend.onrender.com/student/getsuitabletutors";

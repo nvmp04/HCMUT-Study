@@ -1,55 +1,24 @@
 import { Calendar, Clock } from "lucide-react";
 import { useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { fetchAPI } from "../../../utils/fetchAPI";
-import ExpiredTimeModal from "../../../components/ExpiredTimeModal";
+import AlertModal from "../../../components/AlertModal";
 import ScheduleConflictModal from "../../../components/ScheduleConflictModal";
-import { checkTimeOverlap } from "../../../utils/checkTimeOverlap";
-export default function ScheduleSection({ selectedTimeSlot, setSelectedTimeSlot, setBooking }) {
+import {checkTimeOverlap} from '../../../utils/checkTimeOverlap'
+import { getExpiredTimeMessage } from "../utils/generateModalContent";
+import { useTutorSchedule } from "../hooks/useTutorSchedule";
+import { useStudentAppointment } from "../hooks/useStudentAppointment";
+
+
+export default function ScheduleSection({ selectedTimeSlot, setBooking}) {
   const {id} = useParams();
-  const url = 'https://hcmut-study-backend.onrender.com/student/getschedule';
-  const {data} = useQuery({
-    queryKey: ['tutorschedule'], 
-    queryFn: async ()=> await fetchAPI(url, 'POST', {id}, true)
-  })
-  const weeklySchedule = useMemo(() => {
-    if (!data) return [];
-    const today = new Date();
-    const weekdayMap = {
-      0: "sun",
-      1: "mon",
-      2: "tues",
-      3: "wed",
-      4: "thur",
-      5: "fri",
-      6: "sat",
-    };
-    return Array.from({ length: 7 }, (_, i) => {
-      const date = new Date(today);
-      date.setDate(today.getDate() + i);
-      const weekday = date.getDay();
-      const scheduleKey = weekdayMap[weekday];
-      const slotsFromAPI = data?.schedule?.[scheduleKey] || [];
-      const dayformat = date.toLocaleDateString("vi-VN", { weekday: "long" });
-      const dateformat = date.toLocaleDateString("vi-VN", {
-          day: "2-digit",
-          month: "2-digit",
-          year: "numeric",
-        })
-      return {
-        day: dayformat,
-        date: dateformat,
-        timeSlots: slotsFromAPI.map((time) => {
-          const matched = data.status?.find(appt => appt.slotId === (time + ' ' + dateformat));
-          return {
-          slotId: time + ' ' + dateformat,
-          time, 
-          status: matched ? matched.status : 'available'
-        }}),
-      };
-    });
-  }, [data]);
+  const {title: expiredTitle, renderMessage: expiredMessage} = getExpiredTimeMessage();
+
+  //Lấy lịch rảnh của Tutor
+  const {weeklySchedule} = useTutorSchedule(id);
+  //Lấy các cuộc hẹn sắp tới của Student
+  const {data} = useStudentAppointment();
+  
   const [conflict, setConflict] = useState({state:false, tutorName: '', title: '', slotId: ''});
   const [expiredTimeModal, setExpiredTimeModal] = useState(false); 
   const handleTimeSlotClick = async (day, timeSlot) => {
@@ -64,10 +33,7 @@ export default function ScheduleSection({ selectedTimeSlot, setSelectedTimeSlot,
       setExpiredTimeModal(true);
       return;
     }
-    const url = "https://hcmut-study-backend.onrender.com/student/getmyschedule";
-    const data = await fetchAPI(url, "GET", null, true);
-    const {appointment} = data;
-    const sameDayAppt = appointment.filter((a)=>{
+    const sameDayAppt = data.appointment.filter((a)=>{
       return (
         a.date.split(' ')[2] ===  timeSlot.slotId.split(' ')[3]
         && (a.status === 'accepted' || a.status === 'pending')
@@ -81,16 +47,14 @@ export default function ScheduleSection({ selectedTimeSlot, setSelectedTimeSlot,
       return;
     }
     if (timeSlot.status === 'available') {
-      setSelectedTimeSlot({
+      setBooking({
         day: day.day,
         date: day.date,
         time: timeSlot.time,
         slotId: timeSlot.slotId,
       });
-      setBooking(true);
     }
   };
-
 
   return (
     <div className="bg-white rounded-2xl p-6 shadow-md border border-gray-200">
@@ -131,7 +95,10 @@ export default function ScheduleSection({ selectedTimeSlot, setSelectedTimeSlot,
           </div>
         ))}
       </div>
-      {expiredTimeModal && <ExpiredTimeModal onClose={()=>setExpiredTimeModal(false)}/>}
+      {expiredTimeModal && <AlertModal 
+        title={expiredTitle}
+        message={expiredMessage()}
+        onClose={()=>setExpiredTimeModal(false)}/>}
       <ScheduleConflictModal
         open={conflict.state} 
         onClose={()=>setConflict({...conflict, state:false})} 
