@@ -12,7 +12,7 @@ function App() {
   const token = auth.token;
   return (
     <>
-      <Header/>
+      {path!=='/login' && <Header/>}
       <AppRoutes/>
       {(!token || path === '/') && <Footer/>}
     </>

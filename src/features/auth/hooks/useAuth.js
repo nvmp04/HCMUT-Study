@@ -28,6 +28,7 @@ export function useAuth(){
     const logout = () => {
         queryClient.clear();
         sessionStorage.clear();
+        window.location.href = '/';
         setAuth({ token: null, role: null });
     }
     return {

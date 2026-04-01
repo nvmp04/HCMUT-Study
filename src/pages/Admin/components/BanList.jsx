@@ -4,9 +4,11 @@ import { fetchAPI } from "../../../utils/fetchAPI";
 import { LoadingModal } from "../../../components/LoadingModal";
 import { useState } from 'react';
 import {ConfirmUnbanModal} from './UserInfoModal/ConfirmUnbanModal'
+import { API_BASE_URL } from "../../../config/api.config";
+
 function BanList() {
   const queryClient = useQueryClient();
-  const url = "https://hcmut-study-backend.onrender.com/admin/getbanlist";
+  const url = API_BASE_URL + "/admin/getbanlist";
   const {data, isLoading} = useQuery({
     queryKey: ['banlist'], 
     queryFn: ()=>fetchAPI(url, 'GET', null, true)
@@ -15,7 +17,7 @@ function BanList() {
   if(isLoading) return <LoadingModal/>
   const handleUnban = (id, role) => {
     if(role!=='student') role = 'tutor';
-    const url = "https://hcmut-study-backend.onrender.com/admin/unban";
+    const url = API_BASE_URL + "/admin/unban";
     fetchAPI(url, 'PUT', {id, role}, true);
     queryClient.invalidateQueries(['banlist']);
     queryClient.invalidateQueries([role==='tutor' ? 'tutorsboard' : 'studentsboard']);

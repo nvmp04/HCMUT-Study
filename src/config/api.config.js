@@ -4,36 +4,35 @@
  * Follows feature-based architecture pattern
  */
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://hcmut-study-backend.onrender.com';
+/*export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://hcmut-study-backend.onrender.com'*/
+export const API_BASE_URL = 'http://localhost:5000'
+//;
 
 /**
  * API Endpoints organized by feature
  */
 export const API_ENDPOINTS = {
-  // Auth feature
   AUTH: {
-    LOGIN: '/sso/login',
+    LOGIN: '/auth/login',
   },
-  // Library feature
   LIBRARY: {
     DOCUMENTS: '/library/documents',
   },
-  // Schedule feature
   SCHEDULE: {
-    BOOK_SESSION: '/student/booksession',
-    GET_APPOINTMENT: '/student/getmyschedule',
     CANCEL_BEFORE_ACCEPT: '/student/cancelbeforeaccept',
     DELETE_CANCELLED: '/student/deletecancelled',
-    GET_TUTOR_SCHEDULE: '/student/getschedule'
+    GET_TUTOR_SCHEDULE: '/schedule/tutor-schedule'
   },
-  TUTOR: {
+  APPOINTMENT: {
+    GET_APPOINTMENT: '/appointments',
+    MAKE_APPOINTMENT: '/appointments', 
+    RESCHEDULE: '/appointments'
   },
   PROFILE: {
-    STUDENT_DETAIL: '/student/getstudentdata',
-    TUTOR_DETAIL: '/tutor/gettutordata',
-    TUTOR_LIST: '/student/gettutorsdata'
+    USER_PROFILE: '/user/profile',
+    TUTOR_PROFILE: '/user/tutor-profile',
+    TUTOR_LIST: '/user/tutor-list'
   }
-  // Add more endpoints as needed for other features
 };
 
 /**

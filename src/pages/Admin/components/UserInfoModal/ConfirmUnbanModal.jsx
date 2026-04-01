@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Unlock } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { fetchAPI } from "../../../../utils/fetchAPI";
+import { API_BASE_URL } from "../../../../config/api.config";
 
 export function ConfirmUnbanModal({ selectedUser, onOpen, onClose }) {
   if (!onOpen) return null;
@@ -16,7 +17,7 @@ export function ConfirmUnbanModal({ selectedUser, onOpen, onClose }) {
     }
 
     const role = selectedUser.role === "student" ? "student" : "tutor";
-    const url = "https://hcmut-study-backend.onrender.com/admin/unban";
+    const url = API_BASE_URL + "/admin/unban";
 
     try {
       await fetchAPI(url, "PUT", { id: selectedUser.id, email: selectedUser.email, role, message }, true);

@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { LoadingModal } from "../../components/LoadingModal";
 import InfoSection from "../../features/profile/components/StudentViewTutorPage/InfoSection";
 import ScheduleSection from "../../features/schedule/components/ScheduleSection";
-import BookingModal from "../../features/schedule/components/BookingModal";
+import BookingModal from "../../features/appointment/components/BookingModal";
 import AlertModal from "../../components/AlertModal";
 import ScheduleConflictModal from '../../components/ScheduleConflictModal'
 import { useTutorDetail } from "../../features/profile/hooks/useTutorDetail";

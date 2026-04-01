@@ -1,7 +1,7 @@
 import { Calendar, Clock, User, MapPin, Video, AlertCircle, FileText, CheckCircle, XCircle, Edit, Star, Trash } from 'lucide-react';
 import StatusBadge from './StatusBadge';
 import { Link } from 'react-router-dom';
-import { useDeleteCancelled } from '../../../features/schedule/hooks/useDeleteCancelled';
+import { useDeleteCancelled } from '../hooks/useDeleteCancelled';
 export default function AppointmentCard({
   appointment,
   isCompleted,

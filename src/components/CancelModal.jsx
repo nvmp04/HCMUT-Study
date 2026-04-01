@@ -6,6 +6,7 @@ import { useAuth } from "../features/auth/hooks/useAuth";
 import AIcheckingModal from "./AIcheckingModal";
 import AIwarningModal from "./AIwarningModal";
 import { checkTutorReason } from "../services/AIcheck";
+import { API_BASE_URL } from "../config/api.config";
 
 export default function CancelModal({
   slot,
@@ -18,7 +19,6 @@ export default function CancelModal({
   const queryClient = useQueryClient();
   const { auth } = useAuth();
   const { role } = auth;
-
   // AI check states
   const [aiModalType, setAiModalType] = useState("main"); 
   const [aiMessage, setAiMessage] = useState("");
@@ -40,12 +40,11 @@ export default function CancelModal({
         return;
       }
 
-      const content = { slotId: slot.slotId, _id: slot._id, reason };
-      const url =
-        role === "tutor"
-          ? "https://hcmut-study-backend.onrender.com/tutor/response"
-          : "https://hcmut-study-backend.onrender.com/student/cancelled";
-
+      const content = { _id: slot.appointment._id, reason };
+      const url = API_BASE_URL + 
+        (role === "tutor"
+          ? "/tutor/response"
+          : "/student/cancelled")
       await fetchAPI(url, "PUT", content, true);
       queryClient.invalidateQueries([
         role === "tutor" ? "tutorappointments" : "studentschedule",
@@ -75,8 +74,8 @@ export default function CancelModal({
 
   // --- UI gốc CancelModal ---
   if (isSuperWarning) {
-    const phone = role === "tutor" ? slot.studentPhone : slot.tutorPhone;
-    const name = role === "tutor" ? slot.studentName : slot.tutorName;
+    const phone = role === "tutor" ? slot.appointment.studentPhone : slot.appointment.tutorPhone;
+    const name = role === "tutor" ? slot.appointment.studentName : slot.appointment.tutorName;
 
     return (
       <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
@@ -105,8 +104,8 @@ export default function CancelModal({
   }
 
   const otherRole = role === "tutor" ? "học viên" : "giảng viên";
-  const otherName = role === "tutor" ? slot.studentName : slot.tutorName;
-  const otherPhone = role === "tutor" ? slot.studentPhone : slot.tutorPhone;
+  const otherName = role === "tutor" ? slot.appointment.studentName : slot.appointment.tutorName;
+  const otherPhone = role === "tutor" ? slot.appointment.studentPhone : slot.appointment.tutorPhone;
 
   return (
     <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
@@ -149,7 +148,7 @@ export default function CancelModal({
         ) : (
           <p className="text-sm text-slate-600 mb-3">
             Bạn có chắc chắn muốn hủy buổi học{" "}
-            <span className="font-medium text-slate-800">{slot.title}</span> với {otherRole} <strong>{otherName}</strong>
+            <span className="font-medium text-slate-800">{slot.appointment.title}</span> với {otherRole} <strong>{otherName}</strong>
           </p>
         )}
 

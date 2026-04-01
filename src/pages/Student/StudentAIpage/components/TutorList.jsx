@@ -2,9 +2,10 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchAPI } from "../../../../utils/fetchAPI";
 import { LoadingModal } from "../../../../components/LoadingModal";
 import TutorCard from "../../../../features/profile/components/shared/TutorCard"
+import { API_BASE_URL } from "../../../../config/api.config";
 
 export function TutorList({ tutorsId }) {
-  const url = "https://hcmut-study-backend.onrender.com/student/getsuitabletutors";
+  const url = API_BASE_URL + "/student/getsuitabletutors";
   const { data, isLoading } = useQuery({
     queryKey: ["suitabletutors"],
     queryFn: async () => await fetchAPI(url, "POST", { tutorsId }, true),

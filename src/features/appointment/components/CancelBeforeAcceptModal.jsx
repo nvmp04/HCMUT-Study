@@ -1,19 +1,14 @@
-import React from "react";
-import { fetchAPI } from "../../../utils/fetchAPI";
-import { useQueryClient } from "@tanstack/react-query";
+import { useCancelBeforeAccept } from "../hooks/useCancelBeforeAccept";
 
 export default function CancelBeforeAcceptModal({ appointment, open, onClose }) {
-  const queryClient = useQueryClient();
-  if (!open) return null;
-
+  const {mutate} = useCancelBeforeAccept();
   async function handleSubmit() {
-    const content = { _id: appointment._id, appointmentId: appointment.slotId };
-    const url = "https://hcmut-study-backend.onrender.com/student/cancelbeforeaccept";
-    await fetchAPI(url, "DELETE", content, true);
-    queryClient.invalidateQueries(["studentschedule"]);
-    onClose();
+    mutate(
+      appointment,
+      {onSuccess: onClose}
+    );
   }
-
+  if (!open) return null;
   return (
     <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
       <div className="bg-white rounded-xl shadow-lg p-6 max-w-md w-full">

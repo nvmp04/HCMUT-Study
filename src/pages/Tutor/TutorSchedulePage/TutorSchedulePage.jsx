@@ -8,17 +8,20 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchAPI } from "../../../utils/fetchAPI";
 import { EndModal } from "./EndModal";
 import { useSocket } from "../../../features/websocket/hooks/useSocket";
+import { API_BASE_URL } from "../../../config/api.config";
+import {useTutorSchedule} from '../../../features/schedule/hooks/useTutorSchedule'
+import { LoadingModal } from "../../../components/LoadingModal";
 
 export default function TutorSchedule() {
   const queryClient = useQueryClient();
   const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
   const [modalType, setModalType] = useState(null);
   const {socket} = useSocket();
-  const url = 'https://hcmut-study-backend.onrender.com/tutor/getschedule';
-  const {data, isLoading} = useQuery({
-    queryKey: ['schedule'], 
-    queryFn: async ()=> await fetchAPI(url, 'GET', null, true)
-  })
+  const url = API_BASE_URL + '/tutor/getschedule';
+  // const {data, isLoading} = useQuery({
+  //   queryKey: ['schedule'], 
+  //   queryFn: async ()=> await fetchAPI(url, 'GET', null, true)
+  // })
   const id = sessionStorage.getItem('id');
   useEffect(() => {
     if(!socket) return;
@@ -39,58 +42,14 @@ export default function TutorSchedule() {
       events.forEach((e)=>{socket.off(e, handleEvent)});
     };
   }, [queryClient, socket]);
-  const weeklySchedule = useMemo(() => {
-    if (!data) return [];
-    const today = new Date();
-    const weekdayMap = {
-      0: "sun",
-      1: "mon",
-      2: "tues",
-      3: "wed",
-      4: "thur",
-      5: "fri",
-      6: "sat",
-    };
-    return Array.from({ length: 7 }, (_, i) => {
-      const date = new Date(today);
-      date.setDate(today.getDate() + i);
-      const weekday = date.getDay();
-      const scheduleKey = weekdayMap[weekday];
-      const slotsFromAPI = data?.schedule?.[scheduleKey] || [];
-      const dayformat = date.toLocaleDateString("vi-VN", { weekday: "long" });
-      const dateformat = date.toLocaleDateString("vi-VN", {
-          day: "2-digit",
-          month: "2-digit",
-          year: "numeric",
-        })
-      return {
-        day: dayformat,
-        date: dateformat,
-        timeSlots: slotsFromAPI.map((time) => {
-          const matched = data.appointment?.find(appt => appt.slotId === (time + ' ' + dateformat));
-          return{
-            _id: matched ? matched._id : '',
-            slotId: time + ' ' + dateformat,
-            time,
-            status: matched ? matched.status : 'available',
-            studentName: matched ? matched.studentName : '',
-            studentPhone: matched ? matched.studentPhone : '',
-            title: matched ? matched.title : ''
-        }}),
-      };
-    });
-  }, [data]);
-  
-  const handleTimeSlotClick = (day, slotIndex) => {
-    const Day = weeklySchedule.find((d)=>d.day === day);
-    const slot = Day.timeSlots[slotIndex];
-    const date = Day.date;
-    setSelectedTimeSlot({ day, date, slotIndex, slot });
+  const {weeklySchedule, isScheduleLoading} = useTutorSchedule(id);
+  const handleTimeSlotClick = (slot) => {
+    setSelectedTimeSlot({ slot });
     if (slot.status === "pending") setModalType("request");
     else if (slot.status === "accepted") {
       const endTime = slot.time.split(' - ')[1];
       const [hours, minutes] = endTime.split(":").map(Number);
-      const [day, month, year] = date.split("/").map(Number);
+      const [day, month, year] = slot.appointment.date.split("/").map(Number);
       const endDateTime = new Date(year, month - 1, day, hours, minutes);
       const now = new Date();
       if ((endDateTime - now) / 1000 / 60 <= 0) {
@@ -104,7 +63,7 @@ export default function TutorSchedule() {
   };
 
   async function handleConfirmDeleteAvailable(){
-    const url = 'https://hcmut-study-backend.onrender.com/tutor/adddeleteslot';
+    const url = API_BASE_URL + '/tutor/adddeleteslot';
     const {day, slot} = selectedTimeSlot;
     const {time} = slot;
     const content = {day: weekdayMap2[day], time, type: 'delete'};
@@ -129,7 +88,8 @@ export default function TutorSchedule() {
     if (status === "pending") return "bg-red-100 border-red-300 text-red-700";
     return "bg-white border-gray-200 text-gray-700 hover:bg-blue-50 hover:border-blue-400";
   };
-
+  
+  if(isScheduleLoading) return <LoadingModal/>
   return (
     <div className="max-w-4xl mx-auto p-6">
       <div className="mb-6">
@@ -147,8 +107,8 @@ export default function TutorSchedule() {
             <div key={dayIndex} className="bg-gray-50 border border-gray-200 rounded-xl p-4">
               <div className="flex items-center justify-between border-b border-gray-200 mb-3 pb-2">
                 <div className="flex items-center gap-3">
-                  <h3 className="text-base font-semibold text-gray-800 capitalize">{day.day}</h3>
-                  <span className="text-xs text-gray-400">{day.date}</span>
+                  <h3 className="text-base font-semibold text-gray-800 capitalize">{day.dayFormat}</h3>
+                  <span className="text-xs text-gray-400">{day.dateFormat}</span>
                 </div>
                 <button
                   title="Thêm khung rảnh"
@@ -161,9 +121,9 @@ export default function TutorSchedule() {
 
               <div className="grid grid-cols-[repeat(auto-fit,minmax(120px,120px))] gap-2">
                 {day.timeSlots.map((slot, slotIndex) => (
-                  <div key={slot.slotId}>
+                  <div key={slotIndex}>
                     <button
-                      onClick={() => handleTimeSlotClick(day.day, slotIndex)}
+                      onClick={() => handleTimeSlotClick(slot, day.time)}
                       className={`flex flex-col items-center justify-center gap-1 min-h-[60px] p-2 border-2 rounded-lg text-sm font-medium transition-all ${slotClassByStatus(
                         slot.status
                       )}`}
@@ -190,8 +150,6 @@ export default function TutorSchedule() {
       {modalType === "request" && selectedTimeSlot && (
         <RequestModal
           slot={selectedTimeSlot.slot}
-          day={selectedTimeSlot.day}
-          date={selectedTimeSlot.date}
           onClose={closeModal}
         />
       )}

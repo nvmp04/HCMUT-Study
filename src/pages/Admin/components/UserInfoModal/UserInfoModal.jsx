@@ -4,6 +4,7 @@ import { fetchAPI } from "../../../../utils/fetchAPI";
 import { ConfirmBanModal } from "./ConfirmBanModal";
 import { ConfirmUnbanModal } from "./ConfirmUnbanModal";
 import ReportList from "./ReportList";
+import { API_BASE_URL } from "../../../../config/api.config";
 
 export default function UserInfoModal({
   role,
@@ -21,7 +22,7 @@ export default function UserInfoModal({
   // Gửi thông báo
   const handleSendNotification = async () => {
     if (notification.trim()) {
-      const url = "https://hcmut-study-backend.onrender.com/admin/sendnotification";
+      const url = API_BASE_URL + "/admin/sendnotification";
       await fetchAPI(url, "POST", { id: selectedUser.id, notification }, true);
       alert(`Đã gửi thông báo đến ${selectedUser.name}:\n"${notification}"`);
       setNotification("");

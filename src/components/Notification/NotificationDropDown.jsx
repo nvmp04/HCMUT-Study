@@ -3,13 +3,14 @@ import { Bell, Trash2 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { fetchAPI } from "../../utils/fetchAPI";
 import { useSocket } from "../../features/websocket/hooks/useSocket";
+import { API_BASE_URL } from "../../config/api.config";
 
 export default function NotificationDropdown() {
   const {socket} = useSocket();
   const queryClient = useQueryClient();
   const [isOpen, setIsOpen] = useState(false);
   const id = sessionStorage.getItem('id');
-  const url = 'https://hcmut-study-backend.onrender.com/notification/get'
+  const url = API_BASE_URL + '/notification/get'
   const {data, isLoading} = useQuery({
     queryKey: ['getnotifications'], 
     queryFn: ()=> fetchAPI(url, 'GET', null, true)
@@ -37,7 +38,6 @@ export default function NotificationDropdown() {
   }, []);
 
   if(isLoading) return <></>
-
   const formatTime = (timestamp) => {
     const now = new Date();
     const time = new Date(timestamp);
@@ -59,13 +59,13 @@ export default function NotificationDropdown() {
   })) || [];
   const unreadCount = notifications.filter(n => !n.read).length;
   const markAsRead = async (_id) => {
-    const url = 'https://hcmut-study-backend.onrender.com/notification/read'
+    const url = API_BASE_URL + '/notification/read'
     await fetchAPI(url, 'PUT', {_id}, true);
     queryClient.invalidateQueries(['getnotifications']);
   };
 
   const deleteNotification = async (_id) => {
-    const url = 'https://hcmut-study-backend.onrender.com/notification/delete';
+    const url = API_BASE_URL + '/notification/delete';
     await fetchAPI(url, 'DELETE', { _id }, true);
     queryClient.invalidateQueries(['getnotifications']);
   };

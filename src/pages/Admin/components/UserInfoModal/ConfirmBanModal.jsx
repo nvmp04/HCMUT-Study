@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Ban } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { fetchAPI } from "../../../../utils/fetchAPI";
+import { API_BASE_URL } from "../../../../config/api.config";
 
 export function ConfirmBanModal({selectedUser, onOpen, onClose, setShowConfirmBan}){
     if(!onOpen) return null;
@@ -13,7 +14,7 @@ export function ConfirmBanModal({selectedUser, onOpen, onClose, setShowConfirmBa
           return;
         }
         const role = selectedUser.role === 'student' ? 'student' : 'tutor';
-        const url = "https://hcmut-study-backend.onrender.com/admin/ban";
+        const url = API_BASE_URL + "/admin/ban";
         fetchAPI(url, 'PUT', {id: selectedUser.id, role, email: selectedUser.email, message: banMessage}, true);
         queryClient.invalidateQueries(['banlist']);
         queryClient.invalidateQueries([role==='tutor' ? 'tutorsboard' : 'studentsboard']);

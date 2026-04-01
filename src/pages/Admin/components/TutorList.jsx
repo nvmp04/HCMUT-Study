@@ -4,9 +4,10 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchAPI } from "../../../utils/fetchAPI";
 import { LoadingModal } from "../../../components/LoadingModal";
 import UserInfoModal from "./UserInfoModal/UserInfoModal";
+import { API_BASE_URL } from "../../../config/api.config";
 
 function TutorList() {
-  const url = "https://hcmut-study-backend.onrender.com/admin/gettutors";
+  const url = API_BASE_URL + "/admin/gettutors";
   const { data, isLoading } = useQuery({
     queryKey: ["tutorsboard"],
     queryFn: () => fetchAPI(url, "GET", null, true),

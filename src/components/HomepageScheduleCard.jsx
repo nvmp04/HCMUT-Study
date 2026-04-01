@@ -31,7 +31,7 @@ export default function HomePage({ data }) {
 
       {/* Content */}
       <div className="p-6">
-        {data.appointment.length === 0 ? (
+        {data.appointments.length === 0 ? (
           <div className="text-center py-8">
             <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center mx-auto mb-3">
               <Calendar className="text-slate-400" size={28} />
@@ -42,7 +42,7 @@ export default function HomePage({ data }) {
           </div>
         ) : (
           <div className="space-y-3">
-            {data.appointment.map((a) => (
+            {data.appointments.map((a) => (
               <div
                 key={a.id}
                 className="flex items-center justify-between gap-4 p-4 bg-slate-50 border border-slate-200 rounded-lg hover:shadow-md transition-all"

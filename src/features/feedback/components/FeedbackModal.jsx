@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Star } from "lucide-react";
 import { fetchAPI } from "../../../utils/fetchAPI";
 import { useQueryClient } from "@tanstack/react-query";
+import { API_BASE_URL } from "../../../config/api.config";
 
 export default function FeedbackModal({ open, appointment, onClose}) {
   const queryClient = useQueryClient();
@@ -10,7 +11,7 @@ export default function FeedbackModal({ open, appointment, onClose}) {
   const tutorId = appointment.tutorId;
   const handleSubmit = () => {
     if (rating > 0) {
-      const url = 'https://hcmut-study-backend.onrender.com/student/rating'
+      const url = API_BASE_URL + '/student/rating'
       fetchAPI(url, 'PUT', {tutorId, rating, _id: appointment._id}, true);
       queryClient.invalidateQueries(["studentschedule"]);
       onClose();

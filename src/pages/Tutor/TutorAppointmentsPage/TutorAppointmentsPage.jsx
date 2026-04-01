@@ -6,11 +6,12 @@ import SessionCard from "./SessionCard";
 import CancelModal from "../../../components/CancelModal";
 import { useSocket } from "../../../features/websocket/hooks/useSocket";
 import ReportModal from "../../../components/ReportModal";
+import { API_BASE_URL } from "../../../config/api.config";
 
 export default function TutorAppointmentsPage() {
   const {socket} = useSocket();
   const queryClient = useQueryClient();
-  const url = "https://hcmut-study-backend.onrender.com/tutor/getappointments";
+  const url = API_BASE_URL + "/tutor/getappointments";
 
   const { data, isLoading } = useQuery({
     queryKey: ["tutorappointments"],
@@ -57,7 +58,7 @@ export default function TutorAppointmentsPage() {
     setReportModal(true);
   };
   const handleSubmitReport = async (reportData) => {
-    const url = 'https://hcmut-study-backend.onrender.com/tutor/report'
+    const url = API_BASE_URL + '/tutor/report'
     await fetchAPI(url, 'PUT', {report: reportData}, true);
     queryClient.invalidateQueries({queryKey: ["tutorappointments"]});
   };

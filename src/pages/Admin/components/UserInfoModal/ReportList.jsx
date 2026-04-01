@@ -3,9 +3,10 @@ import { fetchAPI } from "../../../../utils/fetchAPI";
 import { LoadingModal } from "../../../../components/LoadingModal";
 import { useState } from "react";
 import ReportModal from "./ReportModal";
+import { API_BASE_URL } from "../../../../config/api.config";
 
 export default function ReportList({ id }) {
-  const url = "https://hcmut-study-backend.onrender.com/admin/getreportlist";
+  const url = API_BASE_URL + "/admin/getreportlist";
   const { data, isLoading } = useQuery({
     queryKey: ["reportlist", id],
     queryFn: async () => fetchAPI(url, "POST", { studentId: id }, true),

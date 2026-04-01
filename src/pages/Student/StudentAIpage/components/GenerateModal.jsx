@@ -3,6 +3,7 @@ import { X, Sparkles, Brain, ArrowRight } from "lucide-react";
 import AILoading from "./AILoading";
 import { fetchAPI } from "../../../../utils/fetchAPI";
 import { useQueryClient } from "@tanstack/react-query";
+import { API_BASE_URL } from "../../../../config/api.config";
 
 function GenerateModal({ isOpen, onClose }) {
   const queryClient = useQueryClient();
@@ -44,7 +45,7 @@ function GenerateModal({ isOpen, onClose }) {
   const generateAIPlan = async () => {
     try {
       setIsLoading(true);
-      const url = "https://hcmut-study-backend.onrender.com/student/ai";
+      const url = API_BASE_URL + "/student/ai";
       await fetchAPI(url, "POST", formData, true);
     } catch (err) {
       alert(err.message);

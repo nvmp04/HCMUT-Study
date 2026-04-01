@@ -11,7 +11,6 @@ export function AuthInitializer({children}){
         const timeLeft = getTokenExpiry(auth.token);
         if(timeLeft <= 0) {
             logout();
-            navigate('/login');
             return;
         }
         const timer = setTimeout(logout, timeLeft);

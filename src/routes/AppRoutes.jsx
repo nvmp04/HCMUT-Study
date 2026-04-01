@@ -5,7 +5,7 @@ import StudentHomepage from '../pages/Student/StudentHomepage';
 import StudentSchedulePage from '../pages/Student/StudentSchedulePage';
 import {AdminLayout, Layout} from '../layouts/Layout';
 import {ProtectedRoute, ProtectedLogInRoute, ProtectedBannedRoute} from './ProtectedRoute';
-import StudentMySchedulePage from '../pages/Student/StudentMySchedulePage/StudentMySchedulePage';
+import StudentMySchedulePage from '../pages/Student/StudentMySchedulePage';
 import TutorHomePage from '../pages/Tutor/TutorHomePage/TutorHomePage';
 import TutorSchedule from '../pages/Tutor/TutorSchedulePage/TutorSchedulePage';
 import StudentViewTutorPage from '../pages/Student/StudentViewTutorPage';

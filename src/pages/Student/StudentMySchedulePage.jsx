@@ -1,19 +1,19 @@
 import { useState, useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { LoadingModal } from "../../../components/LoadingModal";
-import AppointmentCard from "./AppointmentCard";
-import CancelModal from "../../../components/CancelModal";
-import CancelBeforeAcceptModal from "./CancelBeforeAcceptModal";
-import RescheduleModal from "./RescheduleModal";
-import FeedbackModal from "./FeedbackModal";
-import { useSocket } from "../../../features/websocket/hooks/useSocket";
-import ReportModal from "../../../components/ReportModal";
-import { useStudentAppointment } from "../../../features/schedule/hooks/useStudentAppointment";
-import { useAppointmentFilter } from "../../../features/schedule/hooks/useAppointmentFilter";
+import { LoadingModal } from "../../components/LoadingModal";
+import AppointmentCard from "../../features/appointment/components/AppointmentCard";
+import CancelModal from "../../components/CancelModal";
+import CancelBeforeAcceptModal from "../../features/appointment/components/CancelBeforeAcceptModal";
+import RescheduleModal from "../../features/appointment/components/RescheduleModal";
+import FeedbackModal from "../../features/feedback/components/FeedbackModal";
+import { useSocket } from "../../features/websocket/hooks/useSocket";
+import ReportModal from "../../components/ReportModal";
+import { useAppointments } from "../../features/appointment/hooks/useAppointments";
+import { useAppointmentFilter } from "../../features/appointment/hooks/useAppointmentFilter";
 
 export default function StudentMySchedulePage() {
   const {socket} = useSocket();
-  const { data, isLoading } = useStudentAppointment();
+  const { data, isLoading } = useAppointments();
   const queryClient = useQueryClient();
   const [warning, setWarning] = useState(false);
   const [superWarning, setSuperWarning] = useState(false);
@@ -42,7 +42,7 @@ export default function StudentMySchedulePage() {
     };
   }, [socket, modalState.selectedAppointment]);
 
-  const appointments = data?.appointment || [];
+  const appointments = data?.appointments || [];
   const {pendingAppt, cancelledAppt, completedAppt} = useAppointmentFilter(appointments);
   const filteredAppointments = {
     "pending": pendingAppt, 
@@ -136,21 +136,21 @@ export default function StudentMySchedulePage() {
       <CancelBeforeAcceptModal
         appointment={modalState.selectedAppointment}
         open={modalState.type === 'cancel-before-accept'}
-        onClose={()=>handleCloseModal()}
+        onClose={handleCloseModal}
       />
       <RescheduleModal
         open={modalState.type === 'reschedule'}
         appointment={modalState.selectedAppointment}
-        onClose={()=>handleCloseModal()}
+        onClose={handleCloseModal}
       />
       <FeedbackModal
         open={modalState.type === 'feedback'}
         appointment={modalState.selectedAppointment}
-        onClose={()=>handleCloseModal()}
+        onClose={handleCloseModal}
       />
       <ReportModal
         open={modalState.type === 'report'}
-        onClose={()=>handleCloseModal()}
+        onClose={handleCloseModal}
         appointment={modalState.selectedAppointment}
       />
     </div>

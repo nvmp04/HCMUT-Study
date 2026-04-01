@@ -4,16 +4,16 @@ import { useQuery } from '@tanstack/react-query';
 import { fetchAPI } from '../../../../utils/fetchAPI';
 import {LoadingModal} from '../../../../components/LoadingModal'
 import { TutorList } from './TutorList';
+import { API_BASE_URL } from '../../../../config/api.config';
 
 function Roadmap(){
-  const url = 'https://hcmut-study-backend.onrender.com/student/getroadmap';
+  const url = API_BASE_URL + '/student/getroadmap';
   const {data, isLoading} = useQuery({
     queryKey: ['roadmap'], 
     queryFn: async()=> fetchAPI(url, 'GET', null, true)
   })
   const [expandedStage, setExpandedStage] = useState(null);
   if(isLoading) return <LoadingModal/>
-
   return (
     <div className="min-h-screen to-purple-50 p-6">
       <div className="max-w-7xl mx-auto">

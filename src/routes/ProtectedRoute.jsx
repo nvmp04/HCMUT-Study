@@ -3,9 +3,10 @@ import { useAuth } from "../features/auth/hooks/useAuth";
 
 export function ProtectedRoute({allowedRole}){
     const {auth} = useAuth();
-    if(allowedRole !== auth.role){
-        return <Navigate to="/login" replace />;
+    if(allowedRole !== auth.role || !auth.role){
+        return <Navigate to="/" replace />;
     }
+    const hasAccess = auth && auth.role === allowedRole;
     return <Outlet/>
 }
 export function ProtectedLogInRoute(){

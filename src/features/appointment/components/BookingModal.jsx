@@ -4,6 +4,7 @@ import AIwarningModal from '../../../components/AIwarningModal';
 import { useBooking } from '../hooks/useBooking';
 
 export default function BookingModal({ tutor, selectedTimeSlot, onConfirm, onCancel }) {
+  console.log(selectedTimeSlot)
   const [sessionTitle, setSessionTitle] = useState('');
   const [modalType, setModalType] = useState('booking');
   const [warningMessage, setWarningMessage] = useState('');
@@ -50,7 +51,7 @@ export default function BookingModal({ tutor, selectedTimeSlot, onConfirm, onCan
                 <strong>Tutor:</strong> {tutor.name}
               </p>
               <p className="text-gray-600 text-sm mb-2">
-                <strong>Thời gian:</strong> {selectedTimeSlot.day}, {selectedTimeSlot.date}
+                <strong>Thời gian:</strong> {selectedTimeSlot.day}, {selectedTimeSlot.dateformat}
               </p>
               <p className="text-gray-600 text-sm">
                 <strong>Giờ học:</strong> {selectedTimeSlot.time}

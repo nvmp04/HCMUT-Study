@@ -5,9 +5,11 @@ import { useQueryClient } from "@tanstack/react-query";
 import AIcheckingModal from "../../../components/AIcheckingModal";
 import AIwarningModal from "../../../components/AIwarningModal";
 import { checkTutorReason } from "../../../services/AIcheck";
+import { API_BASE_URL } from "../../../config/api.config";
 
-export default function RequestModal({ slot, day, date, onClose }) {
+export default function RequestModal({ slot, onClose }) {
   if(!slot) return null;
+  console.log(slot)
   const queryClient = useQueryClient();
   const [step, setStep] = useState("info");
   const [method, setMethod] = useState("online");
@@ -25,8 +27,8 @@ export default function RequestModal({ slot, day, date, onClose }) {
           : "Vui lòng nhập liên kết cuộc họp!"
       );
     }
-    const content = { _id: slot._id, slotId: slot.slotId, type: method, detail };
-    const url = "https://hcmut-study-backend.onrender.com/tutor/response";
+    const content = { _id: slot.appointment._id, type: method, detail };
+    const url = API_BASE_URL + "/tutor/response";
     await fetchAPI(url, "PUT", content, true);
     queryClient.invalidateQueries(["schedule"]);
     onClose();
@@ -51,11 +53,10 @@ export default function RequestModal({ slot, day, date, onClose }) {
       // Nếu hợp lệ 
       setModalType('successDecline');
       const content = {
-        _id: slot._id,
-        reason: declineReason,
-        slotId: slot.slotId,
+        _id: slot.appointment._id,
+        reason: declineReason
       };
-      const url = "https://hcmut-study-backend.onrender.com/tutor/decline";
+      const url = API_BASE_URL + "/tutor/decline";
       await fetchAPI(url, "DELETE", content, true);
       queryClient.invalidateQueries(["schedule"]);
     } catch (err) {
@@ -105,13 +106,13 @@ export default function RequestModal({ slot, day, date, onClose }) {
             </h3>
             <div className="mb-4 bg-gray-50 p-3 rounded-md border border-gray-100">
               <p className="text-sm">
-                <strong>Học viên:</strong> {slot.studentName}
+                <strong>Học viên:</strong> {slot.appointment.studentName}
               </p>
               <p className="text-sm">
-                <strong>Tên buổi học:</strong> {slot.title}
+                <strong>Tên buổi học:</strong> {slot.appointment.title}
               </p>
               <p className="text-sm mt-2">
-                <strong>Thời gian:</strong> {day}, {date} — {slot.time}
+                <strong>Thời gian:</strong> {slot.appointment.date} — {slot.time}
               </p>
             </div>
 
