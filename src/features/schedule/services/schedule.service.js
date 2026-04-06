@@ -16,7 +16,7 @@ export async function studentBooking(profile, tutor, selectedTimeSlot, sessionTi
 }
 
 export async function CancelBeforeAccept(appointment){
-    const url = buildAPIUrl(API_ENDPOINTS.SCHEDULE.CANCEL_BEFORE_ACCEPT);
+    const url = buildAPIUrl(API_ENDPOINTS.APPOINTMENT.CANCEL_BEFORE_ACCEPT);
     await fetchAPI(url, 'DELETE', {_id: appointment._id}, true);
 }
 

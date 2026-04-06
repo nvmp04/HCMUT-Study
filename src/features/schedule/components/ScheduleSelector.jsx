@@ -31,12 +31,10 @@ export default function ScheduleSelector({ tutorId, onSelect, selectedTimeSlot }
       setExpiredTimeModal(true);
       return;
     }
-
     // 2. Check trùng lịch của Student
-    const sameDayAppt = data.appointments.filter((a) => {
+    const sameDayAppt = data.active.filter((a) => {
       return (
-        (a.date === day.dateFormat || a.date === day.dayFormat) &&
-        (a.status === 'accepted' || a.status === 'pending')
+        (a.date === day.dateFormat) 
       );
     });
 

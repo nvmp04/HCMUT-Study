@@ -42,13 +42,13 @@ function NotificationModal() {
         ? ["appointment-updated", "decline"]
         : ["booksession", "studentcancel"];
 
-    function handleStudentEvent({ title, slotId, name, studentId, reason, type }) {
+    function handleStudentEvent({  slotId, name, studentId, reason, type }) {
       if (id !== studentId) return;
       setData({ slotId, name, reason });
       setType(type);
       setNotifiModal(true);
     }
-    function handleTutorEvent({ title, slotId, name, tutorId, reason, type }) {
+    function handleTutorEvent({ slotId, name, tutorId, reason, type }) {
       if (id !== tutorId) return;
       setData({ slotId, name, reason });
       setType(type);

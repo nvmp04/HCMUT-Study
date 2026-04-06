@@ -1,4 +1,4 @@
-import { Home, Calendar, Clock, Zap, Book, Menu } from "lucide-react";
+import { Home, Calendar, Clock, Zap, Book, Menu, Search } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
@@ -12,8 +12,8 @@ function NavigationBar() {
   if (role === 'student') {
     navItems = [
       { to: '/student', icon: Home, label: 'Trang Chủ' },
-      { to: '/student/schedule', icon: Calendar, label: 'Đặt Lịch' },
-      { to: '/student/myschedule', icon: Clock, label: 'Lịch' },
+      { to: '/student/schedule', icon: Search, label: 'Đặt Lịch' },
+      { to: '/student/myschedule', icon: Calendar, label: 'Lịch' },
       { to: '/student/ai', icon: Zap, label: 'Lộ Trình' },
       { to: '/student/library', icon: Book, label: 'Thư Viện' },
     ];

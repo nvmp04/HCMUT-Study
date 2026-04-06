@@ -12,7 +12,7 @@ import StudentViewTutorPage from '../pages/Student/StudentViewTutorPage';
 import TutorAppointmentsPage from '../pages/Tutor/TutorAppointmentsPage/TutorAppointmentsPage';
 import AdminDashboard from '../pages/Admin/AdminDashboard';
 import BanPage from '../pages/BanPage';
-import StudentAIpage from '../pages/Student/StudentAIpage/StudentAIpage';
+import StudentAIpage from '../pages/Student/StudentAIpage';
 import LibraryPage from '../pages/LibraryPage/LibraryPage';
 function AppRoutes(){
   return(

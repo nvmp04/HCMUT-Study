@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { Calendar, Sparkles, Clock, Target, CheckCircle2 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
-import { fetchAPI } from '../../../../utils/fetchAPI';
-import {LoadingModal} from '../../../../components/LoadingModal'
+import { fetchAPI } from '../../../utils/fetchAPI';
+import { LoadingModal } from '../../../components/LoadingModal';
 import { TutorList } from './TutorList';
-import { API_BASE_URL } from '../../../../config/api.config';
+import { API_ENDPOINTS, buildAPIUrl } from '../../../config/api.config';
 
 function Roadmap(){
-  const url = API_BASE_URL + '/student/getroadmap';
+  const url = buildAPIUrl(API_ENDPOINTS.ROADMAP.GET_ROADMAP);
   const {data, isLoading} = useQuery({
     queryKey: ['roadmap'], 
     queryFn: async()=> fetchAPI(url, 'GET', null, true)

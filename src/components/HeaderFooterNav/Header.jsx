@@ -6,7 +6,6 @@ import { LogoutModal } from '../LogoutModal';
 import { useAuth } from '../../features/auth/hooks/useAuth';
 import { useProfile } from '../../features/profile/hooks/useProfile';
 import NotificationDropdown from '../Notification/NotificationDropDown';
-import { LoadingModal } from '../LoadingModal';
 import logo from '../../assets/logo.png';
 import avt from '../../assets/avt.jpg';
 
@@ -27,7 +26,7 @@ const LogoSection = ({ role }) => (
 
 function  UserActions ({ isProfileOpen, setIsProfileOpen, dropdownRef, onLogoutClick }) {
   const {data: profile, isLoading} = useProfile();
-  if(isLoading) return <LoadingModal/>
+  if(isLoading) return null;
   return <>
   <div className="flex items-center bg-slate-100/80 p-1 rounded-full border border-slate-200">
         <button className="p-2 text-slate-600 hover:text-indigo-600 hover:bg-white rounded-full transition-all">

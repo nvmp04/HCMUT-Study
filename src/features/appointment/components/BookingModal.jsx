@@ -4,7 +4,6 @@ import AIwarningModal from '../../../components/AIwarningModal';
 import { useBooking } from '../hooks/useBooking';
 
 export default function BookingModal({ tutor, selectedTimeSlot, onConfirm, onCancel }) {
-  console.log(selectedTimeSlot)
   const [sessionTitle, setSessionTitle] = useState('');
   const [modalType, setModalType] = useState('booking');
   const [warningMessage, setWarningMessage] = useState('');

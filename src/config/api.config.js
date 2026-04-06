@@ -19,14 +19,23 @@ export const API_ENDPOINTS = {
     DOCUMENTS: '/library/documents',
   },
   SCHEDULE: {
-    CANCEL_BEFORE_ACCEPT: '/student/cancelbeforeaccept',
-    DELETE_CANCELLED: '/student/deletecancelled',
     GET_TUTOR_SCHEDULE: '/schedule/tutor-schedule'
   },
   APPOINTMENT: {
     GET_APPOINTMENT: '/appointments',
     MAKE_APPOINTMENT: '/appointments', 
-    RESCHEDULE: '/appointments'
+    RESCHEDULE: '/appointments',
+    CANCEL: '/appointments',
+    DELETE_HISTORY: '/appointments/history',
+    CANCEL_BEFORE_ACCEPT: '/appointments/pending',
+  },
+  ROADMAP: {
+    GOAL: '/roadmap', 
+    GET_ROADMAP: '/roadmap',
+    SUITABLE_TUTORS: '/roadmap/suitable-tutors'
+  },
+  RATING: {
+    RATE: '/rating'
   },
   PROFILE: {
     USER_PROFILE: '/user/profile',

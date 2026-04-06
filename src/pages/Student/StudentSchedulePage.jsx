@@ -46,9 +46,6 @@ function StudentSchedulePage() {
     <div className="max-w-[1000px] mx-auto p-4 md:p-8 min-h-screen bg-transparent font-sans relative z-10">
       
       <div className="text-center mt-8 mb-12">
-        <div className="inline-flex items-center gap-2 bg-blue-50/50 text-blue-600 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-4 border border-blue-100/50 backdrop-blur-sm">
-          <Sparkles size={14} /> Khám phá tri thức
-        </div>
         <h1 className="text-4xl md:text-5xl font-black text-slate-900 mb-4 tracking-tight">
           Tìm kiếm <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-violet-600">Gia sư phù hợp</span>
         </h1>

@@ -31,8 +31,18 @@ export default {
         'display-xl': ['4.5rem', { lineHeight: '1.1', fontWeight: '800' }],
       },
       spacing: {
+        '0.75': '0.1875rem',
         '4.5': '1.125rem',
         '5.5': '1.375rem',
+      },
+      height: {
+        '15': '3.75rem',
+      },
+      inset: {
+        '19': '4.75rem',
+      },
+      fontFamily: {
+        'dm': ["'DM Sans'", "'Segoe UI'", 'system-ui', 'sans-serif'],
       },
       borderRadius: {
         '3xl': '24px',

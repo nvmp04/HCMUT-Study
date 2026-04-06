@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchAPI } from "../../../../utils/fetchAPI";
-import { LoadingModal } from "../../../../components/LoadingModal";
-import TutorCard from "../../../../features/profile/components/shared/TutorCard"
-import { API_BASE_URL } from "../../../../config/api.config";
+import { fetchAPI } from "../../../utils/fetchAPI";
+import { LoadingModal } from "../../../components/LoadingModal";
+import TutorCard from "../../profile/components/shared/TutorCard"
+import {API_ENDPOINTS, buildAPIUrl } from "../../../config/api.config";
 
 export function TutorList({ tutorsId }) {
-  const url = API_BASE_URL + "/student/getsuitabletutors";
+  const url = buildAPIUrl(API_ENDPOINTS.ROADMAP.SUITABLE_TUTORS)
   const { data, isLoading } = useQuery({
     queryKey: ["suitabletutors"],
     queryFn: async () => await fetchAPI(url, "POST", { tutorsId }, true),
