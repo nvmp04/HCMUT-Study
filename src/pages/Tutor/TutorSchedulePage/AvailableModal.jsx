@@ -1,6 +1,6 @@
 import { X } from "lucide-react";
 
-export default function AvailableModal({ slot, day, date, onClose, onDelete }) {
+export default function AvailableModal({ slot, onClose, onDelete }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
       <div className="bg-white rounded-2xl p-6 max-w-sm w-[92%] relative">
@@ -13,7 +13,7 @@ export default function AvailableModal({ slot, day, date, onClose, onDelete }) {
 
         <h3 className="text-lg font-semibold text-slate-800 mb-3">Khung rảnh</h3>
         <div className="mb-4 text-sm text-slate-600">
-          Khung: <strong>{slot.time}</strong> — {day}, {date}
+          Khung: <strong>{slot.time}</strong> — {slot.dayFormat}, {slot.dateFormat}
         </div>
 
         <div className="flex justify-end gap-3">

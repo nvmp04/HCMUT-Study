@@ -3,7 +3,7 @@ import { X, Clock } from "lucide-react";
 import { checkTimeOverlap } from "../../../utils/checkTimeOverlap";
 import { fetchAPI } from "../../../utils/fetchAPI";
 import { useQueryClient } from "@tanstack/react-query";
-import { API_BASE_URL } from "../../../config/api.config";
+import { API_BASE_URL, API_ENDPOINTS, buildAPIUrl } from "../../../config/api.config";
 
 export const weekdayMap2 = {
     "Chủ Nhật": "sun",
@@ -39,8 +39,8 @@ export function AddTimeModal({ onClose, day }) {
       return;
     }
     else{
-      const url = API_BASE_URL + '/tutor/adddeleteslot';
-      const content = {day: weekdayMap2[day.day], time: `${startTime} - ${endTime}`, type: 'add'};
+      const url = buildAPIUrl(API_ENDPOINTS.SCHEDULE.ADD_SLOT);
+      const content = {day: weekdayMap2[day.dayFormat], time: `${startTime} - ${endTime}`};
       await fetchAPI(url, 'PUT', content, true);
       queryClient.invalidateQueries(['schedule']);
       setError("");

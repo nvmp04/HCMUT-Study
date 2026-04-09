@@ -5,11 +5,10 @@ import { useQueryClient } from "@tanstack/react-query";
 import AIcheckingModal from "../../../components/AIcheckingModal";
 import AIwarningModal from "../../../components/AIwarningModal";
 import { checkTutorReason } from "../../../services/AIcheck";
-import { API_BASE_URL } from "../../../config/api.config";
+import { API_BASE_URL, API_ENDPOINTS, buildAPIUrl } from "../../../config/api.config";
 
 export default function RequestModal({ slot, onClose }) {
   if(!slot) return null;
-  console.log(slot)
   const queryClient = useQueryClient();
   const [step, setStep] = useState("info");
   const [method, setMethod] = useState("online");
@@ -28,8 +27,8 @@ export default function RequestModal({ slot, onClose }) {
       );
     }
     const content = { _id: slot.appointment._id, type: method, detail };
-    const url = API_BASE_URL + "/tutor/response";
-    await fetchAPI(url, "PUT", content, true);
+    const url = buildAPIUrl(API_ENDPOINTS.APPOINTMENT.ACCEPT);
+    await fetchAPI(url, "PATCH", content, true);
     queryClient.invalidateQueries(["schedule"]);
     onClose();
   }
@@ -56,7 +55,7 @@ export default function RequestModal({ slot, onClose }) {
         _id: slot.appointment._id,
         reason: declineReason
       };
-      const url = API_BASE_URL + "/tutor/decline";
+      const url = buildAPIUrl(API_ENDPOINTS.APPOINTMENT.DECLINE);
       await fetchAPI(url, "DELETE", content, true);
       queryClient.invalidateQueries(["schedule"]);
     } catch (err) {

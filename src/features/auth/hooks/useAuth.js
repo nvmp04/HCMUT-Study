@@ -13,16 +13,17 @@ export function useAuth(){
             setBanned(true);
             return;
         }
+        
         if(response.error) return {error: response.error}
         setAuth({
             token: response.token, 
-            role: response.user.role
+            role: response.user.currentRole
         });
         sessionStorage.setItem('token', response.token);
-        sessionStorage.setItem('role', response.user.role);
+        sessionStorage.setItem('role', response.user.currentRole);
         const decoded = jwtDecode(response.token);
-        const { id } = decoded;
-        sessionStorage.setItem('id', id);
+        const { sub } = decoded;
+        sessionStorage.setItem('id', sub);
         return response.user;
     }
     const logout = () => {

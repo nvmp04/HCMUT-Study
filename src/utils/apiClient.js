@@ -30,7 +30,7 @@ export const createFeatureClient = (baseEndpoint) => {
 
 /**
  * Simple wrapper to use full endpoints with automatic base URL
- * @param {string} endpoint - Full endpoint path (e.g., '/library/documents')
+ * @param {string} endpoint - Full endpoint path 
  * @param {string} method - HTTP method
  * @param {*} data - Request data
  * @param {boolean} auth - Include authorization

@@ -8,7 +8,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchAPI } from "../../../utils/fetchAPI";
 import { EndModal } from "./EndModal";
 import { useSocket } from "../../../features/websocket/hooks/useSocket";
-import { API_BASE_URL } from "../../../config/api.config";
+import { API_BASE_URL, API_ENDPOINTS, buildAPIUrl } from "../../../config/api.config";
 import {useTutorSchedule} from '../../../features/schedule/hooks/useTutorSchedule'
 import { LoadingModal } from "../../../components/LoadingModal";
 
@@ -17,11 +17,6 @@ export default function TutorSchedule() {
   const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
   const [modalType, setModalType] = useState(null);
   const {socket} = useSocket();
-  const url = API_BASE_URL + '/tutor/getschedule';
-  // const {data, isLoading} = useQuery({
-  //   queryKey: ['schedule'], 
-  //   queryFn: async ()=> await fetchAPI(url, 'GET', null, true)
-  // })
   const id = sessionStorage.getItem('id');
   useEffect(() => {
     if(!socket) return;
@@ -43,8 +38,12 @@ export default function TutorSchedule() {
     };
   }, [queryClient, socket]);
   const {weeklySchedule, isScheduleLoading} = useTutorSchedule(id);
-  const handleTimeSlotClick = (slot) => {
-    setSelectedTimeSlot({ slot });
+  const handleTimeSlotClick = (slot, day) => {
+    setSelectedTimeSlot({ 
+      ...slot,
+      dateFormat: day.dateFormat,
+      dayFormat: day.dayFormat
+    });
     if (slot.status === "pending") setModalType("request");
     else if (slot.status === "accepted") {
       const endTime = slot.time.split(' - ')[1];
@@ -63,11 +62,10 @@ export default function TutorSchedule() {
   };
 
   async function handleConfirmDeleteAvailable(){
-    const url = API_BASE_URL + '/tutor/adddeleteslot';
-    const {day, slot} = selectedTimeSlot;
-    const {time} = slot;
-    const content = {day: weekdayMap2[day], time, type: 'delete'};
-    await fetchAPI(url, 'PUT', content, true);
+    const url = buildAPIUrl(API_ENDPOINTS.SCHEDULE.DELETE_SLOT);
+    const {dayFormat, time} = selectedTimeSlot;
+    const content = {day: weekdayMap2[dayFormat], time};
+    await fetchAPI(url, 'DELETE', content, true);
     queryClient.invalidateQueries(['schedule']);
     closeModal();
   };
@@ -123,7 +121,7 @@ export default function TutorSchedule() {
                 {day.timeSlots.map((slot, slotIndex) => (
                   <div key={slotIndex}>
                     <button
-                      onClick={() => handleTimeSlotClick(slot, day.time)}
+                      onClick={() => handleTimeSlotClick(slot, day)}
                       className={`flex flex-col items-center justify-center gap-1 min-h-[60px] p-2 border-2 rounded-lg text-sm font-medium transition-all ${slotClassByStatus(
                         slot.status
                       )}`}
@@ -149,24 +147,20 @@ export default function TutorSchedule() {
       {/* ---- MODALS ---- */}
       {modalType === "request" && selectedTimeSlot && (
         <RequestModal
-          slot={selectedTimeSlot.slot}
+          slot={selectedTimeSlot}
           onClose={closeModal}
         />
       )}
 
       {modalType === "confirmed" && selectedTimeSlot && (
         <ConfirmedModal
-          slot={selectedTimeSlot.slot}
-          day={selectedTimeSlot.day}
-          date={selectedTimeSlot.date}
+          slot={selectedTimeSlot}
           onClose={closeModal}
         />
       )}
       {modalType === "availableActions" && selectedTimeSlot && (
         <AvailableModal
-          slot={selectedTimeSlot.slot}
-          day={selectedTimeSlot.day}
-          date={selectedTimeSlot.date}
+          slot={selectedTimeSlot}
           onClose={closeModal}
           onDelete={handleConfirmDeleteAvailable}
         />

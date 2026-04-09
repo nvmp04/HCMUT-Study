@@ -1,93 +1,66 @@
-import { Star, Calendar, ShieldCheck, GraduationCap, BookOpen, MessageCircle } from "lucide-react";
 import { Link } from "react-router-dom";
-import avt from '../../../../assets/avt.jpg'; 
+import { Star, CheckCircle, MessageSquare, Calendar, GraduationCap } from "lucide-react";
+
+function getInitials(name = "") {
+  return name
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((w) => w[0].toUpperCase())
+    .join("");
+}
 
 export default function TutorCard({ tutor }) {
-  const subjects = tutor?.subjects || [];
-
   return (
-    <div className="group relative flex flex-col md:flex-row bg-white/60 backdrop-blur-xl border border-white/60 rounded-[2rem] p-5 md:p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_15px_35px_rgb(0,0,0,0.06)] transition-all duration-300 overflow-hidden gap-6">
-      <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-blue-100 to-violet-100 rounded-full blur-3xl opacity-40 group-hover:opacity-70 transition-opacity pointer-events-none"></div>
-
-      {/* CỘT 1: Avatar & Đánh giá */}
-      <div className="flex flex-col items-center min-w-[140px] z-10">
-        <div className="relative mb-3">
-          <img 
-            src={avt} 
-            alt={tutor?.name} 
-            className="w-24 h-24 md:w-28 md:h-28 rounded-2xl object-cover border-4 border-white shadow-sm" 
-          />
-          <div className="absolute -bottom-2 -right-2 w-5 h-5 bg-green-500 border-2 border-white rounded-full"></div>
+    <div className="group flex flex-col md:flex-row w-full bg-[#161e2e]/30 border border-white/[0.05] rounded-lg overflow-hidden hover:border-white/20 transition-all duration-200">
+      
+      {/* Avatar vuông vức hơn, bớt màu mè */}
+      <div className="p-6 md:w-[140px] flex-shrink-0 flex md:flex-col items-center gap-4">
+        <div className="w-20 h-20 bg-slate-800 rounded-md overflow-hidden border border-white/10">
+          {tutor?.avatarUrl ? (
+            <img src={tutor.avatarUrl} alt="" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all" />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center text-slate-500 font-bold">{getInitials(tutor?.name)}</div>
+          )}
         </div>
-        
-        <div className="flex flex-col items-center">
-          <div className="flex items-center gap-1 text-slate-800 font-bold text-lg">
-            <Star className="fill-yellow-400 text-yellow-400" size={18} />
-            <span>{tutor?.rating || "N/A"}</span>
-          </div>
-          <span className="text-slate-500 text-xs font-medium">{tutor?.totalReviews || 0} đánh giá</span>
+        <div className="flex items-center gap-1">
+          <Star size={12} className="text-emerald-500 fill-emerald-500" />
+          <span className="text-sm font-semibold text-white">{tutor?.rating || "5.0"}</span>
         </div>
       </div>
 
-      {/* CỘT 2: Thông tin chi tiết */}
-      <div className="flex-1 flex flex-col z-10">
-        <div className="flex items-start justify-between mb-1">
-          <h3 className="text-xl md:text-2xl font-bold text-slate-900 flex items-center gap-2">
-            {tutor?.name}
-            <ShieldCheck size={20} className="text-blue-500" />
-          </h3>
+      {/* Thông tin: Text phẳng, phân cấp bằng độ đậm nhạt của chữ */}
+      <div className="flex-1 p-6 flex flex-col justify-center border-t md:border-t-0 md:border-l border-white/[0.05]">
+        <div className="flex items-center gap-2 mb-1">
+          <span className="text-[9px] font-bold text-emerald-500 uppercase tracking-tighter">Verified</span>
+          <span className="text-[9px] font-medium text-slate-600 uppercase tracking-widest">{tutor?.department}</span>
         </div>
-
-        <div className="flex flex-wrap items-center gap-4 text-slate-600 text-sm font-medium mb-3">
-          <span className="flex items-center gap-1.5">
-            <GraduationCap size={16} className="text-violet-500"/> 
-            {tutor?.department || "Chưa cập nhật khoa"}
-          </span>
-          <span className="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
-          <span className="flex items-center gap-1.5">
-            <BookOpen size={16} className="text-orange-400"/> 
-            {subjects.length} môn học
-          </span>
-        </div>
-
-        <p className="text-slate-600 text-sm leading-relaxed line-clamp-2 md:line-clamp-3 mb-4">
-          {tutor?.bio || "Giảng viên này chưa cập nhật phần giới thiệu chi tiết."}
+        <h3 className="text-lg font-semibold text-slate-200 mb-2">{tutor?.name}</h3>
+        <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed mb-4 max-w-2xl">
+          {tutor?.bio || "Thông tin giới thiệu về kỹ năng và kinh nghiệm giảng dạy."}
         </p>
-
-        <div className="flex flex-wrap gap-2 mt-auto">
-          {subjects.slice(0, 4).map((sub, idx) => (
-            <span 
-              key={idx} 
-              className="bg-blue-50/80 border border-blue-100 text-blue-700 text-[11px] font-bold px-3 py-1.5 rounded-lg"
-            >
-              {sub}
-            </span>
+        <div className="flex flex-wrap gap-2">
+          {tutor?.subjects?.slice(0, 3).map((sub, i) => (
+            <span key={i} className="text-[10px] text-slate-400 bg-white/5 px-2 py-1 rounded-sm border border-white/5">{sub}</span>
           ))}
         </div>
       </div>
 
-      {/* CỘT 3: Hành động */}
-      <div className="flex flex-col md:items-end justify-center md:min-w-[180px] z-10 border-t md:border-t-0 md:border-l border-slate-100/50 pt-5 md:pt-0 md:pl-6 mt-4 md:mt-0 gap-3">
-        <div className="flex flex-col md:items-end mb-2">
-          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Chi phí</span>
-          <span className="text-2xl font-black text-slate-800">Miễn phí</span>
+      {/* Action: Chỉ giữ 1 nút Emerald nổi bật, còn lại làm chìm */}
+      <div className="p-6 md:w-[180px] flex md:flex-col justify-between items-center md:justify-center gap-4 bg-black/10">
+        <div className="text-center">
+          <span className="block text-[10px] text-slate-600 uppercase">Học phí</span>
+          <span className="text-lg font-bold text-white tracking-tight">Miễn phí</span>
         </div>
-
-        <Link
-          to={`/student/schedule/${tutor?.id}`}
-          /* ĐÃ LOẠI BỎ: group-hover:scale-[1.02] */
-          className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold px-5 py-3 rounded-xl text-sm shadow-[0_4px_14px_0_rgba(59,130,246,0.3)] flex items-center justify-center gap-2 transition-colors duration-200"
-        >
-          <Calendar size={18} />
-          Xem lịch trống
-        </Link>
-        
-        <button className="w-full bg-white/80 hover:bg-white text-slate-700 border border-slate-200 font-bold px-5 py-2.5 rounded-xl text-sm shadow-sm transition-colors flex items-center justify-center gap-2">
-          <MessageCircle size={18} className="text-slate-400" />
-          Nhắn tin
-        </button>
+        <div className="flex flex-col gap-2 w-full">
+          <Link to={`/student/schedule/${tutor?.id}`} className="w-full py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-bold uppercase text-center rounded-sm transition-colors">
+            Xem lịch dạy
+          </Link>
+          <button className="w-full py-2 border border-white/10 text-slate-400 hover:text-white text-[11px] font-bold uppercase text-center rounded-sm transition-colors">
+            Gửi tin nhắn
+          </button>
+        </div>
       </div>
-
     </div>
   );
 }

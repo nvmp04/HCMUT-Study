@@ -1,152 +1,87 @@
 import { motion } from 'framer-motion';
-import { CheckCircle, Zap, Shield, BookOpen } from 'lucide-react';
-import AbstractBlobs from './AbstractBlobs';
-import GridPattern from './GridPattern';
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.2,
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6 },
-  },
-};
+import { ArrowUpRight } from 'lucide-react';
 
 export default function About() {
-  const features = [
+  const standards = [
     {
-      icon: CheckCircle,
-      title: 'Verified Tutors',
-      description: 'Carefully vetted educators with proven academic excellence and mentoring expertise.',
-      color: 'from-emerald-400 to-emerald-600',
+      no: "01",
+      title: "Đội ngũ Mentor uy tín",
+      description: "Chúng tôi không chỉ chọn người giỏi, chúng tôi chọn những chuyên gia có khả năng truyền đạt và tư duy thực chiến."
     },
     {
-      icon: Shield,
-      title: 'Secure Payments',
-      description: 'Safe, transparent transactions with multiple payment methods and buyer protection.',
-      color: 'from-blue-400 to-blue-600',
+      no: "02",
+      title: "Cá nhân hóa lộ trình",
+      description: "Không có giáo trình chung cho tất cả. Mọi buổi học đều được thiết kế riêng dựa trên lỗ hổng kiến thức của bạn."
     },
     {
-      icon: Zap,
-      title: 'University-Sync',
-      description: 'Seamlessly align sessions with your university schedule and academic calendar.',
-      color: 'from-amber-400 to-amber-600',
-    },
-    {
-      icon: BookOpen,
-      title: 'Quality Content',
-      description: 'Structured learning materials and personalized study plans tailored to your needs.',
-      color: 'from-purple-400 to-purple-600',
-    },
+      no: "03",
+      title: "Minh bạch & An toàn",
+      description: "Hệ thống thanh toán và đánh giá được vận hành tự động, đảm bảo quyền lợi tuyệt đối cho cả người học và người dạy."
+    }
   ];
 
   return (
-    <section
-      id="about"
-      className="py-24 px-4 sm:px-6 lg:px-8 bg-white relative overflow-hidden transition-colors duration-700"
-    >
-      {/* Visual Elements */}
-      <AbstractBlobs count={2} opacity={0.08} />
-      <GridPattern opacity={0.03} size={50} />
+    <section id="about" className="py-32 bg-slate-950 text-white overflow-hidden">
+      <div className="max-w-[1400px] mx-auto px-8 md:px-16">
+        
+        {/* Header Section: Left Aligned */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-end mb-32">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="space-y-6"
+          >
+            <p className="text-emerald-500 font-black text-[10px] tracking-[0.5em] uppercase">
+              Our Vision
+            </p>
+            <h2 className="text-5xl md:text-7xl font-[1000] tracking-tighter uppercase leading-[0.9]">
+              Tiêu chuẩn <br />
+              <span className="text-slate-700 italic font-light lowercase tracking-normal">mới trong</span> <br />
+              Giáo dục.
+            </h2>
+          </motion.div>
+          
+          <motion.p 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            className="text-slate-500 text-xl font-light leading-relaxed max-w-md pb-2"
+          >
+            Chúng tôi tin rằng giáo dục hiệu quả nhất đến từ sự kết nối giữa người đi trước và người đi sau. Không rườm rà, tập trung thẳng vào mục tiêu.
+          </motion.p>
+        </div>
 
-      {/* Background Decoration */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-cyan-50 rounded-full blur-3xl opacity-40 -z-10" />
+        {/* The Standards: Typography-focused List */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-1px bg-white/5 border-y border-white/5">
+          {standards.map((item, index) => (
+            <motion.div 
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1 }}
+              viewport={{ once: true }}
+              className="group p-12 hover:bg-emerald-500/5 transition-colors duration-500 border-r last:border-r-0 border-white/5"
+            >
+              <span className="text-5xl font-black text-slate-800 group-hover:text-emerald-500/20 transition-colors">
+                {item.no}
+              </span>
+              <h3 className="text-xl font-bold mt-8 mb-4 uppercase tracking-widest text-emerald-400">
+                {item.title}
+              </h3>
+              <p className="text-slate-500 leading-relaxed font-light">
+                {item.description}
+              </p>
+              <div className="mt-8 opacity-0 group-hover:opacity-100 transition-opacity">
+                <ArrowUpRight className="text-emerald-500" size={24} />
+              </div>
+            </motion.div>
+          ))}
+        </div>
 
-      <div className="max-w-7xl mx-auto">
-        {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className="text-center mb-20"
-        >
-          <div className="inline-block mb-4">
-            <span className="px-4 py-2 bg-primary-50 border border-primary-200 rounded-full text-sm font-semibold text-primary-700">
-              How It Works
-            </span>
-          </div>
-          <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">
-            Our Mission & Values
-          </h2>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-            We're committed to transforming education by connecting passionate learners with expert mentors, fostering meaningful relationships that drive academic success.
-          </p>
-        </motion.div>
-
-        {/* Bento Grid */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
-        >
-          {features.map((feature, index) => {
-            const Icon = feature.icon;
-            return (
-              <motion.div
-                key={index}
-                variants={itemVariants}
-                whileHover={{ y: -8 }}
-                className="group relative"
-              >
-                <div className="h-full p-8 rounded-2xl bg-gradient-to-br from-white to-slate-50 border border-slate-200 hover:border-primary-200 shadow-soft hover:shadow-soft-lg transition-all duration-300">
-                  {/* Icon Background */}
-                  <div className={`inline-flex p-3 rounded-xl bg-gradient-to-br ${feature.color} mb-6`}>
-                    <Icon className="w-6 h-6 text-white" />
-                  </div>
-
-                  {/* Content */}
-                  <h3 className="text-lg font-bold text-slate-900 mb-3">
-                    {feature.title}
-                  </h3>
-                  <p className="text-slate-600 text-sm leading-relaxed">
-                    {feature.description}
-                  </p>
-
-                  {/* Hover Effect Line */}
-                  <div className="absolute bottom-0 left-0 h-1 bg-gradient-to-r from-primary-600 to-primary-400 rounded-full w-0 group-hover:w-full transition-all duration-300" />
-                </div>
-              </motion.div>
-            );
-          })}
-        </motion.div>
-
-        {/* Additional Info Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          viewport={{ once: true }}
-          className="mt-20 pt-20 border-t border-slate-200"
-        >
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <h4 className="text-3xl font-bold text-primary-600 mb-2">Custom Matching</h4>
-              <p className="text-slate-600">Our AI algorithm pairs you with the perfect tutor based on your learning style and academic goals.</p>
-            </div>
-            <div className="text-center">
-              <h4 className="text-3xl font-bold text-primary-600 mb-2">Flexible Scheduling</h4>
-              <p className="text-slate-600">Book sessions around your university timetable with our intelligent availability matching system.</p>
-            </div>
-            <div className="text-center">
-              <h4 className="text-3xl font-bold text-primary-600 mb-2">Progress Tracking</h4>
-              <p className="text-slate-600">Monitor your growth with detailed analytics and personalized feedback from your tutor.</p>
-            </div>
-          </div>
-        </motion.div>
+        {/* Floating Background Element */}
+        <div className="mt-32 flex justify-center">
+            <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-emerald-500/20 to-transparent"></div>
+        </div>
       </div>
     </section>
   );

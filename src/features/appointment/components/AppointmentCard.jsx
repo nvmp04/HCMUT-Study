@@ -1,11 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { 
-  Calendar, Clock, User, MapPin, Video, AlertCircle, FileText, 
-  CheckCircle, XCircle, Edit, Star, Trash, MonitorUp, Paperclip, X
+  Clock, User, MapPin, Video, AlertCircle, FileText, 
+  CheckCircle, Trash, MonitorUp, Paperclip, X, Edit, Zap
 } from 'lucide-react';
-
-// Giả định hook này tồn tại trong project của bạn
+import { motion } from 'framer-motion';
 import { useDeleteHistory } from '../hooks/useDeleteHistory';
 
 export default function AppointmentRow({
@@ -16,176 +15,156 @@ export default function AppointmentRow({
   onFeedback,
   onReport
 }) {
-  const { status, _id } = appointment;
+  const { status, _id, type } = appointment;
   const isCompleted = status === "completed";
-  const isCancelled = status === "cancelled";
+  const isCancelled = status === "cancelled" || status === "declined";
 
   const { mutate: handleDeleteHistory } = useDeleteHistory(_id);
 
-  // Parse ngày tháng cho Date Block bên trái
-  const dateObj = appointment.date
-    ? new Date(appointment.date)
-    : appointment.startTime
-    ? new Date(appointment.startTime)
-    : null;
+  const [day, month] = appointment.date ? appointment.date.split('/') : ["--", "--"];
 
-  const dayNum = dateObj ? dateObj.getDate().toString().padStart(2, "0") : "--";
-  const monthStr = dateObj
-    ? ["Th1", "Th2", "Th3", "Th4", "Th5", "Th6", "Th7", "Th8", "Th9", "Th10", "Th11", "Th12"][dateObj.getMonth()]
-    : "---";
-
-  // Cấu hình màu sắc cho trạng thái
   const statusMap = {
-    pending:   { label: "Đang chờ",     bg: "#FAEEDA", color: "#854F0B", border: "border-amber-200" },
-    accepted:  { label: "Đã xác nhận",  bg: "#EAF3DE", color: "#3B6D11", border: "border-green-200" },
-    completed: { label: "Hoàn thành",   bg: "#E6F1FB", color: "#185FA5", border: "border-blue-200" },
-    cancelled: { label: "Đã hủy",       bg: "#FCEBEB", color: "#A32D2D", border: "border-red-200" },
+    pending:   { label: "Đang chờ", color: "#d97706", bg: "bg-[#d97706]/10", border: "border-[#d97706]/20" },
+    accepted:  { label: "Đã xác nhận", color: "#0d9488", bg: "bg-[#0d9488]/10", border: "border-[#0d9488]/20" },
+    completed: { label: "Hoàn thành", color: "#0088cc", bg: "bg-[#6366f1]/10", border: "border-[#6366f1]/20" },
+    cancelled: { label: "Đã hủy", color: "#e11d48", bg: "bg-[#e11d48]/10", border: "border-[#e11d48]/20" },
+    declined:  { label: "Từ chối", color: "#64748b", bg: "bg-slate-500/10", border: "border-slate-500/20" }
   };
-  const pill = statusMap[status] || { label: status, bg: "#eee", color: "#555", border: "border-gray-200" };
+  const theme = statusMap[status] || statusMap.pending;
 
   return (
-    <div className={`bg-white rounded-2xl border ${pill.border} shadow-sm hover:shadow-md transition-all duration-200 mb-4 overflow-hidden ${isCancelled ? "opacity-80 bg-slate-50" : ""}`}>
-      
-      {/* ─── PHẦN THÂN CARD (THÔNG TIN & DATE BLOCK) ─── */}
-      <div className="p-5 flex flex-col sm:flex-row gap-5">
+    <motion.div 
+      initial={{ opacity: 0, y: 5 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="relative bg-[#0f172a] border border-white/5 rounded-sm mb-4 group overflow-hidden shadow-xl"
+    >
+      {/* DECOR: HÌNH ẢNH CÁCH ĐIỆU GÓC PHẢI (Abstract Tech Art) */}
+      <div className="absolute top-0 right-0 h-full w-1/2 opacity-10 pointer-events-none transition-opacity">
+        <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <path d="M100 0 L100 100 L0 100 C 40 100 60 0 100 0" fill={theme.color} fillOpacity="0.2" />
+          <path d="M100 20 L80 0 M100 50 L50 100 M100 80 L80 100" stroke="white" strokeWidth="0.5" />
+          <circle cx="90" cy="10" r="1.5" fill="white" />
+          <circle cx="60" cy="80" r="1" fill="white" />
+        </svg>
+      </div>
+
+      <div className="relative z-10 flex flex-col md:flex-row">
         
-        {/* Date block (Giao diện mới) */}
-        <div className="flex-shrink-0 flex flex-col items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-slate-100 rounded-xl border border-slate-200">
-          <span className="text-2xl sm:text-3xl font-black text-slate-800 leading-none mb-1">{dayNum}</span>
-          <span className="text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-widest">{monthStr}</span>
+        {/* KHỐI NGÀY THÁNG */}
+        <div className="flex flex-row md:flex-col items-center justify-center p-6 bg-black/20 border-b md:border-b-0 md:border-r border-white/5 min-w-[100px]">
+          <span className="text-3xl font-black text-white leading-none tracking-tighter">{day}</span>
+          <span className="text-[10px] font-bold text-slate-400 uppercase mt-1 md:mt-2 tracking-widest">TH.{month}</span>
         </div>
 
-        {/* Thông tin chính */}
-        <div className="flex-1 min-w-0">
-          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-2">
-            <div>
-              <h3 className="text-lg font-bold text-slate-900 truncate">
-                {appointment.subject || appointment.title || "Buổi học chuyên môn"}
-              </h3>
-              <div className="flex items-center gap-2 mt-1 text-sm text-slate-600">
-                <User size={15} className="text-blue-500" />
-                <span className="font-medium">{appointment.tutorName || "Đang cập nhật"}</span>
-              </div>
-            </div>
-
-            {/* Status Badge */}
-            <div className="flex-shrink-0">
-              <span className="inline-flex items-center px-3 py-1 text-xs font-bold rounded-full uppercase tracking-wide" style={{ background: pill.bg, color: pill.color }}>
-                {pill.label}
-              </span>
-            </div>
+        {/* NỘI DUNG CHÍNH */}
+        <div className="flex-1 p-6 flex flex-col justify-center">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-4">
+            <h3 className="text-sm font-black text-slate-100 uppercase tracking-widest truncate max-w-[350px]">
+              {appointment.subject || appointment.title || "Buổi học chuyên môn"}
+            </h3>
+            <span 
+              className={`text-[9px] font-black px-2 py-0.5 rounded-sm uppercase tracking-tighter`}
+              style={{ color: theme.color }}
+            >
+              {theme.label}
+            </span>
           </div>
 
-          {/* Chi tiết thời gian, địa điểm */}
-          <div className="flex flex-wrap items-center gap-4 text-sm text-slate-600 mb-4">
-            <div className="flex items-center gap-1.5">
-              <Clock size={15} className="text-blue-500" />
-              <span className="font-medium">{appointment.time || "--:--"}</span>
+          <div className="flex flex-wrap items-center gap-6">
+            <div className="flex items-center gap-2 text-[11px] font-bold text-slate-300">
+              <User size={14} className="text-blue-500" />
+              <span className="uppercase tracking-tight">{appointment.tutorName || "Người hướng dẫn"}</span>
             </div>
-            
-            <div className="flex items-center gap-1.5">
-              {appointment.type === "online" ? (
-                <><Video size={15} className="text-emerald-500" /><span className="font-medium">Học Online</span></>
+            <div className="flex items-center gap-2 text-[11px] font-mono text-slate-400">
+              <Clock size={14} />
+              <span>{appointment.time || "--:--"}</span>
+            </div>
+            <div className="flex items-center gap-2 text-[11px] font-bold">
+              {type === "online" ? (
+                <span className="text-emerald-500 flex items-center gap-1.5"><Video size={14}/> TRỰC TUYẾN</span>
               ) : (
-                <><MapPin size={15} className="text-orange-500" /><span className="font-medium">{appointment.location}</span></>
+                <span className="text-orange-500 flex items-center gap-1.5"><MapPin size={14}/> {appointment.location}</span>
               )}
             </div>
           </div>
 
-          {/* ─── KHAY TIỆN ÍCH MỞ RỘNG (SUPER CARD FEATURES) ─── */}
-          {(status === "accepted" || status === "completed") && (
-            <div className="flex flex-wrap gap-2 mt-3">
-              {/* Nút vào phòng học (Nổi bật nhất nếu là online) */}
-              {appointment.type === "online" && status === "accepted" && (
+          {/* Tools & Lý do */}
+          <div className="mt-5 flex items-center gap-4">
+            <button className="text-[9px] font-black text-slate-500 hover:text-white flex items-center gap-1.5 transition-colors uppercase">
+              <MonitorUp size={12}/> Bảng trắng
+            </button>
+            <button className="text-[9px] font-black text-slate-500 hover:text-white flex items-center gap-1.5 transition-colors uppercase">
+              <Paperclip size={12}/> Tài liệu
+            </button>
+            {isCancelled && appointment.reason && (
+              <span className="ml-auto text-[10px] text-red-500/80 italic font-medium">
+                // Lý do: {appointment.reason}
+              </span>
+            )}
+          </div>
+        </div>
+
+        {/* KHỐI HÀNH ĐỘNG */}
+        <div className="p-6 flex items-center justify-end bg-black/10 md:bg-transparent min-w-[200px]">
+          
+          {/* Trạng thái Đã xác nhận */}
+          {status === "accepted" && (
+            <div className="flex gap-2 items-center">
+              <button onClick={() => onCancel(appointment)} className="px-4 py-2 text-[10px] font-black text-red-600 border border-red-500/20 hover:bg-red-500 hover:text-white rounded-sm transition-all uppercase">
+                Hủy lịch
+              </button>
+              {type === "online" && (
                 <a href={appointment.link || "#"} target="_blank" rel="noreferrer" 
-                   className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-teal-50 text-teal-700 hover:bg-teal-100 text-xs font-bold transition-colors border border-teal-200">
-                  <Video size={14} /> Vào phòng (Join Room)
+                   className="flex items-center gap-2 px-6 py-2.5 bg-blue-600 text-white text-[10px] font-black uppercase tracking-widest rounded-sm hover:bg-blue-500 transition-all shadow-lg shadow-blue-500/20">
+                  <Zap size={14} fill="currentColor" /> Vào học
                 </a>
               )}
-              
-              {/* Tính năng tĩnh tương lai */}
-              <button className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-50 text-indigo-700 hover:bg-indigo-100 text-xs font-bold transition-colors border border-indigo-100">
-                <MonitorUp size={14} /> Bảng trắng chung
-              </button>
-              
-              <button className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 text-xs font-bold transition-colors border border-slate-200">
-                <Paperclip size={14} /> 2 Tài liệu đính kèm
-              </button>
             </div>
           )}
 
-          {/* Thông báo lý do hủy */}
-          {isCancelled && appointment.reason && (
-            <div className="mt-3 p-3 bg-red-50 rounded-xl text-sm text-red-700 border border-red-100 flex items-start gap-2">
-              <AlertCircle size={16} className="mt-0.5 flex-shrink-0" />
-              <div><strong className="font-semibold">Lý do hủy: </strong>{appointment.reason}</div>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* ─── PHẦN FOOTER (ACTION BUTTONS - CÓ CHỮ RÕ RÀNG) ─── */}
-      <div className="bg-slate-50 px-5 py-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
-        
-        {/* Nút Report bên trái cho lịch đã hoàn thành */}
-        <div className="flex-1">
-          {isCompleted && (
-            <button onClick={() => onReport(appointment)} className="inline-flex items-center gap-1.5 text-slate-500 hover:text-blue-600 text-sm font-medium transition-colors">
-              <FileText size={15} /> Xem biên bản / Báo cáo
-            </button>
-          )}
-        </div>
-
-        {/* Các nút hành động chính bên phải */}
-        <div className="flex flex-wrap items-center gap-2">
-          
-          {/* Nút cho Pending */}
+          {/* Trạng thái Chờ duyệt */}
           {status === "pending" && (
-            <>
-              <button onClick={() => onReschedule(appointment)} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-white border border-slate-300 text-slate-700 text-sm font-semibold hover:bg-slate-50 transition-colors">
-                <Edit size={15} /> Đổi lịch
+            <div className="flex gap-2">
+              <button onClick={() => onReschedule(appointment)} className="p-2.5 bg-white/5 hover:bg-white/10 text-slate-400 rounded-sm border border-white/5">
+                <Edit size={16} />
               </button>
-              <button onClick={() => onCancelBeforeAccept(appointment)} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-red-50 text-red-600 text-sm font-semibold hover:bg-red-100 border border-red-100 transition-colors">
-                <X size={15} /> Hủy lịch
+              <button onClick={() => onCancelBeforeAccept(appointment)} className="px-4 py-2.5 text-[10px] font-black text-red-500 border border-red-500/20 hover:bg-red-500 hover:text-white rounded-sm transition-all uppercase">
+                Hủy yêu cầu
               </button>
-            </>
+            </div>
           )}
 
-          {/* Nút cho Accepted */}
-          {status === "accepted" && (
-            <button onClick={() => onCancel(appointment)} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-red-50 text-red-600 text-sm font-semibold hover:bg-red-100 border border-red-100 transition-colors">
-              <XCircle size={15} /> Hủy lịch
-            </button>
-          )}
-
-          {/* Nút cho Completed */}
+          {/* Trạng thái Hoàn thành */}
           {status === "completed" && (
-            <>
-              {appointment.rating && appointment.rating !== 0 ? (
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-50 border border-emerald-100 text-emerald-700 text-sm font-semibold">
-                  <CheckCircle size={15} /> Đã đánh giá ({appointment.rating}/5 <Star size={13} className="fill-emerald-500 text-emerald-500 mb-0.5"/>)
+            <div className="flex gap-2 items-center">
+              <button onClick={() => onReport(appointment)} className="p-2.5 hover:bg-blue-500/10 text-slate-400 hover:text-blue-400 transition-all">
+                <FileText size={20} />
+              </button>
+              {appointment.rating ? (
+                <div className="px-4 py-2 border border-emerald-500/30 text-emerald-500 text-[10px] font-black tracking-widest uppercase">
+                  Đã đánh giá: {appointment.rating}
                 </div>
               ) : (
-                <button onClick={() => onFeedback(appointment)} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-amber-400 text-amber-950 text-sm font-bold hover:bg-amber-500 shadow-sm transition-colors">
-                  <Star size={15} /> Đánh giá buổi học
+                <button onClick={() => onFeedback(appointment)} className="px-6 py-2.5 bg-amber-500 text-amber-950 text-[10px] font-black uppercase rounded-sm hover:bg-amber-400 transition-all">
+                  Đánh giá
                 </button>
               )}
-            </>
+            </div>
           )}
 
-          {/* Nút cho Cancelled */}
-          {status === "cancelled" && (
-            <>
-              <button onClick={() => handleDeleteHistory()} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-white border border-slate-300 text-slate-500 text-sm font-semibold hover:text-red-600 hover:border-red-200 transition-colors">
-                <Trash size={15} /> Xóa lịch
+          {/* Trạng thái Đã hủy / Từ chối */}
+          {isCancelled && (
+            <div className="flex gap-3 items-center">
+              <button onClick={() => handleDeleteHistory()} className="p-2.5 text-slate-500 hover:text-red-500 transition-colors">
+                <Trash size={18} />
               </button>
-              <Link to="/student/schedule" className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-bold hover:bg-blue-700 shadow-sm transition-colors">
-                <Calendar size={15} /> Đặt lại lịch mới
+              <Link to="/student/tutors" className="px-5 py-2.5 border border-white/10 text-slate-300 text-[10px] font-black uppercase rounded-sm hover:bg-white/5">
+                Đặt lịch lại
               </Link>
-            </>
+            </div>
           )}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

@@ -6,17 +6,13 @@ import SessionCard from "./SessionCard";
 import CancelModal from "../../../components/CancelModal";
 import { useSocket } from "../../../features/websocket/hooks/useSocket";
 import ReportModal from "../../../components/ReportModal";
-import { API_BASE_URL } from "../../../config/api.config";
+import { API_BASE_URL, API_ENDPOINTS, buildAPIUrl } from "../../../config/api.config";
+import { useAppointments } from "../../../features/appointment/hooks/useAppointments";
 
 export default function TutorAppointmentsPage() {
   const {socket} = useSocket();
   const queryClient = useQueryClient();
-  const url = API_BASE_URL + "/tutor/getappointments";
-
-  const { data, isLoading } = useQuery({
-    queryKey: ["tutorappointments"],
-    queryFn: async () => await fetchAPI(url, "GET", null, true),
-  });
+  const { data, isLoading } = useAppointments();
 
   const [selectedSession, setSelectedSession] = useState(null);
   const [cancelModal, setCancelModal] = useState(false);
@@ -58,7 +54,7 @@ export default function TutorAppointmentsPage() {
     setReportModal(true);
   };
   const handleSubmitReport = async (reportData) => {
-    const url = API_BASE_URL + '/tutor/report'
+    const url = buildAPIUrl(API_ENDPOINTS.REPORT);
     await fetchAPI(url, 'PUT', {report: reportData}, true);
     queryClient.invalidateQueries({queryKey: ["tutorappointments"]});
   };

@@ -1,24 +1,24 @@
 import { useState } from 'react';
 import { LoadingModal } from '../../components/LoadingModal';
 import FilterBar from '../../features/profile/components/StudentViewTutorPage/FilterBar';
-import TutorCard from '../../features/profile/components/shared/TutorCard'
-import { ChevronLeft, ChevronRight, Search, Sparkles } from 'lucide-react';
+import TutorCard from '../../features/profile/components/shared/TutorCard';
+import { ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import { useTutorList } from '../../features/profile/hooks/useTutorList';
 import { useTutorFilter } from '../../features/profile/hooks/useTutorFilter';
+import { motion, AnimatePresence } from 'framer-motion';
 
 function StudentSchedulePage() {
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-
-  const tutorsPerPage = 5; // Giảm xuống 5 vì card ngang chiếm nhiều diện tích hơn
+  const tutorsPerPage = 6;
 
   const categories = [
     { id: 'all', name: 'Tất cả' },
     { id: "Khoa Đại cương", name: 'Đại cương' },
-    { id: 'Khoa học Tự nhiên', name: 'Khoa học tự nhiên' },
+    { id: 'Khoa học Tự nhiên', name: 'Tự nhiên' },
     { id: 'Khoa Ngoại ngữ', name: 'Ngoại ngữ' },
-    { id: 'Khoa học và Kỹ thuật máy tính', name: 'Khoa học và kỹ thuật máy tính' },
+    { id: 'Khoa học và Kỹ thuật máy tính', name: 'CS & IT' },
     { id: 'Khoa Kinh tế', name: 'Kinh tế' }
   ];
 
@@ -26,7 +26,6 @@ function StudentSchedulePage() {
   if (isLoading) return <LoadingModal />;
 
   const filteredTutors = useTutorFilter(data.tutors, activeCategory, searchTerm);
-
   const totalPages = Math.ceil(filteredTutors.length / tutorsPerPage);
   const indexOfLast = currentPage * tutorsPerPage;
   const indexOfFirst = indexOfLast - tutorsPerPage;
@@ -43,90 +42,105 @@ function StudentSchedulePage() {
   };
 
   return (
-    <div className="max-w-[1000px] mx-auto p-4 md:p-8 min-h-screen bg-transparent font-sans relative z-10">
+    <div className="relative min-h-screen bg-[#0f172a] text-slate-300 font-sans overflow-hidden">
       
-      <div className="text-center mt-8 mb-12">
-        <h1 className="text-4xl md:text-5xl font-black text-slate-900 mb-4 tracking-tight">
-          Tìm kiếm <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-violet-600">Gia sư phù hợp</span>
-        </h1>
-        <p className="text-slate-500 text-base md:text-lg max-w-2xl mx-auto font-medium">
-          Học tập 1-1 cùng đội ngũ giảng viên và sinh viên ưu tú nhất từ các khoa.
-        </p>
-      </div>
+      <div className="absolute inset-0 opacity-[0.02] pointer-events-none" 
+           style={{ backgroundImage: `linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)`, backgroundSize: '80px 80px' }} />
+      
+      <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-emerald-500/5 blur-[150px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-[-10%] left-[-5%] w-[400px] h-[400px] bg-blue-500/5 blur-[120px] rounded-full pointer-events-none" />
 
-      <FilterBar
-        categories={categories}
-        activeCategory={activeCategory}
-        onCategoryChange={handleCategoryChange}
-        searchTerm={searchTerm}
-        onSearchChange={handleSearchChange}
-      />
+      <div className="relative z-10 max-w-[1200px] mx-auto px-6 py-16 md:py-20">
 
-      {/* DANH SÁCH TUTORS: Chuyển hoàn toàn sang Flex-Col (Dạng List) */}
-      <div className="flex flex-col gap-6 mb-12">
-        {currentTutors.map(tutor => (
-          <TutorCard key={tutor.id} tutor={tutor} />
-        ))}
-      </div>
-
-      {/* TRẠNG THÁI TRỐNG */}
-      {filteredTutors.length === 0 && (
-        <div className="text-center py-20 bg-white/30 backdrop-blur-md rounded-[3rem] border border-dashed border-slate-300">
-          <div className="bg-slate-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-400">
-            <Search size={32} />
-          </div>
-          <p className="text-lg font-bold text-slate-800 m-0">
-            Hệ thống không tìm thấy tutor nào...
-          </p>
-          <p className="text-slate-500 text-sm mt-1">Hãy thử thay đổi từ khóa hoặc khoa khác nhé!</p>
+        {/* FILTER BAR SECTION */}
+        <div className="mb-12">
+          <FilterBar
+            categories={categories}
+            activeCategory={activeCategory}
+            onCategoryChange={handleCategoryChange}
+            searchTerm={searchTerm}
+            onSearchChange={handleSearchChange}
+          />
         </div>
-      )}
 
-      {/* PHÂN TRANG (PAGINATION) */}
-      {filteredTutors.length > 0 && (
-        <div className="flex items-center justify-center gap-3 mt-12 pb-10">
-          <button
-            onClick={() => {
-                setCurrentPage(p => Math.max(p - 1, 1));
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }}
-            disabled={currentPage === 1}
-            className="w-12 h-12 flex items-center justify-center rounded-2xl bg-white/60 backdrop-blur-md text-slate-600 hover:bg-blue-600 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed border border-white shadow-sm transition-all"
-          >
-            <ChevronLeft size={20} />
-          </button>
-
-          <div className="flex items-center gap-2 bg-white/40 backdrop-blur-md p-1.5 rounded-2xl border border-white shadow-sm">
-            {Array.from({ length: totalPages }, (_, i) => (
-                <button
-                key={i}
-                onClick={() => {
-                    setCurrentPage(i + 1);
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                }}
-                className={`w-10 h-10 rounded-xl font-bold text-sm transition-all ${
-                    currentPage === i + 1
-                    ? 'bg-slate-900 text-white shadow-lg shadow-slate-200 scale-110'
-                    : 'text-slate-500 hover:bg-white hover:text-slate-900'
-                }`}
-                >
-                {i + 1}
-                </button>
+        {/* TUTOR LIST */}
+        <div className="grid grid-cols-1 gap-5 mb-20">
+          <AnimatePresence mode='popLayout'>
+            {currentTutors.map((tutor, index) => (
+              <motion.div
+                key={tutor.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.98 }}
+                transition={{ duration: 0.3, delay: index * 0.05 }}
+              >
+                <TutorCard tutor={tutor} />
+              </motion.div>
             ))}
-          </div>
-
-          <button
-            onClick={() => {
-                setCurrentPage(p => Math.min(p + 1, totalPages));
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }}
-            disabled={currentPage === totalPages}
-            className="w-12 h-12 flex items-center justify-center rounded-2xl bg-white/60 backdrop-blur-md text-slate-600 hover:bg-blue-600 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed border border-white shadow-sm transition-all"
-          >
-            <ChevronRight size={20} />
-          </button>
+          </AnimatePresence>
         </div>
-      )}
+
+        {/* EMPTY STATE: Mềm mại hơn */}
+        {filteredTutors.length === 0 && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center py-24 border border-white/[0.03] rounded-[2.5rem] bg-white/[0.01]"
+          >
+            <div className="bg-emerald-500/5 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-emerald-500/50">
+              <Search size={28} />
+            </div>
+            <h3 className="text-lg font-semibold text-slate-200">Không tìm thấy kết quả</h3>
+            <p className="text-slate-500 text-sm mt-1">Hãy thử thay đổi từ khóa hoặc bộ lọc của bạn.</p>
+          </motion.div>
+        )}
+
+        {/* PAGINATION: Giảm font-black để dễ nhìn hơn */}
+        {filteredTutors.length > 0 && (
+          <div className="flex items-center justify-center gap-6 mt-16 border-t border-white/[0.05] pt-10">
+            <button
+              onClick={() => {
+                  setCurrentPage(p => Math.max(p - 1, 1));
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              disabled={currentPage === 1}
+              className="flex items-center gap-2 text-xs font-medium text-slate-500 hover:text-emerald-400 disabled:opacity-20 transition-all"
+            >
+              <ChevronLeft size={18} /> Trước
+            </button>
+
+            <div className="flex items-center gap-3">
+              {Array.from({ length: totalPages }, (_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => {
+                        setCurrentPage(i + 1);
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                    className={`w-9 h-9 rounded-xl text-xs font-semibold transition-all border ${
+                        currentPage === i + 1
+                        ? 'bg-emerald-500 border-emerald-500 text-[#0f172a] shadow-lg shadow-emerald-500/20'
+                        : 'border-white/[0.05] bg-white/[0.02] text-slate-500 hover:border-white/20'
+                    }`}
+                  >
+                    {i + 1}
+                  </button>
+              ))}
+            </div>
+
+            <button
+              onClick={() => {
+                  setCurrentPage(p => Math.min(p + 1, totalPages));
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              disabled={currentPage === totalPages}
+              className="flex items-center gap-2 text-xs font-medium text-slate-500 hover:text-emerald-400 disabled:opacity-20 transition-all"
+            >
+              Tiếp <ChevronRight size={18} />
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

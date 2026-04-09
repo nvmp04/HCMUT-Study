@@ -14,18 +14,20 @@ export const API_BASE_URL = 'http://localhost:5000'
 export const API_ENDPOINTS = {
   AUTH: {
     LOGIN: '/auth/login',
-  },
-  LIBRARY: {
-    DOCUMENTS: '/library/documents',
+    TUTOR_MODE: '/auth/tutor-mode'
   },
   SCHEDULE: {
-    GET_TUTOR_SCHEDULE: '/schedule/tutor-schedule'
+    GET_TUTOR_SCHEDULE: '/schedule/tutor-schedule',
+    ADD_SLOT: '/schedule/slot',
+    DELETE_SLOT: '/schedule/slot'
   },
   APPOINTMENT: {
     GET_APPOINTMENT: '/appointments',
     MAKE_APPOINTMENT: '/appointments', 
     RESCHEDULE: '/appointments',
-    CANCEL: '/appointments',
+    ACCEPT: '/appointments',
+    CANCEL: '/appointments?action=cancelled',
+    DECLINE: '/appointments?action=declined',
     DELETE_HISTORY: '/appointments/history',
     CANCEL_BEFORE_ACCEPT: '/appointments/pending',
   },
@@ -37,6 +39,8 @@ export const API_ENDPOINTS = {
   RATING: {
     RATE: '/rating'
   },
+  REPORT: '/report',
+  DOCUMENT: '/documents',
   PROFILE: {
     USER_PROFILE: '/user/profile',
     TUTOR_PROFILE: '/user/tutor-profile',
@@ -46,7 +50,7 @@ export const API_ENDPOINTS = {
 
 /**
  * Build full API URL from endpoint
- * @param {string} endpoint - API endpoint path (e.g., '/library/documents')
+ * @param {string} endpoint 
  * @returns {string} - Full URL
  */
 export const buildAPIUrl = (endpoint) => `${API_BASE_URL}${endpoint}`;

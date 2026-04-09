@@ -27,19 +27,17 @@ export default function CancelModal({
   if (!open) return null;
   async function handleSubmit() {
     if (!reason.trim()) return;
-    setAiModalType("checking");
+    //setAiModalType("checking");
     try {
-      const res = await checkTutorReason(reason);
-      const { error, message, ban } = res;
-      console.log(res);
-      if (error === true || error === "true") {
-        setAiMessage(message);
-        setBan(ban === true || ban === "true");
-        setAiModalType("error");
-        return;
-      }
-
-      const content = { _id: slot._id, reason };
+      // const res = await checkTutorReason(reason);
+      // const { error, message, ban } = res;
+      // if (error === true || error === "true") {
+      //   setAiMessage(message);
+      //   setBan(ban === true || ban === "true");
+      //   setAiModalType("error");
+      //   return;
+      // }
+      const content = { _id: slot.appointment._id, reason };
       const url = buildAPIUrl(API_ENDPOINTS.APPOINTMENT.CANCEL);
       await fetchAPI(url, "DELETE", content, true);
       queryClient.invalidateQueries([

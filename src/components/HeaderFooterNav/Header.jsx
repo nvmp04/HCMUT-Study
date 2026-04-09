@@ -9,60 +9,69 @@ import NotificationDropdown from '../Notification/NotificationDropDown';
 import logo from '../../assets/logo.png';
 import avt from '../../assets/avt.jpg';
 
-
-
-
+// --- COMPONENT: LOGO ---
 const LogoSection = ({ role }) => (
-  <Link to={role ? `/${role}` : '/'} className="flex items-center gap-3">
-    <div className="bg-indigo-600 p-2 rounded-xl">
-      <img src={logo} className="w-8 h-8 brightness-0 invert" alt="logo" />
+  <Link to={role ? `/${role}` : '/'} className="flex items-center gap-3 group">
+    <div className="bg-emerald-500 p-2 rounded-xl transition-transform group-hover:rotate-6 duration-300 shadow-[0_0_20px_rgba(16,185,129,0.2)]">
+      <img src={logo} className="w-6 h-6 brightness-0" alt="logo" />
     </div>
     <div className="hidden sm:block">
-      <h2 className="text-xl font-extrabold text-slate-900">Alpha<span className="text-indigo-600">Tutor</span></h2>
-      <p className="text-[11px] font-semibold text-slate-500 uppercase">Bách Khoa Mentor</p>
+      <h2 className="text-lg font-[1000] text-white tracking-tighter uppercase leading-none">
+        Alpha<span className="text-emerald-500">Tutor</span>
+      </h2>
+      <p className="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em]">Bách Khoa Mentor</p>
     </div>
   </Link>
 );
 
-function  UserActions ({ isProfileOpen, setIsProfileOpen, dropdownRef, onLogoutClick }) {
-  const {data: profile, isLoading} = useProfile();
-  if(isLoading) return null;
-  return <>
-  <div className="flex items-center bg-slate-100/80 p-1 rounded-full border border-slate-200">
-        <button className="p-2 text-slate-600 hover:text-indigo-600 hover:bg-white rounded-full transition-all">
+// --- COMPONENT: USER ACTIONS ---
+function UserActions({ isProfileOpen, setIsProfileOpen, dropdownRef, onLogoutClick }) {
+  const { data: profile, isLoading } = useProfile();
+  if (isLoading) return null;
+
+  return (
+    <>
+      <div className="flex items-center bg-black/20 p-1 rounded-full border border-white/5">
+        <button className="p-2 text-slate-400 hover:text-emerald-500 transition-colors">
           <MessageSquare className="w-5 h-5" />
         </button>
-        <div className="p-2 text-slate-600 hover:text-indigo-600 hover:bg-white rounded-full transition-all cursor-pointer">
+        <div className="p-2 text-slate-400 hover:text-emerald-500 transition-colors cursor-pointer">
           <NotificationDropdown />
         </div>
       </div>
 
-      <div className="w-[1px] h-6 bg-slate-300 mx-2 hidden md:block"></div>
+      <div className="w-[1px] h-4 bg-white/10 mx-3 hidden md:block"></div>
 
+      {/* Profile Trigger */}
       <div className="relative" ref={dropdownRef}>
         <button
           onClick={() => setIsProfileOpen(!isProfileOpen)}
-          className="flex items-center gap-3 pl-1 pr-3 py-1 rounded-full bg-slate-900 text-white shadow-md hover:bg-indigo-950 transition-all"
+          
         >
-          <img src={avt} alt="User" className="w-8 h-8 rounded-full border border-white/20" />
-          <span className="text-sm font-bold hidden md:inline-block">{profile?.name}</span>
-          <ChevronDown className={`w-4 h-4 transition-transform ${isProfileOpen ? 'rotate-180' : ''}`} />
+          <div className="relative">
+            <img src={avt} alt="User" className="w-8 h-8 rounded-full border border-emerald-500/20 object-cover" />
+            <div className="absolute bottom-0 right-0 w-2 h-2 bg-emerald-500 border-2 border-[#020617] rounded-full"></div>
+          </div>
         </button>
 
+        {/* Profile Dropdown - Fix màu #020617 đồng bộ tuyệt đối */}
         <AnimatePresence>
           {isProfileOpen && (
             <motion.div
-              initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }}
-              className="absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-2xl border border-slate-200 z-50 overflow-hidden"
+              initial={{ opacity: 0, y: 10, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 10, scale: 0.98 }}
+              className="absolute right-0 mt-4 w-64 bg-[#020617] rounded-2xl shadow-[0_30px_60px_-15px_rgba(0,0,0,0.7)] border border-white/10 z-50 overflow-hidden"
             >
-              <div className="bg-slate-50 px-5 py-4 border-b border-slate-200">
-                <p className="text-base font-bold text-slate-900 truncate mt-1">{profile?.name}</p>
-                <p className="text-xs text-slate-500 truncate">{profile?.email || 'student@hcmut.edu.vn'}</p>
+              <div className="px-6 py-5 border-b border-white/5 bg-white/[0.01]">
+                <p className="text-[9px] font-black text-emerald-500 uppercase tracking-[0.2em] mb-1 italic">Authorized Access</p>
+                <p className="text-sm font-bold text-white truncate">{profile?.name}</p>
+                <p className="text-[10px] text-slate-500 truncate font-medium">{profile?.email}</p>
               </div>
               <div className="p-2">
                 <button
                   onClick={onLogoutClick}
-                  className="w-full flex items-center gap-3 px-4 py-3 text-sm font-bold text-red-600 hover:bg-red-50 rounded-xl transition-colors"
+                  className="w-full flex items-center gap-3 px-4 py-3 text-[10px] font-black text-red-400 hover:bg-red-500/10 rounded-xl transition-all uppercase tracking-widest"
                 >
                   <LogOut className="w-4 h-4" /> Đăng xuất
                 </button>
@@ -71,11 +80,11 @@ function  UserActions ({ isProfileOpen, setIsProfileOpen, dropdownRef, onLogoutC
           )}
         </AnimatePresence>
       </div>
-  </>
-};
+    </>
+  );
+}
 
 // --- MAIN HEADER ---
-
 function Header() {
   const { auth } = useAuth();
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
@@ -98,16 +107,14 @@ function Header() {
       <LogoutModal isOpen={isLogoutModalOpen} setIsOpen={setIsLogoutModalOpen} />
       
       <motion.header
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="sticky top-0 z-40 w-full border-b border-slate-200 bg-white/80 backdrop-blur-md shadow-sm"
+        className="sticky top-0 z-50 w-full border-b border-white/5 bg-[#020617] transform-gpu"
+        style={{ isolation: 'isolate' }}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-[70px] flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-6 sm:px-10 h-[80px] flex items-center justify-between">
           
           <LogoSection role={auth.role} />
 
           <div className="flex items-center gap-3">
-            {/* Kiểm tra trực tiếp bằng auth.token */}
             {auth.token ? (
               <UserActions
                 isProfileOpen={isProfileOpen}
@@ -121,9 +128,9 @@ function Header() {
             ) : (
               <button
                 onClick={() => navigate('/login')}
-                className="px-6 py-2.5 bg-indigo-600 text-white text-sm font-bold rounded-xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100"
+                className="px-8 py-3 bg-emerald-500 text-slate-950 text-[10px] font-[1000] uppercase tracking-[0.2em] rounded-full hover:bg-emerald-400 transition-all shadow-lg shadow-emerald-500/10"
               >
-                Đăng Nhập
+                Bắt đầu ngay
               </button>
             )}
           </div>

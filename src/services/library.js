@@ -2,7 +2,7 @@ import { fetchAPI } from '../utils/fetchAPI';
 import { buildAPIUrl } from '../config/api.config';
 import { API_ENDPOINTS } from '../config/api.config';
 
-const url = buildAPIUrl(API_ENDPOINTS.LIBRARY.DOCUMENTS);
+const url = buildAPIUrl(API_ENDPOINTS.DOCUMENT);
 
 export const getDocuments = async () => {
     return await fetchAPI(`${url}`, 'GET', null, true);

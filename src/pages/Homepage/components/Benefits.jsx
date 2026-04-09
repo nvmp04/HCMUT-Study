@@ -1,168 +1,105 @@
 import { motion } from 'framer-motion';
-import { BookOpen, Target, Handshake, Award, ArrowRight } from 'lucide-react';
-import AbstractBlobs from './AbstractBlobs';
-import MeshGradient from './MeshGradient';
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.12,
-      delayChildren: 0.2,
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: 'easeOut' },
-  },
-};
+import { BookOpen, Target, Handshake, Award, ArrowUpRight } from 'lucide-react';
 
 export default function Benefits() {
   const benefits = [
     {
-      icon: BookOpen,
-      title: 'Expert Learning Support',
-      desc: 'Get direct guidance from experienced tutors who understand your academic challenges and tailor their teaching to your learning style.',
-      color: 'from-blue-400 to-blue-600',
-      col: 'md:col-span-1',
+      icon: <BookOpen size={24} />,
+      title: 'Hỗ trợ chuyên sâu',
+      desc: 'Nhận sự dẫn dắt trực tiếp từ những Mentor đã kinh qua các thách thức thực tế, tối ưu hóa phong cách học tập riêng biệt của bạn.',
     },
     {
-      icon: Target,
-      title: 'Career Development',
-      desc: 'Beyond academics, develop soft skills, time management, and research abilities that will shape your professional future.',
-      color: 'from-purple-400 to-purple-600',
-      col: 'md:col-span-1',
+      icon: <Target size={24} />,
+      title: 'Phát triển sự nghiệp',
+      desc: 'Không chỉ dừng lại ở kiến thức, bạn được rèn luyện kỹ năng mềm, quản lý thời gian và tư duy nghiên cứu chuyên nghiệp.',
     },
     {
-      icon: Handshake,
-      title: 'Community Network',
-      desc: 'Build meaningful connections with peers and mentors who share your passion for learning and academic excellence.',
-      color: 'from-emerald-400 to-emerald-600',
-      col: 'md:col-span-1',
+      icon: <Handshake size={24} />,
+      title: 'Mạng lưới kết nối',
+      desc: 'Xây dựng mối quan hệ giá trị với cộng đồng chuyên gia và bạn đồng hành cùng chí hướng bứt phá.',
     },
     {
-      icon: Award,
-      title: 'Achievement Recognition',
-      desc: 'Get your progress officially recognized with certificates and academic credits that boost your university profile.',
-      color: 'from-amber-400 to-amber-600',
-      col: 'md:col-span-1',
+      icon: <Award size={24} />,
+      title: 'Chứng nhận năng lực',
+      desc: 'Sự tiến bộ của bạn được ghi nhận qua các cột mốc thực tế, giúp làm đẹp Profile và khẳng định vị thế cá nhân.',
     },
   ];
 
   return (
-    <section
-      id="benefits"
-      className="py-24 px-4 sm:px-6 lg:px-8 bg-sky-50 relative overflow-hidden transition-colors duration-700"
-    >
-      {/* Visual Elements */}
-      <AbstractBlobs count={3} opacity={0.10} />
-      <MeshGradient opacity={0.05} />
+    <section id="benefits" className="py-32 bg-[#020617] text-white overflow-hidden relative">
+      
 
-      {/* Background Decoration */}
-      <div className="absolute top-[-50%] left-[-20%] w-96 h-96 bg-cyan-100 rounded-full blur-3xl opacity-10 -z-10" />
-      <div className="absolute bottom-0 right-[-10%] w-96 h-96 bg-blue-100 rounded-full blur-3xl opacity-15 -z-10" />
-
-      <div className="max-w-7xl mx-auto">
-        {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className="text-center mb-20"
-        >
-          <div className="inline-block mb-4">
-            <span className="px-4 py-2 bg-primary-50 border border-primary-200 rounded-full text-sm font-semibold text-primary-700">
-              Why Choose Us
-            </span>
-          </div>
-          <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">
-            Comprehensive Benefits
-          </h2>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-            More than just tutoring — a complete ecosystem for academic growth and personal development.
+      <div className="max-w-[1400px] mx-auto px-8 md:px-16">
+        
+        {/* Header - Minimal & Sharp */}
+        <div className="mb-24 flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <p className="text-emerald-500 font-black text-[10px] tracking-[0.5em] uppercase mb-4">Values</p>
+            <h2 className="text-5xl md:text-6xl font-[1000] tracking-tighter uppercase leading-none">
+              GIÁ TRỊ <br /> ĐẶC QUYỀN.
+            </h2>
+          </motion.div>
+          <p className="text-slate-500 text-lg font-light max-w-sm border-b border-white/5 pb-4">
+            Hệ sinh thái toàn diện hỗ trợ sự tăng trưởng bền vững của cả tri thức và sự nghiệp.
           </p>
-        </motion.div>
+        </div>
 
-        {/* Benefits Grid */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12"
-        >
-          {benefits.map((item, index) => {
-            const Icon = item.icon;
-            return (
-              <motion.div
-                key={index}
-                variants={itemVariants}
-                className={item.col}
-              >
-                <motion.div
-                  whileHover={{ y: -8 }}
-                  className="group h-full p-8 rounded-2xl bg-white border border-slate-200 shadow-soft hover:shadow-soft-lg transition-all duration-300 relative overflow-hidden"
-                >
-                  {/* Icon Container */}
-                  <div className={`inline-flex p-4 rounded-xl bg-gradient-to-br ${item.color} mb-6 text-white`}>
-                    <Icon className="w-7 h-7" />
-                  </div>
-
-                  {/* Content */}
-                  <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-primary-600 transition-colors">
+        {/* Benefits Grid - Industrial & Border-focused */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-white/5 border border-white/5">
+          {benefits.map((item, index) => (
+            <motion.div 
+              key={index}
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ delay: index * 0.1 }}
+              viewport={{ once: true }}
+              className="group p-12 hover:bg-emerald-500/[0.02] transition-all duration-700 relative overflow-hidden"
+            >
+              {/* Hover Indicator */}
+              <div className="absolute top-0 left-0 w-[2px] h-0 bg-emerald-500 group-hover:h-full transition-all duration-500"></div>
+              
+              <div className="flex flex-col gap-8">
+                <div className="text-emerald-500 transform group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500">
+                  {item.icon}
+                </div>
+                
+                <div className="space-y-4">
+                  <h3 className="text-2xl font-black uppercase tracking-tight group-hover:text-emerald-400 transition-colors">
                     {item.title}
                   </h3>
-                  <p className="text-slate-600 leading-relaxed min-h-[80px]">
+                  <p className="text-slate-500 leading-relaxed font-light text-lg">
                     {item.desc}
                   </p>
+                </div>
 
-                  {/* Footer Action */}
-                  <div className="flex items-center gap-2 text-primary-600 font-semibold mt-6 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <span>Learn more</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </div>
+                <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/10 group-hover:text-emerald-500 transition-colors">
+                  Details <ArrowUpRight size={14} />
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
 
-                  {/* Gradient Bottom Border */}
-                  <div className="absolute bottom-0 left-0 h-1 bg-gradient-to-r from-transparent via-primary-600 to-transparent w-0 group-hover:w-full transition-all duration-500" />
-                </motion.div>
-              </motion.div>
-            );
-          })}
-        </motion.div>
-
-        {/* Trust Badge Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          viewport={{ once: true }}
-          className="bg-gradient-to-r from-primary-50 to-white rounded-2xl border border-primary-200 p-12 text-center"
-        >
-          <h3 className="text-2xl font-bold text-slate-900 mb-8">
-            Trusted by Thousands of Students
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div>
-              <p className="text-4xl font-bold text-primary-600 mb-2">98%</p>
-              <p className="text-slate-600">Student Satisfaction Rate</p>
-            </div>
-            <div>
-              <p className="text-4xl font-bold text-primary-600 mb-2">50K+</p>
-              <p className="text-slate-600">Successful Sessions Completed</p>
-            </div>
-            <div>
-              <p className="text-4xl font-bold text-primary-600 mb-2">4.8★</p>
-              <p className="text-slate-600">Average Tutor Rating</p>
-            </div>
+        {/* Stats Section - Bỏ Badge rẻ tiền, dùng Typography sạch */}
+        <div className="mt-32 grid grid-cols-1 md:grid-cols-3 gap-16 pt-16 border-t border-white/5">
+          <div className="flex flex-col gap-2">
+            <span className="text-5xl font-black tracking-tighter">98%</span>
+            <span className="text-xs font-bold text-slate-600 uppercase tracking-[0.3em]">Hài lòng tuyệt đối</span>
           </div>
-        </motion.div>
+          <div className="flex flex-col gap-2">
+            <span className="text-5xl font-black tracking-tighter">1.2K+</span>
+            <span className="text-xs font-bold text-slate-600 uppercase tracking-[0.3em]">Phiên học thực chiến</span>
+          </div>
+          <div className="flex flex-col gap-2">
+            <span className="text-5xl font-black tracking-tighter">4.8/5</span>
+            <span className="text-xs font-bold text-slate-600 uppercase tracking-[0.3em]">Đánh giá chuyên gia</span>
+          </div>
+        </div>
+
       </div>
     </section>
   );

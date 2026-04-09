@@ -14,6 +14,7 @@ import AdminDashboard from '../pages/Admin/AdminDashboard';
 import BanPage from '../pages/BanPage';
 import StudentAIpage from '../pages/Student/StudentAIpage';
 import LibraryPage from '../pages/LibraryPage/LibraryPage';
+import { TutorOnboarding } from '../pages/TutorOnboarding';
 function AppRoutes(){
   return(
     <>
@@ -22,7 +23,7 @@ function AppRoutes(){
         <Route element={<ProtectedLogInRoute />}>
           <Route path='/login' element={<LogIn/>} />
         </Route>
-
+        
         <Route element={<ProtectedRoute allowedRole='student' />}>
           <Route path='/student' element={<Layout/>}>
             <Route index element={<StudentHomepage/>} />
@@ -33,7 +34,8 @@ function AppRoutes(){
             <Route path='library' element={<LibraryPage/>}/>
           </Route>
         </Route>
-
+        
+          <Route path='/tutor-onboarding' element={<TutorOnboarding/>} />
         <Route element={<ProtectedRoute allowedRole='tutor' />}>
           <Route path='/tutor' element={<Layout/>}>
             <Route index element={<TutorHomePage/>}/>

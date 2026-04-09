@@ -1,20 +1,24 @@
 import React, { useState } from 'react';
 import { 
   Eye, EyeOff, Lock, Mail, ArrowRight, 
-  Chrome, AlertTriangle, Loader2 
+  Chrome, AlertTriangle, Loader2, ArrowUpRight 
 } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { useAuth } from '../../features/auth/hooks/useAuth';
-import { checkUsername, checkPassword } from '../../features/auth/utils/checkCredentialInput';
-import logo from '../../assets/logo.png'
+import { checkPassword } from '../../features/auth/utils/checkCredentialInput';
+import logo from '../../assets/logo.png';
 
 const LoginPage = () => {
   const { login } = useAuth();
-  const [formData, setFormData] = useState({ username: '', password: '' });
-  const [errors, setErrors] = useState({ username: '', password: '' });
-  
+  const [formData, setFormData] = useState({ email: '', password: '' });
+  const [errors, setErrors] = useState({ email: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [warning, setWarning] = useState(false);  
+  const [warning, setWarning] = useState(false);
+
+  // Link ảnh Unsplash - Kiến trúc hiện đại, sạch sẽ, hoạt động ổn định
+  const BK_IMAGE_URL = "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=2070";
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -22,40 +26,20 @@ const LoginPage = () => {
     if (warning) setWarning(false);
   };
 
-  const handleClear = () => {
-    setFormData({ username: '', password: '' });
-    setErrors({ username: '', password: '' });
-    setWarning(false);
-  };
-
   const handleLogin = async (e) => {
     e.preventDefault();
-    
-    const uError = checkUsername(formData.username);
     const pError = checkPassword(formData.password);
 
-    if (uError || pError) {
+    if ( pError) {
       setErrors({
-        username: uError ? 'Username has not been entered' : '',
-        password: pError ? 'Password has not been entered' : ''
+        password: pError ? 'Yêu cầu mật khẩu' : ''
       });
       return;
     }
 
     setIsLoading(true);
     try {
-      const credentials = { 
-        username: formData.username, 
-        password: formData.password, 
-        role: 'user' 
-      };
-
-      const res = await login(credentials);
-
-      if (res?.error) {
-        handleClear();
-        setWarning(true);
-      }
+      await login({ ...formData, role: 'user' });
     } catch (err) {
       setWarning(true);
     } finally {
@@ -64,121 +48,115 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen w-full flex bg-white font-sans text-slate-900">
+    <div className="relative min-h-screen w-full flex bg-[#050810] font-sans overflow-hidden text-slate-200">
       
-      <div className="flex-1 flex flex-col justify-center items-center p-8 lg:p-20">
-        <div className="w-full max-w-[400px] space-y-8">
+      {/* BACKGROUND DECORATION (Mảnh dẻ và tinh tế hơn) */}
+      <div className="absolute inset-0 opacity-[0.05] pointer-events-none" 
+           style={{ backgroundImage: `linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)`, size: '50px 50px' }} />
+
+      {/* CỘT TRÁI: MINIMAL MASKING (50%) */}
+      <div className="hidden lg:flex w-1/2 relative p-10 items-center">
+        <motion.div 
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 1 }}
+          className="relative w-full h-[85vh] rounded-[2.5rem] overflow-hidden border border-white/5 shadow-2xl"
+        >
+          <img 
+            src={BK_IMAGE_URL} 
+            className="w-full h-full object-cover grayscale brightness-[0.5] contrast-[1.1]"
+            alt="Office background"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#050810] via-transparent to-transparent"></div>
           
-          <div className="flex flex-col">
-            <img src={logo} alt="HCMUT" className="h-12 w-auto self-start mb-10 drop-shadow-sm" />
-            <h1 className="text-3xl font-extrabold tracking-tight">Đăng nhập</h1>
-            <p className="mt-2 text-slate-500 font-medium">Chào mừng bạn quay trở lại hệ thống.</p>
-          </div>
-
-          {warning && (
-            <div className="flex items-start gap-3 p-4 bg-amber-50 border border-amber-200 rounded-xl text-amber-800 transition-all animate-in fade-in slide-in-from-top-2">
-              <AlertTriangle className="shrink-0 mt-0.5" size={20} />
-              <p className="text-sm font-medium">
-                The credentials you provided cannot be determined to be authentic.
-              </p>
+          <div className="absolute bottom-16 left-16 space-y-4">
+            <div className="flex items-center gap-3">
+              <span className="w-8 h-[1.5px] bg-emerald-500"></span>
+              <span className="text-[10px] font-bold tracking-[0.3em] text-emerald-500 uppercase">Hệ thống giáo dục thông minh</span>
             </div>
-          )}
-
-          <div className="space-y-6">
-            <button className="w-full flex items-center justify-center gap-3 py-3 px-4 border border-slate-200 rounded-xl hover:bg-slate-50 font-semibold text-slate-700 transition-all">
-              <Chrome size={20} className="text-blue-500" />
-              Tiếp tục với Google
-            </button>
-
-            <div className="relative flex items-center justify-center">
-              <span className="absolute inset-x-0 border-t border-slate-100"></span>
-              <span className="relative bg-white px-4 text-xs font-bold text-slate-400 uppercase tracking-widest">Hoặc</span>
-            </div>
-
-            <form className="space-y-5" onSubmit={handleLogin}>
-              {/* Username Input */}
-              <div className="space-y-2">
-                <label className="text-sm font-bold text-slate-700 ml-1">Username</label>
-                <div className="relative">
-                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-                  <input 
-                    name="username"
-                    value={formData.username}
-                    onChange={handleChange}
-                    placeholder={errors.username || "Enter username"}
-                    className={`w-full pl-12 pr-4 py-3.5 bg-slate-50 border rounded-xl outline-none transition-all font-medium
-                      ${errors.username ? 'border-red-500 placeholder-red-400 bg-red-50' : 'border-slate-200 focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500'}`}
-                  />
-                </div>
-              </div>
-
-              {/* Password Input */}
-              <div className="space-y-2">
-                <div className="flex justify-between items-center px-1">
-                  <label className="text-sm font-bold text-slate-700">Password</label>
-                </div>
-                <div className="relative">
-                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-                  <input 
-                    name="password"
-                    type={showPassword ? "text" : "password"}
-                    value={formData.password}
-                    onChange={handleChange}
-                    placeholder={errors.password || "Enter password"}
-                    className={`w-full pl-12 pr-12 py-3.5 bg-slate-50 border rounded-xl outline-none transition-all font-medium
-                      ${errors.password ? 'border-red-500 placeholder-red-400 bg-red-50' : 'border-slate-200 focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500'}`}
-                  />
-                  <button 
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-slate-400 hover:text-slate-600 transition-colors"
-                  >
-                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                  </button>
-                </div>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex flex-col gap-3 pt-2">
-                <button 
-                  disabled={isLoading}
-                  className="w-full bg-slate-900 hover:bg-black text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-all active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed shadow-lg shadow-slate-200"
-                >
-                  {isLoading ? <Loader2 className="animate-spin" size={20} /> : (
-                    <>
-                      <span>Login</span>
-                      <ArrowRight size={18} />
-                    </>
-                  )}
-                </button>
-                
-                <button 
-                  type="button"
-                  onClick={handleClear}
-                  className="w-full bg-white border border-slate-200 text-slate-600 font-bold py-3 rounded-xl hover:bg-slate-50 transition-all text-sm"
-                >
-                  Clear Fields
-                </button>
-              </div>
-            </form>
+            <h2 className="text-5xl font-[1000] tracking-tight leading-tight uppercase italic">
+              Alpha<span className="text-emerald-500">Tutor</span><br />
+              <span className="font-light text-slate-400">Bách Khoa 2026.</span>
+            </h2>
           </div>
-        </div>
+        </motion.div>
       </div>
 
-      <div className="hidden lg:flex flex-1 bg-[#0f172a] relative overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute top-[-10%] right-[-10%] w-[600px] h-[600px] bg-blue-600/20 rounded-full blur-[120px]" />
-          <div className="absolute bottom-[-10%] left-[-10%] w-[400px] h-[400px] bg-indigo-600/10 rounded-full blur-[100px]" />
-        </div>
-        <div className="relative z-10 m-auto max-w-xl p-12 text-white text-center lg:text-left">
-          <h2 className="text-5xl font-extrabold mb-6 leading-tight tracking-tight">
-            Nền tảng giáo dục <br /> <span className="text-blue-500">thế hệ mới.</span>
-          </h2>
-          <p className="text-slate-400 text-lg leading-relaxed font-medium mb-10">
-            Hệ thống học tập thông minh giúp sinh viên kết nối và phát triển năng lực vượt trội.
-          </p>
-        </div>
+      {/* CỘT PHẢI: LOGIN FORM (50%) */}
+      <div className="w-full lg:w-1/2 flex flex-col justify-center px-8 md:px-24 z-10">
+        <motion.div 
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="max-w-[400px] w-full mx-auto space-y-12"
+        >
+          <div className="space-y-3">
+            <img src={logo} className="h-7 w-auto brightness-0 invert opacity-80" alt="Logo" />
+            <h3 className="text-3xl font-[1000] tracking-tight uppercase italic">Đăng nhập</h3>
+            <p className="text-slate-500 text-sm font-medium leading-relaxed italic">Vui lòng cung cấp khóa bảo mật để tiếp tục.</p>
+          </div>
+
+          <form onSubmit={handleLogin} className="space-y-8">
+            <div className="space-y-2">
+              <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Tên tài khoản</label>
+              <div className="relative">
+                <Mail className="absolute left-0 top-1/2 -translate-y-1/2 text-slate-600" size={16} />
+                <input 
+                  type='email'
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder={errors.email || "Nhập email"}
+                  className={`w-full bg-transparent border-b border-white/10 pl-7 py-3 outline-none transition-all font-semibold text-lg
+                    ${errors.email ? 'border-red-500/50' : 'focus:border-emerald-500'}`}
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Mật mã bảo mật</label>
+              <div className="relative">
+                <Lock className="absolute left-0 top-1/2 -translate-y-1/2 text-slate-600" size={16} />
+                <input 
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder={errors.password || "••••••••"}
+                  className={`w-full bg-transparent border-b border-white/10 pl-7 py-3 outline-none transition-all font-semibold text-lg
+                    ${errors.password ? 'border-red-500/50' : 'focus:border-emerald-500'}`}
+                />
+                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-0 top-1/2 -translate-y-1/2 text-slate-600 hover:text-white transition-colors">
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
+            </div>
+
+            {warning && (
+              <div className="text-red-400 bg-red-400/5 p-3 rounded-xl border border-red-400/10 text-[10px] font-bold uppercase tracking-widest flex gap-2 items-center italic">
+                <AlertTriangle size={14} /> Thông tin xác thực không chính xác.
+              </div>
+            )}
+
+            <div className="flex flex-col gap-4 pt-4">
+              <button 
+                disabled={isLoading}
+                className="group relative w-full py-5 bg-emerald-500 text-slate-950 font-black rounded-xl overflow-hidden transition-all flex items-center justify-center hover:bg-emerald-400"
+              >
+                <span className="tracking-[0.2em] text-[11px] uppercase">Xác thực hệ thống</span>
+                {isLoading ? <Loader2 className="ml-3 animate-spin" size={18} /> : <ArrowRight className="ml-3 opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0" size={18} />}
+              </button>
+
+              <button type="button" className="w-full flex items-center justify-center gap-2 py-4 border border-white/5 rounded-xl hover:bg-white/5 text-[10px] font-bold text-slate-500 tracking-widest uppercase transition-all">
+                <Chrome size={14} className="text-emerald-500" /> Google Account
+              </button>
+            </div>
+          </form>
+        </motion.div>
       </div>
+
+      {/* Subtle Glows */}
+      <div className="absolute top-[-10%] right-[-5%] w-80 h-80 bg-emerald-500/5 blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-[-5%] left-[45%] w-64 h-64 bg-emerald-500/5 blur-[80px] pointer-events-none" />
     </div>
   );
 };

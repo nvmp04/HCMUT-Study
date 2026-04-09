@@ -23,7 +23,7 @@ export default function ScheduleSelector({ tutorId, onSelect, selectedTimeSlot }
     const start = time.split(' - ')[0];
     const [hour, min] = start.split(':').map(Number);
     const now = new Date();
-    const [d, m, y] = day.date.split('/').map(Number);
+    const [d, m, y] = day.dateFormat.split('/').map(Number);
     const target = new Date(y, m - 1, d, hour, min, 0, 0);
 
     // 1. Check thời gian quá hạn

@@ -1,253 +1,115 @@
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../../features/auth/hooks/useAuth';
-import { ArrowRight, BookOpen, Calendar, Users } from 'lucide-react';
-import AbstractBlobs from './AbstractBlobs';
-import MeshGradient from './MeshGradient';
+import { ArrowRight, Star, ArrowUpRight } from 'lucide-react';
 
 export default function Hero() {
   const navigate = useNavigate();
-  const { auth } = useAuth();
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.3,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.6, ease: 'easeOut' },
-    },
-  };
 
   return (
-    <section className="relative min-h-screen bg-gradient-to-b from-white via-blue-50 to-cyan-50 overflow-hidden transition-colors duration-700">
-      {/* Visual Elements */}
-      <AbstractBlobs count={4} opacity={0.12} />
-      <MeshGradient opacity={0.06} />
-
-      {/* Background Gradient Blobs */}
-      <div className="absolute inset-0 overflow-hidden">
-        <motion.div
-          animate={{ y: [0, -20, 0] }}
-          transition={{ duration: 8, repeat: Infinity }}
-          className="absolute top-10 right-10 w-72 h-72 bg-gradient-to-br from-cyan-200 to-blue-100 rounded-full blur-3xl opacity-20"
-        />
-        <motion.div
-          animate={{ y: [0, 20, 0] }}
-          transition={{ duration: 10, repeat: Infinity, delay: 1 }}
-          className="absolute bottom-20 left-20 w-96 h-96 bg-gradient-to-br from-blue-200 to-cyan-100 rounded-full blur-3xl opacity-15"
-        />
+    <section className="relative min-h-screen bg-slate-950 text-white font-sans overflow-hidden">
+      
+      {/* BACKGROUND TEXT (Mờ ảo tạo chiều sâu) */}
+      <div className="absolute top-20 left-10 opacity-[0.02] select-none pointer-events-none">
+        <h1 className="text-[20rem] font-black leading-none">EXPERT</h1>
       </div>
 
-      {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          {/* Left Column - Text Content */}
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
+      {/* MAIN CONTENT CONTAINER */}
+      <div className="relative z-10 max-w-[1600px] mx-auto flex flex-col lg:flex-row min-h-screen items-center">
+        
+        {/* LEFT COLUMN: 40% - Typography & Narrative */}
+        <div className="w-full lg:w-[45%] px-8 md:px-16 pt-32 pb-20 flex flex-col justify-center">
+          <motion.div 
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
             className="space-y-8"
           >
-            {/* Badge */}
-            <motion.div
-              variants={itemVariants}
-              className="inline-block"
-            >
-              <div className="flex items-center gap-2 px-4 py-2 bg-primary-50 border border-primary-200 rounded-full w-fit">
-                <span className="w-2 h-2 bg-primary-600 rounded-full animate-pulse" />
-                <span className="text-sm font-semibold text-primary-700">
-                  Welcome to Premium Tutoring
-                </span>
-              </div>
-            </motion.div>
+            <div className="flex items-center gap-4">
+              <span className="w-12 h-[1px] bg-emerald-500"></span>
+              <span className="text-[10px] font-black tracking-[0.4em] text-emerald-500 uppercase">Premium Learning Platform</span>
+            </div>
 
-            {/* Main Heading */}
-            <motion.div variants={itemVariants} className="space-y-4">
-              <h1 className="text-5xl md:text-6xl font-bold leading-tight">
-                <span className="block text-slate-900">Master Your Major</span>
-                <span className="block bg-gradient-to-r from-primary-600 to-primary-400 bg-clip-text text-transparent">
-                  with 1-on-1 Mentorship
-                </span>
-              </h1>
-            </motion.div>
+            <h1 className="text-5xl md:text-7xl font-[1000] tracking-tighter leading-[1.1] uppercase">
+              KẾT NỐI. <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400 font-light italic">HỌC TẬP.</span> <br />
+              BỨT PHÁ.
+            </h1>
 
-            {/* Description */}
-            <motion.p
-              variants={itemVariants}
-              className="text-lg text-slate-600 leading-relaxed max-w-md"
-            >
-              Connect with verified tutors aligned with your university schedule. Get personalized guidance, build meaningful relationships, and accelerate your academic growth.
-            </motion.p>
+            <p className="max-w-md text-slate-400 text-lg leading-relaxed font-light">
+              Đồng hành cùng những Mentor hàng đầu để chinh phục mọi mục tiêu học thuật và sự nghiệp. Trải nghiệm giáo dục cá nhân hóa ở cấp độ cao nhất.
+            </p>
 
-            {/* Smart Search Bar */}
-            <motion.div
-              variants={itemVariants}
-              className="space-y-3"
-            >
-              <div className="flex gap-3 bg-white p-2 rounded-2xl shadow-soft border border-slate-100 hover:shadow-soft-lg transition-shadow duration-300">
-                <input
-                  type="text"
-                  placeholder="What subject do you need help with?"
-                  className="flex-1 px-4 py-2 bg-transparent text-slate-900 placeholder-slate-400 outline-none text-sm"
-                />
-                <button
-                  onClick={() => navigate('/student/schedule')}
-                  className="px-6 py-2 bg-gradient-to-r from-primary-600 to-primary-500 text-white font-semibold rounded-xl hover:shadow-soft-lg transition-all duration-300 flex items-center gap-2 whitespace-nowrap"
-                >
-                  Search
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-              </div>
-              <p className="text-sm text-slate-500">Try: "Mathematics", "Physics", "Programming"</p>
-            </motion.div>
+            <div className="flex flex-col sm:flex-row items-center gap-8 pt-8">
+              <button 
+                onClick={() => navigate('/student/schedule')}
+                className="group relative px-10 py-5 bg-emerald-500 text-slate-950 font-black rounded-full overflow-hidden transition-all hover:pr-14"
+              >
+                <span className="relative z-10 tracking-widest text-sm">BẮT ĐẦU NGAY</span>
+                <ArrowRight className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all" size={20} />
+              </button>
 
-            {/* CTA Buttons */}
-            <motion.div
-              variants={itemVariants}
-              className="flex gap-4 flex-wrap pt-4"
-            >
-              {!auth.token && (
-                <>
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => navigate('/login')}
-                    className="px-8 py-4 bg-gradient-to-r from-primary-600 to-primary-500 text-white font-semibold rounded-xl shadow-soft hover:shadow-soft-lg transition-all duration-300 flex items-center gap-2"
-                  >
-                    Get Started
-                    <ArrowRight className="w-5 h-5" />
-                  </motion.button>
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="px-8 py-4 border-2 border-primary-600 text-primary-600 font-semibold rounded-xl hover:bg-primary-50 transition-colors duration-300"
-                  >
-                    Learn More
-                  </motion.button>
-                </>
-              )}
-            </motion.div>
-
-            {/* Quick Stats */}
-            <motion.div
-              variants={itemVariants}
-              className="grid grid-cols-3 gap-4 pt-4"
-            >
-              <div className="space-y-1">
-                <p className="text-2xl font-bold text-slate-900">500+</p>
-                <p className="text-sm text-slate-600">Verified Tutors</p>
-              </div>
-              <div className="space-y-1">
-                <p className="text-2xl font-bold text-slate-900">2K+</p>
-                <p className="text-sm text-slate-600">Active Students</p>
-              </div>
-              <div className="space-y-1">
-                <p className="text-2xl font-bold text-slate-900">95%</p>
-                <p className="text-sm text-slate-600">Success Rate</p>
-              </div>
-            </motion.div>
+              <button className="flex items-center gap-2 text-xs font-black tracking-widest text-slate-500 hover:text-white transition-colors uppercase">
+                Khám phá Mentor <ArrowUpRight size={16} className="text-emerald-500" />
+              </button>
+            </div>
           </motion.div>
 
-          {/* Right Column - Floating UI Cards */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="relative h-full hidden lg:flex items-center justify-center"
+          {/* Mini Stats Line */}
+          <div className="mt-24 flex gap-12 items-center opacity-50">
+            <div className="flex flex-col">
+              <span className="text-xl font-black">1.2K+</span>
+              <span className="text-[8px] font-bold uppercase tracking-widest">Active Mentors</span>
+            </div>
+            <div className="w-[1px] h-8 bg-white/10"></div>
+            <div className="flex flex-col">
+              <span className="text-xl font-black">98%</span>
+              <span className="text-[8px] font-bold uppercase tracking-widest">Success Rate</span>
+            </div>
+          </div>
+        </div>
+
+        {/* RIGHT COLUMN: 55% - Creative Image Masking (Lấp đầy khoảng trống) */}
+        <div className="w-full lg:w-[55%] h-full relative p-8 lg:p-16">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1 }}
+            className="relative w-full h-[600px] lg:h-[800px] rounded-[4rem] overflow-hidden group"
           >
-            {/* Main Card - Tutor Profile */}
-            <motion.div
-              animate={{ y: [0, -20, 0] }}
-              transition={{ duration: 6, repeat: Infinity }}
-              className="absolute top-0 left-0 w-72 bg-white rounded-3xl p-6 shadow-soft-lg border border-slate-100"
-            >
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-white text-2xl font-bold">
-                  SA
-                </div>
-                <div>
-                  <h3 className="font-bold text-slate-900">Sarah Anderson</h3>
-                  <p className="text-sm text-slate-600">Mathematics Expert</p>
-                </div>
-              </div>
-              <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 bg-green-500 rounded-full" />
-                  <span className="text-sm text-slate-700">Available Now</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-semibold text-primary-600">★★★★★</span>
-                  <span className="text-sm text-slate-600">4.9 rating</span>
-                </div>
-              </div>
-            </motion.div>
+            {/* Ảnh Portrait chất lượng cao, Grayscale sang trọng */}
+            <img 
+              src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=2070" 
+              className="w-full h-full object-cover grayscale brightness-75 transition-transform duration-[2s] group-hover:scale-110"
+              alt="Mentorship interaction"
+            />
+            
+            {/* Lớp phủ màu Gradient tinh tế */}
+            <div className="absolute inset-0 bg-gradient-to-tr from-emerald-500/20 via-transparent to-transparent mix-blend-overlay"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent"></div>
 
-            {/* Schedule Card */}
-            <motion.div
-              animate={{ y: [0, 20, 0] }}
-              transition={{ duration: 6, repeat: Infinity, delay: 0.5 }}
-              className="absolute top-64 right-0 w-72 bg-white rounded-3xl p-6 shadow-soft-lg border border-slate-100"
-            >
-              <div className="flex items-center gap-2 mb-4">
-                <Calendar className="w-5 h-5 text-primary-600" />
-                <h3 className="font-bold text-slate-900">Next Session</h3>
+            {/* Floating Info Tag (Nhấn mạnh tính kết nối) */}
+            <div className="absolute bottom-12 left-12 bg-white/5 backdrop-blur-xl border border-white/10 p-6 rounded-3xl max-w-xs">
+              <div className="flex gap-1 mb-3">
+                {[...Array(5)].map((_, i) => <Star key={i} size={10} className="text-emerald-500" fill="currentColor" />)}
               </div>
-              <div className="space-y-3">
-                <div>
-                  <p className="text-sm text-slate-600">Tuesday, 2:00 PM</p>
-                  <p className="font-semibold text-slate-900">Calculus Review</p>
-                </div>
-                <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
-                  <div className="w-3/4 h-full bg-gradient-to-r from-primary-600 to-primary-400" />
-                </div>
-                <p className="text-xs text-slate-600">45 minutes remaining</p>
-              </div>
-            </motion.div>
-
-            {/* Features Card */}
-            <motion.div
-              animate={{ y: [0, -15, 0] }}
-              transition={{ duration: 5, repeat: Infinity, delay: 1 }}
-              className="absolute bottom-0 left-1/2 -translate-x-1/2 w-80 bg-white rounded-3xl p-6 shadow-soft-lg border border-slate-100"
-            >
-              <div className="space-y-4">
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <BookOpen className="w-5 h-5 text-primary-600" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold text-slate-900">Smart Matching</p>
-                    <p className="text-xs text-slate-600">AI-powered tutor recommendations</p>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
+              <p className="text-sm font-medium text-slate-200">
+                "Hệ thống giúp tôi tìm đúng người dẫn dắt chỉ trong vài phút. Kết quả vượt mong đợi."
+              </p>
+              <p className="text-[10px] font-black uppercase tracking-widest mt-4 text-emerald-500">— Senior Mentor @ Tech Corp</p>
+            </div>
           </motion.div>
+
+          {/* Decorative Circle (Lấp đầy các góc trống) */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 blur-[100px] rounded-full"></div>
+          <div className="absolute -bottom-20 -right-20 w-96 h-96 bg-emerald-500/5 blur-[120px] rounded-full"></div>
         </div>
       </div>
 
-      {/* Scroll Indicator */}
-      <motion.div
-        animate={{ y: [0, 8, 0] }}
-        transition={{ duration: 2, repeat: Infinity }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2"
-      >
-        <p className="text-sm text-slate-500 mb-2">Scroll to explore</p>
-        <div className="w-6 h-10 border-2 border-slate-400 rounded-full flex justify-center p-2">
-          <div className="w-1 h-2 bg-slate-400 rounded-full" />
-        </div>
-      </motion.div>
+      {/* VERTICAL BRANDING */}
+      <div className="absolute right-10 bottom-10 hidden xl:block">
+        <p className="text-[10px] font-black text-white/10 vertical-text tracking-[1em] uppercase">
+          Learning Evolution • 2026
+        </p>
+      </div>
     </section>
   );
 }
