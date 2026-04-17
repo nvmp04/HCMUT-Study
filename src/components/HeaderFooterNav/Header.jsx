@@ -17,9 +17,9 @@ const LogoSection = ({ role }) => (
     </div>
     <div className="hidden sm:block">
       <h2 className="text-lg font-[1000] text-white tracking-tighter uppercase leading-none">
-        Alpha<span className="text-emerald-500">Tutor</span>
+        <span className="text-emerald-500">CONQUER</span>
       </h2>
-      <p className="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em]">Bách Khoa Mentor</p>
+      <p className="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em]">Study Platform</p>
     </div>
   </Link>
 );

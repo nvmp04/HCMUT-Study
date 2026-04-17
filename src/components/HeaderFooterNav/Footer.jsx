@@ -48,9 +48,8 @@ export default function Footer() {
               <img src={logo} className="w-12 h-12 grayscale brightness-200" alt="logo" />
               <div>
                 <h3 className="text-xl font-[1000] tracking-tighter text-white uppercase italic">
-                  ALPHA<span className="text-emerald-500">.</span>TUTOR
+                  CONQUER
                 </h3>
-                <p className="text-[10px] font-black tracking-[0.3em] text-slate-600 uppercase">Bách Khoa Innovation</p>
               </div>
             </div>
             
@@ -135,7 +134,7 @@ export default function Footer() {
         <div className="pt-10 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="flex items-center gap-6">
              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-700">
-               © 2026 ALPHA.TUTOR • PHÁT TRIỂN BỞI NGUYỄN VIỆT MINH PHÚ
+               © 2026 CONQUER • PHÁT TRIỂN BỞI NGUYỄN VIỆT MINH PHÚ
              </p>
           </div>
           

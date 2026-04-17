@@ -3,8 +3,8 @@ import {
   Calendar, Clock, Users, Star, ArrowUpRight, Video, 
   MoreHorizontal, Wallet, CheckCircle2, XCircle, BrainCircuit, MessageSquare 
 } from "lucide-react";
-import { useProfile } from "../../../features/profile/hooks/useProfile";
-import { LoadingModal } from '../../../components/LoadingModal';
+import { useProfile } from '../../features/profile/hooks/useProfile';
+import { LoadingModal } from '../../components/LoadingModal';
 import { motion, animate } from 'framer-motion';
 
 // --- COMPONENT ĐẾM SỐ TỪ 0 -> N ---

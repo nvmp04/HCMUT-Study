@@ -75,7 +75,7 @@ const LoginPage = () => {
               <span className="text-[10px] font-bold tracking-[0.3em] text-emerald-500 uppercase">Hệ thống giáo dục thông minh</span>
             </div>
             <h2 className="text-5xl font-[1000] tracking-tight leading-tight uppercase italic">
-              Alpha<span className="text-emerald-500">Tutor</span><br />
+              <span className="text-emerald-500">CONQUER</span><br />
               <span className="font-light text-slate-400">Bách Khoa 2026.</span>
             </h2>
           </div>

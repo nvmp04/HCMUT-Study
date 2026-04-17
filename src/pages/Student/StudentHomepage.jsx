@@ -1,16 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Calendar, Clock, Zap, Bell, ArrowUpRight, Video, 
-  BarChart3, ChevronRight, FileText, Play, Target, 
+  ChevronRight, FileText, Play, Target, 
   MoreHorizontal, BookOpen, Award
 } from "lucide-react";
 import { useProfile } from "../../features/profile/hooks/useProfile";
+import { useQuery } from '@tanstack/react-query';
+import { fetchAPI } from '../../utils/fetchAPI';
+import { API_ENDPOINTS, buildAPIUrl } from '../../config/api.config'
 import { LoadingModal } from '../../components/LoadingModal';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 export default function StudentHomepage() {
-  const { data, isLoading } = useProfile();
-  const [timeLeft, setTimeLeft] = useState(1500); // 25:00
+  const { data: profileData, isLoading: isProfileLoading } = useProfile();
+  const { data: roadmapData, isLoading: isRoadmapLoading } = useQuery({
+    queryKey: ['roadmap'],
+    queryFn: async () => fetchAPI(buildAPIUrl(API_ENDPOINTS.ROADMAP.GET_ROADMAP), 'GET', null, true)
+  });
+  const { data: tutorData, isLoading: isTutorsLoading } = useQuery({
+    queryKey: ["suitabletutors", roadmapData?.roadmap?.tutors],
+    queryFn: async () => await fetchAPI(buildAPIUrl(API_ENDPOINTS.ROADMAP.SUITABLE_TUTORS), "POST", { tutorsId: roadmapData?.roadmap?.tutors }, true),
+    enabled: !!roadmapData?.roadmap?.tutors 
+  });
+
+  const [timeLeft, setTimeLeft] = useState(1500);
   const [isTimerRunning, setIsTimerRunning] = useState(false);
 
   useEffect(() => {
@@ -21,58 +35,32 @@ export default function StudentHomepage() {
     return () => clearInterval(timer);
   }, [isTimerRunning, timeLeft]);
 
-  if (isLoading) return <LoadingModal />;
+  if (isProfileLoading || isRoadmapLoading) return <LoadingModal />;
 
-  const studentName = data?.student?.name?.split(' ').pop() || "Bạn";
+  const studentName = profileData?.student?.name?.split(' ').pop() || "Bạn";
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
   };
 
-  // Cấu hình animation cho container cha và các phần tử con
   const containerVariants = {
     hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1 // Hiệu ứng xuất hiện lần lượt
-      }
-    }
+    visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
   };
 
   const itemVariants = {
     hidden: { opacity: 0, y: 15 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: { duration: 0.4, ease: "easeOut" }
-    }
+    visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } }
   };
 
   return (
     <div className="min-h-screen bg-[#0f172a] text-slate-400 p-6 md:pl-28 font-sans selection:bg-emerald-500/30 overflow-x-hidden">
-      {/* Background Glow */}
-      <motion.div 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 2 }}
-        className="absolute top-0 right-0 w-[600px] h-[600px] bg-emerald-500/[0.02] blur-[150px] rounded-full pointer-events-none" 
-      />
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 2 }} className="absolute top-0 right-0 w-[600px] h-[600px] bg-emerald-500/[0.02] blur-[150px] rounded-full pointer-events-none" />
       
-      <motion.div 
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        className="relative z-10 max-w-[1300px] px-2 py-16 mx-auto"
-      >
-
+      <motion.div variants={containerVariants} initial="hidden" animate="visible" className="relative z-10 max-w-[1300px] px-2 py-16 mx-auto">
         <div className="grid grid-cols-12 gap-8">
-          
-          {/* --- LEFT COLUMN (MAIN CONTENT) --- */}
           <div className="col-span-12 lg:col-span-8 space-y-8">
-            
-            {/* 1. DEEP WORK TIMER */}
             <motion.div variants={itemVariants} className="bg-emerald-500/[0.02] border border-emerald-500/10 rounded-md p-6 flex flex-col sm:flex-row items-center justify-between group">
               <div className="flex items-center gap-4 mb-4 sm:mb-0">
                 <div className="p-3 bg-emerald-500/5 rounded-full text-emerald-600">
@@ -96,7 +84,6 @@ export default function StudentHomepage() {
               </div>
             </motion.div>
 
-            {/* 2. NEXT CLASS HERO */}
             <motion.div variants={itemVariants} className="bg-[#1e293b]/20 border border-white/[0.05] rounded-md overflow-hidden backdrop-blur-sm">
               <div className="px-6 py-3 border-b border-white/[0.05] flex justify-between items-center bg-white/[0.01]">
                 <span className="text-[9px] font-black text-emerald-500/70 uppercase tracking-[0.2em] flex items-center gap-2">
@@ -107,9 +94,7 @@ export default function StudentHomepage() {
               <div className="p-8">
                 <div className="flex flex-col md:flex-row justify-between gap-10">
                   <div className="flex-1">
-                    <h2 className="text-2xl font-semibold text-slate-200 tracking-tight mb-6">
-                      Tư duy Thiết kế & Giải quyết vấn đề
-                    </h2>
+                    <h2 className="text-2xl font-semibold text-slate-200 tracking-tight mb-6">Tư duy Thiết kế & Giải quyết vấn đề</h2>
                     <div className="grid grid-cols-2 gap-8">
                        <div className="space-y-1">
                           <span className="text-[9px] text-slate-600 font-black uppercase tracking-widest">Gia sư</span>
@@ -129,8 +114,6 @@ export default function StudentHomepage() {
                 </div>
               </div>
             </motion.div>
-
-            {/* 3. RECENT RESOURCES */}
             <motion.div variants={itemVariants} className="space-y-4">
               <h3 className="text-[10px] font-bold text-slate-600 uppercase tracking-[0.2em] px-1 flex items-center gap-2">
                 <BookOpen size={14}/> Tài liệu truy cập nhanh
@@ -141,9 +124,7 @@ export default function StudentHomepage() {
                   { title: "Record: Chữa bài tập Lab 3", time: "2 ngày trước", icon: <Play size={16}/> }
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-4 p-4 bg-white/[0.01] border border-white/[0.03] rounded-sm hover:border-emerald-500/20 cursor-pointer transition-all group">
-                    <div className="p-2 bg-slate-800 text-slate-500 group-hover:text-emerald-500 transition-colors">
-                      {item.icon}
-                    </div>
+                    <div className="p-2 bg-slate-800 text-slate-500 group-hover:text-emerald-500 transition-colors">{item.icon}</div>
                     <div className="flex-1 min-w-0">
                       <p className="text-[13px] text-slate-400 truncate font-medium group-hover:text-slate-200 transition-colors">{item.title}</p>
                       <p className="text-[9px] text-slate-600 mt-1 uppercase font-bold tracking-tighter">{item.time}</p>
@@ -152,8 +133,6 @@ export default function StudentHomepage() {
                 ))}
               </div>
             </motion.div>
-
-            {/* 4. AI ROADMAP */}
             <motion.div variants={itemVariants} className="space-y-4">
               <div className="flex justify-between items-end px-1">
                 <h3 className="font-bold text-slate-600 text-[10px] uppercase tracking-[0.2em] flex items-center gap-2">
@@ -161,44 +140,33 @@ export default function StudentHomepage() {
                 </h3>
               </div>
               <div className="grid gap-2">
-                {[
-                  { title: "Kỹ năng phân tích nguyên nhân gốc rễ", type: "Thực hành", active: true },
-                  { title: "Lập kế hoạch dự án Agile", type: "Lý thuyết", active: false }
-                ].map((item, idx) => (
-                  <div key={idx} className={`group flex items-center justify-between p-5 border rounded-sm transition-all ${item.active ? 'border-emerald-500/10 bg-emerald-500/[0.01]' : 'border-white/[0.02] opacity-40'}`}>
+                {roadmapData?.roadmap?.stages?.map((stage, idx) => (
+                  <div key={stage.id} className="group flex items-center justify-between p-5 border border-emerald-500/10 bg-emerald-500/[0.01] rounded-sm transition-all hover:bg-emerald-500/[0.03]">
                     <div className="flex items-center gap-6">
-                      <span className={`text-[10px] font-mono ${item.active ? 'text-emerald-600' : 'text-slate-800'}`}>0{idx + 1}</span>
+                      <span className="text-[10px] font-mono text-emerald-600">0{idx + 1}</span>
                       <div>
-                        <div className={`text-sm ${item.active ? 'text-slate-300' : 'text-slate-600'}`}>{item.title}</div>
-                        <div className="text-[9px] font-bold text-slate-700 uppercase tracking-widest mt-1">{item.type}</div>
+                        <div className="text-sm text-slate-300 font-medium">{stage.name}</div>
+                        <div className="text-[9px] font-bold text-slate-700 uppercase tracking-widest mt-1">{stage.duration}</div>
                       </div>
                     </div>
-                    {item.active && <ChevronRight size={14} className="text-slate-800 group-hover:text-emerald-500 transition-colors" />}
+                    <ChevronRight size={14} className="text-slate-800 group-hover:text-emerald-500 transition-colors" />
                   </div>
                 ))}
               </div>
             </motion.div>
           </div>
 
-          {/* --- RIGHT COLUMN (STATS & ACTIVITY) --- */}
+          {/* --- RIGHT COLUMN --- */}
           <div className="col-span-12 lg:col-span-4 space-y-8">
-            
-            {/* 1. WEEKLY PROGRESS */}
+            {/* 1. WEEKLY PROGRESS - KHÔI PHỤC */}
             <motion.div variants={itemVariants} className="bg-[#1e293b]/10 border border-white/[0.05] rounded-md p-6">
               <div className="flex justify-between items-center mb-6">
-                <h3 className="text-[10px] font-bold text-slate-600 uppercase tracking-widest flex items-center gap-2">
-                  <Target size={14}/> Mục tiêu tuần
-                </h3>
+                <h3 className="text-[10px] font-bold text-slate-600 uppercase tracking-widest flex items-center gap-2"><Target size={14}/> Mục tiêu tuần</h3>
                 <span className="text-[10px] text-emerald-500/70 font-mono font-bold">75%</span>
               </div>
               <div className="space-y-4">
                 <div className="w-full bg-white/[0.02] h-[3px] rounded-full overflow-hidden">
-                  <motion.div 
-                    initial={{ width: 0 }}
-                    animate={{ width: "75%" }}
-                    transition={{ duration: 1, delay: 0.5 }}
-                    className="bg-emerald-600/50 h-full" 
-                  />
+                  <motion.div initial={{ width: 0 }} animate={{ width: "75%" }} transition={{ duration: 1, delay: 0.5 }} className="bg-emerald-600/50 h-full" />
                 </div>
                 <div className="flex justify-between text-[10px] font-bold uppercase tracking-tighter">
                   <span className="text-slate-500">3/4 Buổi học</span>
@@ -207,7 +175,7 @@ export default function StudentHomepage() {
               </div>
             </motion.div>
 
-            {/* 2. STATS OVERVIEW */}
+            {/* 2. STATS OVERVIEW - KHÔI PHỤC */}
             <motion.div variants={itemVariants} className="bg-white/[0.01] border border-white/[0.05] rounded-md p-6">
               <p className="text-[9px] font-bold text-slate-600 uppercase tracking-widest mb-4">Học liên tục</p>
               <div className="flex items-baseline gap-2">
@@ -229,32 +197,54 @@ export default function StudentHomepage() {
                  </div>
               </div>
             </motion.div>
-
-            {/* 3. QUICK MATCH */}
             <motion.div variants={itemVariants} className="space-y-4 pt-2">
               <h3 className="text-[10px] font-bold text-slate-600 uppercase tracking-[0.2em] px-1 flex items-center gap-2">
                 <Award size={14}/> Gia sư gợi ý
               </h3>
               <div className="grid gap-3">
-                {[
-                  { name: "Lê Minh Anh", skill: "Algorithm Expert", rate: "5.0" },
-                  { name: "Trần Thế Vinh", skill: "System Architect", rate: "4.9" }
-                ].map((t, i) => (
-                  <div key={i} className="flex items-center justify-between p-3 bg-white/[0.01] border border-white/[0.03] rounded-sm group hover:border-emerald-500/20 transition-all cursor-pointer">
-                    <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 bg-slate-800 rounded-sm flex-shrink-0" />
+                {isTutorsLoading ? (
+                  <div className="animate-pulse space-y-2">
+                    <div className="h-14 bg-white/5 rounded-sm" />
+                    <div className="h-14 bg-white/5 rounded-sm" />
+                  </div>
+                ) : tutorData?.tutors?.slice(0, 3).map((t) => (
+                  <Link 
+                    key={t.id} 
+                    to={`/student/schedule/${t.id}`}
+                    className="flex items-center justify-between p-3 bg-white/[0.01] border border-white/[0.03] rounded-sm group hover:border-emerald-500/20 transition-all cursor-pointer"
+                  >
+                    <div className="flex items-center gap-3 min-w-0">
+                      {/* Avatar chuẩn theo TutorCard: tutor.avatarUrl */}
+                      <div className="w-9 h-9 bg-slate-800 rounded-sm flex-shrink-0 overflow-hidden border border-white/10">
+                        {t.avatarUrl ? (
+                          <img src={t.avatarUrl} alt="" className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all" />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-[10px] font-bold text-slate-500">
+                            {t.name?.split(" ").filter(Boolean).slice(0, 2).map(w => w[0].toUpperCase()).join("")}
+                          </div>
+                        )}
+                      </div>
+
                       <div className="min-w-0">
-                        <p className="text-[11px] font-bold text-slate-300 truncate">{t.name}</p>
-                        <p className="text-[9px] text-slate-600 truncate">{t.skill}</p>
+                        {/* Tên chuẩn: t.name */}
+                        <p className="text-[11px] font-bold text-slate-300 truncate group-hover:text-emerald-400 transition-colors">
+                          {t.name}
+                        </p>
+                        <div className="flex items-center gap-2 mt-0.5">
+                          <p className="text-[9px] text-slate-600 truncate uppercase tracking-tighter font-bold">
+                            {t.department || "N/A"}
+                          </p>
+                          <div className="flex items-center gap-0.5 border-l border-white/10 pl-2">
+                          </div>
+                        </div>
                       </div>
                     </div>
-                    <ArrowUpRight size={14} className="text-slate-700 group-hover:text-emerald-500 transition-colors" />
-                  </div>
+                    <ArrowUpRight size={14} className="text-slate-700 group-hover:text-emerald-500 transition-all" />
+                  </Link>
                 ))}
               </div>
             </motion.div>
 
-            {/* 4. ACTIVITY LOG */}
             <motion.div variants={itemVariants} className="pt-4 px-1">
               <h3 className="text-[10px] font-bold text-slate-600 uppercase tracking-[0.2em] mb-8 flex items-center gap-2">
                 <Bell size={14} /> Hoạt động mới
@@ -262,13 +252,8 @@ export default function StudentHomepage() {
               <div className="space-y-8 relative before:absolute before:left-[3px] before:top-2 before:bottom-2 before:w-[1px] before:bg-white/[0.05]">
                 <div className="relative pl-8">
                   <div className="absolute left-0 top-1.5 w-1.5 h-1.5 rounded-full bg-emerald-600/40 ring-4 ring-[#0f172a]"></div>
-                  <p className="text-[11px] text-slate-400">Gia sư B phê duyệt lịch học buổi tới</p>
+                  <p className="text-[11px] text-slate-400">Gia sư phê duyệt lịch học mới</p>
                   <p className="text-[8px] text-slate-700 mt-1 uppercase font-bold tracking-widest">2 giờ trước</p>
-                </div>
-                <div className="relative pl-8 opacity-40">
-                  <div className="absolute left-0 top-1.5 w-1.5 h-1.5 rounded-full bg-slate-800 ring-4 ring-[#0f172a]"></div>
-                  <p className="text-[11px] text-slate-500 italic">Hệ thống đã tự động cập nhật AI Roadmap</p>
-                  <p className="text-[8px] text-slate-700 mt-1 uppercase font-bold tracking-widest">5 giờ trước</p>
                 </div>
               </div>
             </motion.div>
